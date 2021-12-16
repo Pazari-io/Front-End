@@ -1,254 +1,32 @@
 import Nav from '../components/NavBar';
+import Search from '../components/Search';
+import Footer from '../components/Footer';
+import Slider from '../components/Slider';
+import Card from '../components/Card';
+
+// if you see SVG console errors it seems to be a react
+// bug https://github.com/facebook/react/issues/15187
+// there should be a fix for this but not concerning
 
 export default function Home() {
   return (
-    <div className="dark:bg-gray-900">
+    <main className="min-h-screen mx-auto dark:bg-gray-900">
       <Nav />
+      <Search />
 
-      <div class="container  mx-auto px-4 md:px-12 dark:bg-gray-900">
-        <div class="flex flex-wrap -mx-1 lg:-mx-4">
-          <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-            <article class="overflow-hidden rounded-lg shadow-lg">
-              <a href="#">
-                <img
-                  alt="Placeholder"
-                  class="block h-auto w-full"
-                  src="https://picsum.photos/600/400/?random"
-                />
-              </a>
+      <h1 className="px-2 py-2 text-3xl dark:text-indigo-600">On Fire </h1>
 
-              <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                  <a class="no-underline hover:underline text-black dark:text-gray-300" href="#">
-                    Article Title
-                  </a>
-                </h1>
-                <p class="text-grey-darker dark:text-gray-300 text-sm">11/1/19</p>
-              </header>
+      <Slider />
 
-              <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <a
-                  class="flex items-center no-underline hover:underline text-b dark:text-gray-300"
-                  href="#">
-                  <img
-                    alt="Placeholder"
-                    class="block rounded-full"
-                    src="https://picsum.photos/32/32/?random"
-                  />
-                  <p class="ml-2 text-sm">Author Name</p>
-                </a>
-                <a
-                  class="no-underline text-grey-darker dark:text-gray-300 hover:text-red-dark"
-                  href="#">
-                  <span class="hidden">Like</span>
-                  <i class="fa fa-heart"></i>
-                </a>
-              </footer>
-            </article>
-          </div>
+      <h1 className="px-2 py-2 text-3xl dark:text-indigo-600">ML recommended </h1>
 
-          <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-            <article class="overflow-hidden rounded-lg shadow-lg">
-              <a href="#">
-                <img
-                  alt="Placeholder"
-                  class="block h-auto w-full"
-                  src="https://picsum.photos/600/400/?random"
-                />
-              </a>
+      <Slider />
 
-              <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                  <a class="no-underline hover:underline text-black dark:text-gray-300" href="#">
-                    Article Title
-                  </a>
-                </h1>
-                <p class="text-grey-darker dark:text-gray-300 text-sm">11/1/19</p>
-              </header>
+      <h1 className="px-2 py-2 text-3xl dark:text-indigo-600">Best of this month </h1>
 
-              <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <a
-                  class="flex items-center no-underline hover:underline text-black dark:text-gray-300"
-                  href="#">
-                  <img
-                    alt="Placeholder"
-                    class="block rounded-full"
-                    src="https://picsum.photos/32/32/?random"
-                  />
-                  <p class="ml-2 text-sm">Author Name</p>
-                </a>
-                <a
-                  class="no-underline text-grey-darker dark:text-gray-300 hover:text-red-dark"
-                  href="#">
-                  <span class="hidden">Like</span>
-                  <i class="fa fa-heart"></i>
-                </a>
-              </footer>
-            </article>
-          </div>
+      <Slider />
 
-          <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-            <article class="overflow-hidden rounded-lg shadow-lg">
-              <a href="#">
-                <img
-                  alt="Placeholder"
-                  class="block h-auto w-full"
-                  src="https://picsum.photos/600/400/?random"
-                />
-              </a>
-
-              <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                  <a class="no-underline hover:underline text-black dark:text-gray-300" href="#">
-                    Article Title
-                  </a>
-                </h1>
-                <p class="text-grey-darker dark:text-gray-300 text-sm">11/1/19</p>
-              </header>
-
-              <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <a
-                  class="flex items-center no-underline hover:underline text-black dark:text-gray-300"
-                  href="#">
-                  <img
-                    alt="Placeholder"
-                    class="block rounded-full"
-                    src="https://picsum.photos/32/32/?random"
-                  />
-                  <p class="ml-2 text-sm">Author Name</p>
-                </a>
-                <a
-                  class="no-underline text-grey-darker dark:text-gray-300 hover:text-red-dark"
-                  href="#">
-                  <span class="hidden">Like</span>
-                  <i class="fa fa-heart"></i>
-                </a>
-              </footer>
-            </article>
-          </div>
-
-          <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-            <article class="overflow-hidden rounded-lg shadow-lg">
-              <a href="#">
-                <img
-                  alt="Placeholder"
-                  class="block h-auto w-full"
-                  src="https://picsum.photos/600/400/?random"
-                />
-              </a>
-
-              <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                  <a class="no-underline hover:underline text-black dark:text-gray-300" href="#">
-                    Article Title
-                  </a>
-                </h1>
-                <p class="text-grey-darker dark:text-gray-300 text-sm">11/1/19</p>
-              </header>
-
-              <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <a
-                  class="flex items-center no-underline hover:underline text-black dark:text-gray-300"
-                  href="#">
-                  <img
-                    alt="Placeholder"
-                    class="block rounded-full"
-                    src="https://picsum.photos/32/32/?random"
-                  />
-                  <p class="ml-2 text-sm">Author Name</p>
-                </a>
-                <a
-                  class="no-underline text-grey-darker dark:text-gray-300 hover:text-red-dark"
-                  href="#">
-                  <span class="hidden">Like</span>
-                  <i class="fa fa-heart"></i>
-                </a>
-              </footer>
-            </article>
-            {/* <!-- END Article --> */}
-          </div>
-          {/* <!-- END Column -->
-
-        <!-- Column --> */}
-          <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-            <article class="overflow-hidden rounded-lg shadow-lg">
-              <a href="#">
-                <img
-                  alt="Placeholder"
-                  class="block h-auto w-full"
-                  src="https://picsum.photos/600/400/?random"
-                />
-              </a>
-
-              <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                  <a class="no-underline hover:underline text-black dark:text-gray-300" href="#">
-                    Article Title
-                  </a>
-                </h1>
-                <p class="text-grey-darker  dark:text-gray-300 text-sm">11/1/19</p>
-              </header>
-
-              <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <a
-                  class="flex items-center no-underline hover:underline text-black dark:text-gray-300"
-                  href="#">
-                  <img
-                    alt="Placeholder"
-                    class="block rounded-full"
-                    src="https://picsum.photos/32/32/?random"
-                  />
-                  <p class="ml-2 text-sm">Author Name</p>
-                </a>
-                <a
-                  class="no-underline text-grey-darker dark:text-gray-300 hover:text-red-dark"
-                  href="#">
-                  <span class="hidden">Like</span>
-                  <i class="fa fa-heart"></i>
-                </a>
-              </footer>
-            </article>
-          </div>
-
-          <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-            <article class="overflow-hidden rounded-lg shadow-lg">
-              <a href="#">
-                <img
-                  alt="Placeholder"
-                  class="block h-auto w-full"
-                  src="https://picsum.photos/600/400/?random"
-                />
-              </a>
-
-              <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                  <a class="no-underline hover:underline  dark:text-gray-300 text-black" href="#">
-                    Article Title
-                  </a>
-                </h1>
-                <p class="text-grey-darker dark:text-gray-300 text-sm">11/1/19</p>
-              </header>
-
-              <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <a
-                  class="flex items-center no-underline hover:underline dark:text-gray-300 text-black"
-                  href="#">
-                  <img
-                    alt="Placeholder"
-                    class="block rounded-full"
-                    src="https://picsum.photos/32/32/?random"
-                  />
-                  <p class="ml-2 text-sm">Author Name</p>
-                </a>
-                <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
-                  <span class="hidden">Like</span>
-                  <i class="fa fa-heart"></i>
-                </a>
-              </footer>
-            </article>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Footer />
+    </main>
   );
 }

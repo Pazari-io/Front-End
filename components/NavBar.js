@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import useDarkMode from '../hooks/useDarkMode';
 
 import { useMoralis } from 'react-moralis';
+import AvaxPrice from './AvaxPrice';
 
 const navigation = [
   { name: 'MarketPlace', href: '/', current: false },
@@ -52,7 +53,7 @@ export default function Nav() {
                   <svg
                     onClick={() => setTheme('dark')}
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-indigo-900"
+                    className="w-6 h-6 text-gray-200"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -84,6 +85,12 @@ export default function Nav() {
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex items-center space-x-4">
+                    <img
+                      className="h-8 "
+                      src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                      alt="Workflow"
+                    />
+
                     {navigation.map((item) => (
                       <Link href={item.href} key={item.name}>
                         <a
@@ -134,6 +141,8 @@ export default function Nav() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <AvaxPrice />
+
                 <button
                   onClick={() => {
                     authenticate({ provider: 'metamask', signingMessage: 'LFG metamask !' });

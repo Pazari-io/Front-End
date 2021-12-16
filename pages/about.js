@@ -22,12 +22,6 @@ const navigation = [
   { name: 'About', href: '#', current: false }
 ];
 
-// const navigation = [
-//   { name: 'Marketplace', href: '/' },
-//   { name: 'Learn Here', href: '/story' },
-//   { name: 'About', href: '/about' },
-// ]
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -60,27 +54,14 @@ const features = [
 ];
 
 export default function About() {
-  const [colorTheme, setTheme] = useDarkMode();
-  const router = useRouter();
-
   return (
-    <div className="dark:bg-gray-900">
+    <main className="min-h-screen mx-auto dark:bg-gray-900">
       <Nav />
 
       <div className="relative overflow-hidden bg-white dark:bg-gray-900 ">
         <div className="max-w-full mx-auto bg-gray-300 dark:bg-gray-900 ">
           <div className="relative z-10 pt-4 pb-8 bg-gray-300 dark:bg-gray-900 roundled-lg sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            {/* <svg
-            className="absolute inset-y-0 right-0 hidden w-48 h-full text-white transform translate-x-1/2 lg:block dark:bg-gray-900"
-            fill="currentColor"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <polygon className="dark:text-gray-900"  points="50,0 100,0 50,100 0,100" />
-          </svg> */}
-
-            <main className="px-4 mx-auto mt-10 max-w-7xl sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28 ">
+            <div className="px-4 mx-auto mt-10 max-w-7xl sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28 ">
               <div className="sm:text-center lg:text-left ">
                 <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="block text-indigo-600 xl:inline">
@@ -101,7 +82,7 @@ export default function About() {
                   </div>
                 </div>
               </div>
-            </main>
+            </div>
           </div>
         </div>
         <div className="mb-2 lg:absolute lg:inset-y-0 lg:right-0 lg:w-full">
@@ -309,6 +290,6 @@ export default function About() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
