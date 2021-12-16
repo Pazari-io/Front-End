@@ -14,6 +14,7 @@ import {
   ScaleIcon
 } from '@heroicons/react/outline';
 import Nav from '../components/NavBar';
+import Footer from '../components/Footer';
 
 const navigation = [
   { name: 'Marketplace', href: '#', current: true },
@@ -290,6 +291,8 @@ export default function About() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </main>
   );
 }
