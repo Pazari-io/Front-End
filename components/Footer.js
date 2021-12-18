@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
-    <footer className="pt-4 pb-8 bg-white dark:bg-gray-800 xl:pt-8">
+    <footer className="pt-4 pb-8 bg-gray-200 dark:bg-gray-800 xl:pt-8">
       <div className="max-w-screen-lg px-4 mx-auto text-gray-400 xl:max-w-screen-xl sm:px-6 md:px-8 dark:text-gray-300">
-        <ul className="flex flex-wrap justify-center pb-8 text-lg font-light">
+        {/* <ul className="flex flex-wrap justify-center pb-8 text-lg font-light">
           <li className="w-1/2 md:w-1/3 lg:w-1/3">
             <div className="text-center">
               <h2 className="mb-4 text-gray-500 uppercase dark:text-gray-200 text-md">
@@ -64,7 +64,7 @@ export default function Footer() {
               </ul>
             </div>
           </li>
-        </ul>
+        </ul> */}
         <div className="flex items-center justify-between max-w-xs pt-8 mx-auto border-t border-gray-200">
           <a href="#">
             <svg
@@ -128,7 +128,7 @@ export default function Footer() {
               <input
                 type="text"
                 id='"form-subscribe-Subscribe'
-                className="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none  focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                className="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                 placeholder="Email"
               />
             </div>

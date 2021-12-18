@@ -66,7 +66,7 @@ export default function About() {
               <div className="sm:text-center lg:text-left ">
                 <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="block text-indigo-600 xl:inline">
-                    Publication revolution on avalanche
+                    Indie Digital Publication Revolution On Avalanche
                   </span>
                 </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
@@ -95,9 +95,9 @@ export default function About() {
         </div>
       </div>
 
-      <hr className="mx-4 mb-2 border-purple-400 border-dashed " />
+      {/* <hr className="mx-4 mb-2 border-purple-400 border-dashed " /> */}
 
-      <div className="py-12 bg-white dark:bg-gray-900">
+      <div className="py-12 bg-white dark:bg-gray-800">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="lg:text-center">
             <h2 className="text-base font-semibold tracking-wide text-indigo-600 uppercase">
@@ -107,7 +107,7 @@ export default function About() {
               A better way to publish and purchase
             </p>
             <p className="max-w-2xl mt-4 text-xl text-gray-500 lg:mx-auto">
-              changing fees from 30% to 3%{' '}
+              changing fees from 30% to 7%{' '}
             </p>
           </div>
 
@@ -119,7 +119,7 @@ export default function About() {
                     <div className="absolute flex items-center justify-center w-12 h-12 text-white bg-indigo-500 rounded-md">
                       <feature.icon className="w-6 h-6" aria-hidden="true" />
                     </div>
-                    <p className="ml-16 text-lg font-medium leading-6 text-gray-900">
+                    <p className="ml-16 text-lg font-medium leading-6 text-gray-900 dark:text-gray-300">
                       {feature.name}
                     </p>
                   </dt>
@@ -131,11 +131,9 @@ export default function About() {
         </div>
       </div>
 
-      <hr className="mx-4 mb-2 border-purple-400 border-dashed " />
-
       <div>
-        <section className="text-gray-700">
-          <div className="container px-5 py-4 mx-auto">
+        <section className="text-gray-700 bg-gray-300 dark:bg-gray-800">
+          <div className="container px-5 py-4 mx-auto ">
             <div className="mb-20 text-center">
               <h1 className="mb-4 text-3xl font-medium text-center text-gray-900 sm:text-3xl title-font dark:text-indigo-600">
                 Frequently Asked Question
@@ -223,9 +221,9 @@ export default function About() {
         </section>
       </div>
 
-      <hr className="mx-4 mb-2 border-purple-400 border-dashed " />
+      {/* <hr className="mx-4 mb-2 border-purple-400 border-dashed " /> */}
 
-      <div className="p-2 mt-2 bg-gray-300 dark:bg-gray-900">
+      <div className="p-2 mt-2 bg-white dark:bg-gray-900">
         <h1 className="mb-2 text-3xl font-semibold text-center dark:text-indigo-500">Road Map</h1>
         <div className="container ">
           <div className="flex flex-col grid-cols-12 md:grid text-gray-50">

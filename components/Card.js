@@ -7,7 +7,7 @@ export default function () {
         <Link href="/">
           <a
             href=""
-            className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-700 dark:text-gray-300 c-card hover:shadow-xl">
+            className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
             <div className="relative pb-48 overflow-hidden">
               <img
                 className="absolute inset-0 object-cover w-full h-full"
