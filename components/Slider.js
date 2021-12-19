@@ -1,9 +1,10 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-
+import { useState } from 'react';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+
 import Card from './Card';
 
 import SwiperCore, { FreeMode, Pagination, Navigation } from 'swiper';
@@ -11,6 +12,8 @@ import SwiperCore, { FreeMode, Pagination, Navigation } from 'swiper';
 SwiperCore.use([Pagination, FreeMode, Navigation]);
 
 export default function Slider() {
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
   return (
     <div className="py-4">
       <Swiper
@@ -37,11 +40,9 @@ export default function Slider() {
         <SwiperSlide>
           <Card />
         </SwiperSlide>
-
         <SwiperSlide>
           <Card />
         </SwiperSlide>
-
         <SwiperSlide>
           <Card />
         </SwiperSlide>

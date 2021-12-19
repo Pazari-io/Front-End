@@ -1,12 +1,10 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, LoginIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import useDarkMode from '../hooks/useDarkMode';
-
 import { useMoralis } from 'react-moralis';
 import AvaxPrice from './AvaxPrice';
 import Image from 'next/image';
@@ -48,7 +46,7 @@ export default function Nav() {
               <div className="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
                 <div className="flex items-center flex-shrink-0"></div>
 
-                <Image src={Pazari} alt="Pazari" height="40" width="120" />
+                <Image src={Pazari} alt="Pazari" height="20" width="90" />
 
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex items-center space-x-4">

@@ -1,8 +1,6 @@
 import Nav from '../../components/NavBar';
 import CategoryFilter from '../../components/CategoryFilter';
 import Footer from '../../components/Footer';
-import AudioPlayer from '../../components/AudioPlayer';
-
 /*
 Adobe stock
 ShutterStock

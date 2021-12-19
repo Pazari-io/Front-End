@@ -10,7 +10,6 @@ import {
 } from '@heroicons/react/solid';
 import Slider from './Slider';
 import AudioPlayer from './AudioPlayer';
-
 const products = [
   {
     id: 1,
