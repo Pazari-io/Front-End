@@ -1,4 +1,15 @@
+import { Fragment, useState, useRef, useEffect } from 'react';
+import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
+import {
+  ChevronDownIcon,
+  FilterIcon,
+  MinusSmIcon,
+  PlusSmIcon,
+  ViewGridIcon
+} from '@heroicons/react/solid';
 import Slider from './Slider';
+import AudioPlayer from './AudioPlayer';
 
 const products = [
   {
@@ -13,16 +24,6 @@ const products = [
   }
   // More products...
 ];
-import { Fragment, useState } from 'react';
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
-import {
-  ChevronDownIcon,
-  FilterIcon,
-  MinusSmIcon,
-  PlusSmIcon,
-  ViewGridIcon
-} from '@heroicons/react/solid';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -75,7 +76,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Example() {
+export default function CategoriesFilter(props) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
@@ -316,11 +317,10 @@ export default function Example() {
 
               {/* Product grid */}
               <div className="lg:col-span-3">
-                {/* Replace with your content */}
-                <div className="">
-                  <Slider />
-                  <Slider />
-                </div>
+                {/* main category content */}
+                <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
+                <div>{props.books && <Slider />}</div>
+
                 {/* /End replace */}
               </div>
             </div>

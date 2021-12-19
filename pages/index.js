@@ -55,7 +55,7 @@ export default function Home() {
           </span>
         </Link>
 
-        <Link href="/books">
+        <Link href="/audios">
           <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg dark:bg-gray-800 md:w-1/3">
             <Image src={Audios} alt="Picture of the author" width={256} height={256} />
             <h3 className="py-2 text-2xl dark:text-white">Audios</h3>

@@ -140,7 +140,7 @@ export default function Footer() {
           </form>
         </div>
         <div className="flex items-center justify-center pt-10 font-light text-center sm:pt-12">
-          Made with <span className="px-1 text-red-500"> &hearts; </span> by our {'team '}
+          Made with <span className="px-1 text-red-500"> &hearts; </span> by our Pazari Team
         </div>
       </div>
     </footer>

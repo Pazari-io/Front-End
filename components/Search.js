@@ -41,7 +41,7 @@ export default function Search() {
             className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
             placeholder="Search"
           />
-          <div className="absolute right-0 hidden h-auto px-2 py-1 mr-2 text-xs text-gray-400 border border-gray-300 rounded-2xl md:block dark:bg-gray-800">
+          <div className="absolute right-0 hidden h-auto px-2 py-1 mr-2 text-xs text-black bg-gray-300 border border-gray-300 dark:text-gray-400 rounded-2xl md:block dark:bg-gray-800">
             +
             <Listbox value={selectedCategory} onChange={SetselectedCategory}>
               <Listbox.Button>{selectedCategory.name}</Listbox.Button>

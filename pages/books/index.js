@@ -1,5 +1,5 @@
 import Nav from '../../components/NavBar';
-import CategoryFilter from '../../components/CategoryFilters';
+import CategoryFilter from '../../components/CategoryFilter';
 import Footer from '../../components/Footer';
 const products = [
   {
@@ -14,6 +14,41 @@ const products = [
   }
   // More products...
 ];
+
+/*
+Adobe stock
+ShutterStock
+Istock
+CreativeMarket
+Motionarray
+Evanto 
+
+*/
+
+// aduioCategories = [
+//   'Ambient',
+//   'Children',
+//   'Cinematic',
+//   'Classical',
+//   'Corporate',
+//   'Country, Western',
+//   'Drum & Bass, Breakbeat',
+//   'Electronica',
+//   'Experimental, Abstract',
+//   'Folk, Acoustic',
+//   'Funk, Groove',
+//   'Hip-Hop',
+//   'Holiday & Seasonal',
+//   'House',
+//   'Jazz',
+//   'Miscellaneous',
+//   'Percussion',
+//   'Pop',
+//   'Rock',
+//   'Soul, R&B',
+//   'Vocals, Voice',
+//   'World Beat'
+// ];
 
 let bookCategories = [
   'Computer',
@@ -85,8 +120,8 @@ export default function Home() {
 
           {bookCategories.map((category) => {
             return (
-              <div className="inline-flex px-2 py-1">
-                <span class="px-4 py-2  text-base rounded-full text-white  bg-indigo-500 ">
+              <div className="inline-flex px-2 py-1" key={category}>
+                <span className="px-4 py-2 text-base text-white bg-indigo-500 rounded-full ">
                   {category}
                 </span>
               </div>
@@ -95,7 +130,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CategoryFilter />
+      <CategoryFilter books={[1, 2]} />
       <Footer />
     </main>
   );
