@@ -1,6 +1,17 @@
 export default function Footer() {
   return (
     <footer className="pt-4 pb-8 bg-gray-200 dark:bg-gray-800 xl:pt-8">
+      <div className="flex items-center justify-center">
+        <h3 className="font-bold text-center dark:text-gray-300">Powered by</h3>
+        <img
+          className="w-10 h-10 mx-1"
+          src="https://moralis.io/wp-content/uploads/2021/06/Moralis-Glass-Favicon.svg"
+        />
+        <img
+          className="w-8 h-8 mx-1"
+          src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"
+        />
+      </div>
       <div className="max-w-screen-lg px-4 mx-auto text-gray-400 xl:max-w-screen-xl sm:px-6 md:px-8 dark:text-gray-300">
         {/* <ul className="flex flex-wrap justify-center pb-8 text-lg font-light">
           <li className="w-1/2 md:w-1/3 lg:w-1/3">

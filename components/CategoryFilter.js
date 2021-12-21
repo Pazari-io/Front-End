@@ -10,21 +10,10 @@ import {
 } from '@heroicons/react/solid';
 import Slider from './Slider';
 import AudioPlayer from './AudioPlayer';
-import Search from './Search';
 import Pagination from './Pagination';
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc:
-      'https://i2-prod.walesonline.co.uk/incoming/article6890072.ece/ALTERNATES/s615b/hp1.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black'
-  }
-  // More products...
-];
+
+import Card from './Card';
+import { SwiperSlide } from 'swiper/react';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -38,6 +27,34 @@ const subCategories = [
   // { name: 'Shorts', href: '#' },
   // { name: 'Guides', href: '#' }
 ];
+
+const bookSlides = (
+  <>
+    <SwiperSlide>
+      <Card type="book" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="book" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="book" />
+    </SwiperSlide>
+  </>
+);
+
+const videoSlides = (
+  <>
+    <SwiperSlide>
+      <Card type="video" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="video" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="video" />
+    </SwiperSlide>
+  </>
+);
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -292,7 +309,8 @@ export default function CategoriesFilter(props) {
               <div className="lg:col-span-3">
                 {/* main category content */}
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
-                <div>{props.books && <Slider />}</div>
+                <div>{props.books && <Slider slides={bookSlides} />}</div>
+                <div>{props.videos && <Slider slides={videoSlides} />}</div>
 
                 <Pagination />
                 {/* /End replace */}

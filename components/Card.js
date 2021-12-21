@@ -1,6 +1,33 @@
 import Link from 'next/link';
 
-export default function () {
+const LoadCover = (props) => {
+  switch (props.type) {
+    case 'book':
+      return (
+        <div>
+          <img
+            className="object-cover w-full h-full "
+            src="https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"
+            alt=""
+          />
+        </div>
+      );
+    case 'video':
+      return (
+        <video
+          muted={true}
+          onMouseOver={(event) => event.target.play()}
+          onMouseOut={(event) => event.target.pause()}
+          className="object-cover w-full h-full "
+          src="https://dsqqu7oxq6o1v.cloudfront.net/preview-110211-ds2Rbn0ZcM-high.mp4"
+          type="video/mp4"></video>
+      );
+    default:
+      return null;
+  }
+};
+
+export default function (props) {
   return (
     <div>
       <div className="w-full">
@@ -8,25 +35,30 @@ export default function () {
           <a
             href=""
             className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
-            <div className="relative pb-48 overflow-hidden">
-              <img
-                className="absolute inset-0 object-cover w-full h-full"
-                src="https://picsum.photos/750/400/?random"
-                alt=""
-              />
+            <div className="relative overflow-hidden">
+              <LoadCover type={props.type} />
             </div>
             <div className="p-4">
-              <span className="inline-block px-2 py-1 text-xs font-semibold leading-none tracking-wide text-orange-800 uppercase bg-orange-200 rounded-full">
-                Highlight
+              <span className="inline-block px-2 py-1 text-xs font-semibold leading-none tracking-wide text-indigo-800 uppercase bg-indigo-200 rounded-full">
+                New
               </span>
               <h2 className="mt-2 mb-2 font-bold">Purus Ullamcorper Inceptos Nibh</h2>
               <p className="text-sm">
                 Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec ullamcorper nulla
                 non metus auctor fringilla.
               </p>
-              <div className="flex items-center mt-3">
-                <span className="text-xl font-bold dark:text-indigo-600">45,00</span>&nbsp;
-                <span className="text-sm font-semibold dark:text-indigo-600">$</span>
+              <div className="flex items-center justify-between mt-3">
+                <div>
+                  <span className="text-lg font-bold dark:text-indigo-600">45,00</span>&nbsp;
+                  <span className="text-sm font-semibold dark:text-indigo-600">$</span>
+                </div>
+
+                <div className="flex items-center">
+                  <img
+                    className="w-6 h-6"
+                    src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"></img>
+                  <h3 className="px-2 text-lg font-bold">0.454</h3>
+                </div>
               </div>
             </div>
             <div className="p-4 text-xs text-gray-700 border-t border-b">
