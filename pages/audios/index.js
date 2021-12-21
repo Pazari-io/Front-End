@@ -1,6 +1,37 @@
 import Nav from '../../components/NavBar';
 import CategoryFilter from '../../components/CategoryFilter';
 import Footer from '../../components/Footer';
+
+const filters = [
+  {
+    id: 'properties',
+    name: 'Properties',
+    options: [
+      { value: 'verfied', label: 'Verfied publisher', checked: false },
+      { value: 'exlusive', label: 'Exclusive publication', checked: false },
+      { value: 'erpo', label: 'Exclude R.P.O', checked: false },
+      { value: 'rpoo', label: 'R.P.O only', checked: false }
+    ]
+  },
+  {
+    id: 'type',
+    name: 'Type',
+    options: [
+      { value: 'sfx', label: 'SFX', checked: false },
+      { value: 'music', label: 'Music', checked: false }
+    ]
+  },
+  {
+    id: 'length',
+    name: 'Length',
+    options: [
+      { value: 'lessthan1', label: 'Less than 1 minutes', checked: false },
+      { value: 'morethan1', label: 'More than 1 miutes', checked: false },
+      { value: 'morethan3', label: 'More than 3 minutes', checked: false }
+    ]
+  }
+];
+
 /*
 Adobe stock
 ShutterStock
@@ -38,7 +69,23 @@ let audioCategories = [
   'Rock',
   'Soul, R&B',
   'Vocals, Voice',
-  'World Beat'
+  'World Beat',
+  'Game',
+  'Miscellaneous',
+  'Urban',
+  'Domestic',
+  'Nature',
+  'Industrial',
+  'Human',
+  'Transitions',
+  'Futuristic',
+  'Interface',
+  'Animals',
+  'Creatures',
+  'Foley',
+  'Miscellaneous',
+  'Vehicles',
+  'Voices'
 ];
 
 export default function Home() {
@@ -64,7 +111,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CategoryFilter audioUrls={audioUrls} />
+      <CategoryFilter audioUrls={audioUrls} filters={filters} />
       <Footer />
     </main>
   );

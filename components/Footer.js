@@ -122,7 +122,7 @@ export default function Footer() {
             </svg>
           </a>
         </div>
-        <div className="flex items-center justify-center pt-10 font-light text-center sm:pt-12">
+        {/* <div className="flex items-center justify-center pt-10 font-light text-center sm:pt-12">
           <form className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
             <div className="relative ">
               <input
@@ -138,7 +138,7 @@ export default function Footer() {
               Subscribe
             </button>
           </form>
-        </div>
+        </div> */}
         <div className="flex items-center justify-center pt-10 font-light text-center sm:pt-12">
           Made with <span className="px-1 text-red-500"> &hearts; </span> by our Pazari Team
         </div>

@@ -10,6 +10,8 @@ import {
 } from '@heroicons/react/solid';
 import Slider from './Slider';
 import AudioPlayer from './AudioPlayer';
+import Search from './Search';
+import Pagination from './Pagination';
 const products = [
   {
     id: 1,
@@ -32,43 +34,9 @@ const sortOptions = [
   { name: 'Price: High to Low', href: '#', current: false }
 ];
 const subCategories = [
-  { name: 'Web3', href: '#' },
-  { name: 'Ether', href: '#' },
-  { name: 'Avax', href: '#' },
-  { name: 'XMR', href: '#' },
-  { name: 'BTC', href: '#' }
-];
-const filters = [
-  {
-    id: 'age',
-    name: 'Age',
-    options: [
-      { value: 'every', label: 'Every age', checked: false },
-      { value: 'kids', label: 'Kids', checked: false },
-      { value: 'young', label: 'Young adults', checked: true },
-      { value: 'adults', label: '+18', checked: false }
-    ]
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false }
-    ]
-  },
-  {
-    id: 'types',
-    name: 'Types',
-    options: [
-      { value: 'book', label: 'Ebook', checked: false },
-      { value: 'guide', label: 'Guides', checked: false },
-      { value: 'saga', label: 'Saga', checked: false }
-    ]
-  }
+  // { name: 'Ebook', href: '#' },
+  // { name: 'Shorts', href: '#' },
+  // { name: 'Guides', href: '#' }
 ];
 
 function classNames(...classes) {
@@ -133,7 +101,7 @@ export default function CategoriesFilter(props) {
                     ))}
                   </ul>
 
-                  {filters.map((section) => (
+                  {props.filters.map((section) => (
                     <Disclosure
                       as="div"
                       key={section.id}
@@ -186,10 +154,16 @@ export default function CategoriesFilter(props) {
         </Transition.Root>
 
         <main className="mx-auto sm:px-6 lg:px-8">
-          <div className="relative z-10 flex items-baseline justify-between pt-16 pb-6 border-b border-gray-200">
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-indigo-600">
-              New Arrivals
+          <div className="relative z-10 flex items-center justify-between pt-16 pb-6 border-b border-gray-200">
+            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-indigo-600">
+              Filters
             </h1>
+
+            <input
+              type="text"
+              placeholder="Search ..."
+              className="w-1/3 rounded-lg dark:bg-gray-700 dark:text-gray-300"
+            />
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
@@ -269,7 +243,7 @@ export default function CategoriesFilter(props) {
                   ))}
                 </ul>
 
-                {filters.map((section) => (
+                {props.filters.map((section) => (
                   <Disclosure as="div" key={section.id} className="py-6 border-b border-gray-200">
                     {({ open }) => (
                       <>
@@ -320,6 +294,7 @@ export default function CategoriesFilter(props) {
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
                 <div>{props.books && <Slider />}</div>
 
+                <Pagination />
                 {/* /End replace */}
               </div>
             </div>

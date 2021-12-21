@@ -1,12 +1,3 @@
-import Head from 'next/head';
-import Image from 'next/image';
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react';
-import { Popover, Transition } from '@headlessui/react';
-import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import useDarkMode from '../hooks/useDarkMode';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import {
   AnnotationIcon,
   GlobeAltIcon,
@@ -22,10 +13,6 @@ const navigation = [
   // { name: 'Projects', href: '#', current: false },
   { name: 'About', href: '#', current: false }
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 const features = [
   {

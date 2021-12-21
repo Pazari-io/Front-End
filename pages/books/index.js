@@ -1,18 +1,38 @@
 import Nav from '../../components/NavBar';
 import CategoryFilter from '../../components/CategoryFilter';
 import Footer from '../../components/Footer';
-const products = [
+
+const filters = [
   {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc:
-      'https://i2-prod.walesonline.co.uk/incoming/article6890072.ece/ALTERNATES/s615b/hp1.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black'
+    id: 'properties',
+    name: 'Properties',
+    options: [
+      { value: 'verfied', label: 'Verfied publisher', checked: true },
+      { value: 'exclusive', label: 'Exclusive release', checked: true },
+      { value: 'hasaudio', label: 'With audio', checked: false },
+      { value: 'waterfree', label: 'No watermarks', checked: false },
+      { value: 'permissions', label: 'Full permissions', checked: false }
+    ]
+  },
+  {
+    id: 'age',
+    name: 'Age',
+    options: [
+      { value: 'every', label: 'Every age', checked: false },
+      { value: 'kids', label: 'Kids', checked: false },
+      { value: 'young', label: 'Young adults', checked: true },
+      { value: 'adults', label: '+18', checked: false }
+    ]
+  },
+  {
+    id: 'length',
+    name: 'Length',
+    options: [
+      { value: 'lessthan100', label: 'Less than 100 pages', checked: false },
+      { value: 'morethan100', label: 'More than 100 pages', checked: false },
+      { value: 'morethan300', label: 'More than 300 pages', checked: false }
+    ]
   }
-  // More products...
 ];
 
 /*
@@ -130,7 +150,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CategoryFilter books={[1, 2]} />
+      <CategoryFilter books={[1, 2]} filters={filters} />
       <Footer />
     </main>
   );
