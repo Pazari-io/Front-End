@@ -40,7 +40,7 @@ export default function AudioPlayer(props) {
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    console.log(isLoading);
+    //console.log(isLoading);
   }, [isLoading]);
   const Loaded = async () => {
     setIsLoading(false);

@@ -56,6 +56,20 @@ const videoSlides = (
   </>
 );
 
+const photoSlides = (
+  <>
+    <SwiperSlide>
+      <Card type="photo" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="photo" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="photo" />
+    </SwiperSlide>
+  </>
+);
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -106,7 +120,7 @@ export default function CategoriesFilter(props) {
                 {/* Filters */}
                 <form className="mt-4 border-t border-gray-200 dark:bg-gray-800 dark:text-gray-300">
                   <h3 className="sr-only">Categories</h3>
-                  <ul
+                  {/* <ul
                     role="list"
                     className="px-2 py-3 font-medium text-gray-900 dark:text-gray-300">
                     {subCategories.map((category) => (
@@ -116,7 +130,7 @@ export default function CategoriesFilter(props) {
                         </a>
                       </li>
                     ))}
-                  </ul>
+                  </ul> */}
 
                   {props.filters.map((section) => (
                     <Disclosure
@@ -142,7 +156,9 @@ export default function CategoriesFilter(props) {
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-6">
                               {section.options.map((option, optionIdx) => (
-                                <div key={option.value} className="flex items-center">
+                                <div
+                                  key={option.value}
+                                  className="flex items-center dark:text-gray-300">
                                   <input
                                     id={`filter-mobile-${section.id}-${optionIdx}`}
                                     name={`${section.id}[]`}
@@ -153,7 +169,7 @@ export default function CategoriesFilter(props) {
                                   />
                                   <label
                                     htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                    className="flex-1 min-w-0 ml-3 text-gray-500">
+                                    className="flex-1 min-w-0 ml-3 text-gray-500 dark:text-gray-300">
                                     {option.label}
                                   </label>
                                 </div>
@@ -292,7 +308,7 @@ export default function CategoriesFilter(props) {
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
-                                  className="ml-3 text-sm text-gray-600">
+                                  className="ml-3 text-sm text-gray-600 dark:text-gray-400">
                                   {option.label}
                                 </label>
                               </div>
@@ -311,6 +327,9 @@ export default function CategoriesFilter(props) {
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
                 <div>{props.books && <Slider slides={bookSlides} />}</div>
                 <div>{props.videos && <Slider slides={videoSlides} />}</div>
+                <div>{props.photos && <Slider slides={photoSlides} />}</div>
+                <div>{props.games && <Slider slides={photoSlides} />}</div>
+                <div>{props.graphics && <Slider slides={photoSlides} />}</div>
 
                 <Pagination />
                 {/* /End replace */}

@@ -14,66 +14,43 @@ const filters = [
     ]
   },
   {
-    id: 'type',
-    name: 'Type',
-    options: [
-      { value: 'stock', label: 'Stock Videos', checked: false },
-      { value: 'template', label: 'Templates', checked: false }
-    ]
-  },
-  {
-    id: 'resolution',
-    name: 'Resolutions',
-    options: [
-      { value: '2k', label: '2K', checked: false },
-      { value: '4k', label: '4K', checked: false },
-      { value: '5k', label: '5K+', checked: false }
-    ]
-  },
-  {
     id: 'software',
     name: 'Software',
     options: [
-      { value: 'aftereffects', label: 'Adone After Effect', checked: false },
-      { value: 'premiere', label: 'Adobe Premiere Pro', checked: false },
-      { value: 'davinci', label: 'Davinci Resolve', checked: false },
-      { value: 'finalcut', label: 'Final Cut Pro', checked: false },
-      { value: 'motiongraphic', label: 'Motion Graphics', checked: false }
+      { value: 'canva', label: 'Canva', checked: false },
+      { value: 'illustrator', label: 'Adobe Illustrator', checked: false },
+      { value: 'photoshop', label: 'Adobe Photoshop', checked: false },
+      { value: 'xd', label: 'Adobe XD', checked: false },
+      { value: 'sketch', label: 'Sketch', checked: false },
+      { value: 'pages', label: 'Apple Pages', checked: false },
+      { value: 'slides', label: 'Google Slides', checked: false },
+      { value: 'powerpoint', label: 'MS PowerPoint', checked: false }
     ]
   }
 ];
 
-let videoCategories = [
-  'People',
-  'Nature',
-  'Business',
-  'Corporate',
-  'Food',
-  'Lifestyle',
-  'Sports',
-  'Building',
-  'Medical',
-  'Technology',
-  'Industrial',
-  'Holidays',
-  'Vehicles',
-  'City',
-  'Education',
-  'Overhead',
-  'Time Lap',
-  'Science',
-  'Slow Motion',
-  'Construction',
-  'Special effects',
-  'Kids',
-  'Religious',
-  'Weather',
-  'Military',
-  'Stop Mot',
-  'Cartoons'
+let photoCategories = [
+  'Vectors',
+  'Backgrounds',
+  'Print Templates',
+  'Logo Templates',
+  'Web Elements',
+  'Email Templates',
+  'Presentation Templates',
+  'Icons',
+  'Fonts',
+  'YouTube',
+  'Facebook',
+  'Instagram',
+  'LinkedIn',
+  'TikTok',
+  'Twitter',
+  'Vimeo',
+  'Twitch',
+  'Bundle'
 ];
 
-export default function Home() {
+export default function Graphics() {
   return (
     <main className="min-h-screen mx-auto dark:bg-gray-900">
       <Nav />
@@ -84,7 +61,7 @@ export default function Home() {
             Explore categories
           </h1>
 
-          {videoCategories.map((category) => {
+          {photoCategories.map((category) => {
             return (
               <div className="inline-flex px-2 py-1" key={category}>
                 <span className="px-4 py-2 text-base text-white bg-indigo-500 rounded-full ">
@@ -96,7 +73,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CategoryFilter videos={[1, 2]} filters={filters} />
+      <CategoryFilter photos={[1, 2]} filters={filters} />
       <Footer />
     </main>
   );

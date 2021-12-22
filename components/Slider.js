@@ -13,7 +13,7 @@ import ClientOnly from './ClientOnly';
 SwiperCore.use([Pagination, FreeMode, Navigation]);
 
 export default function Slider(props) {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  //const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   return (
     <div className="py-4">

@@ -18,19 +18,7 @@ import Graphics from '../public/images/Graphics.png';
 // if you see SVG console errors it seems to be a react
 // bug https://github.com/facebook/react/issues/15187
 // there should be a fix for this but not concerning
-
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black'
-  }
-  // More products...
-];
+// buy and remove button
 
 export default function Home() {
   return (
@@ -40,11 +28,11 @@ export default function Home() {
 
       <div>
         <h1 className="py-4 text-4xl font-extrabold tracking-tight text-gray-900 px-14 dark:text-indigo-600">
-          Everything you need to publish
+          Indie Publication revolution
         </h1>
 
         <h3 className="py-4 text-xl px-14 dark:text-gray-200">
-          Publish and get paid on blazing fast AVAX network
+          Pazari a new era of publishing digital assets
         </h3>
       </div>
 
@@ -53,7 +41,7 @@ export default function Home() {
           <Link href="/books">
             <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
               <Image src={Books} alt="Picture of the author" width={256} height={256} />
-              <h3 className="py-2 text-2xl dark:text-white">Books</h3>
+              <h3 className="py-2 text-2xl dark:text-white">E-Books</h3>
             </span>
           </Link>
 
@@ -73,20 +61,26 @@ export default function Home() {
         </div>
 
         <div className="flex items-center justify-center w-full py-4 px-28 ">
-          <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
-            <Image src={Photos} alt="Picture of the author" width={256} height={256} />
-            <h3 className="py-2 text-2xl dark:text-white">Photos</h3>
-          </span>
+          <Link href="/photos">
+            <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
+              <Image src={Photos} alt="Picture of the author" width={256} height={256} />
+              <h3 className="py-2 text-2xl dark:text-white">Photos</h3>
+            </span>
+          </Link>
 
-          <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
-            <Image src={Graphics} alt="Picture of the author" width={256} height={256} />
-            <h3 className="py-2 text-2xl dark:text-white">Graphics</h3>
-          </span>
+          <Link href="/graphics">
+            <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
+              <Image src={Graphics} alt="Picture of the author" width={256} height={256} />
+              <h3 className="py-2 text-2xl dark:text-white">Graphics</h3>
+            </span>
+          </Link>
 
-          <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
-            <Image src={Games} alt="Picture of the author" width={256} height={256} />
-            <h3 className="py-2 text-2xl dark:text-white">Game Assets</h3>
-          </span>
+          <Link href="/games">
+            <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
+              <Image src={Games} alt="Picture of the author" width={256} height={256} />
+              <h3 className="py-2 text-2xl dark:text-white">Game Assets</h3>
+            </span>
+          </Link>
         </div>
       </div>
 
