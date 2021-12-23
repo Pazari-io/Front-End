@@ -22,6 +22,7 @@ function classNames(...classes) {
 
 export default function Nav() {
   const [colorTheme, setTheme] = useDarkMode();
+
   const router = useRouter();
   const { authenticate, isAuthenticated, logout, user } = useMoralis();
 
