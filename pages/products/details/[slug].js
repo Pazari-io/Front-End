@@ -155,41 +155,41 @@ export default function Detail() {
             intellegatur, rationem huius verbi faciendi Zenonis exponere. Hanc quoque iucunditatem,
             si vis, transfer in animum; Confecta res esset. Quae tamen a te agetur non melior, quam
             illae sunt, quas interdum optines.
-            <div class="aspect-w-16 aspect-h-9 my-2">
+            <div className="my-2 aspect-w-16 aspect-h-9">
               <iframe
                 src="https://www.youtube.com/embed/r9jwGansp1E"
-                frameborder="0"
+                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+                allowFullScreen></iframe>
             </div>
             <div className="flex items-center justify-between py-2">
               <button
                 type="button"
-                class="py-4 px-4  w-1/3 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                className="w-1/3 px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
                 Buy A Copy $300
               </button>
               <button
                 type="button"
-                class="py-4 mx-1 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-1/3 transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                className="w-1/3 py-4 mx-1 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
                 Buy And Bang $30000
               </button>
             </div>
             <hr className="my-8 border-gray-400"></hr>
             <h4 className="my-2 font-bond">Higlights</h4>
-            <div class="flex px-2 flex-col gap-8 dark:text-gray-400">
+            <div className="flex flex-col gap-8 px-2 dark:text-gray-400">
               <div>
-                <ul class="list-disc list-inside text-normal text-gray-900 dark:text-gray-500">
+                <ul className="text-gray-900 list-disc list-inside text-normal dark:text-gray-500">
                   <li>Now this is a story all about how, my life got flipped turned upside down</li>
                   <li>And I like to take a minute and sit right here</li>
-                  <li>I'll tell you how I became the prince of a town called Bel-Air </li>
+                  <li>I&#39;ll tell you how I became the prince of a town called Bel-Air </li>
                 </ul>
               </div>
             </div>
             <hr className="my-8 border-gray-400"></hr>
             <h4 className="my-2 font-bond">License</h4>
-            <div class="flex px-2 flex-col gap-8 dark:text-gray-400">
+            <div className="flex flex-col gap-8 px-2 dark:text-gray-400">
               <div>
-                <ul class="list-disc list-inside text-normal text-gray-900 dark:text-gray-500">
+                <ul className="text-gray-900 list-disc list-inside text-normal dark:text-gray-500">
                   <li>personal , professional and exclusive copies avaiable. </li>
                 </ul>
               </div>

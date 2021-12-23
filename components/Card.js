@@ -37,7 +37,7 @@ const LoadCover = (props) => {
   }
 };
 
-export default function (props) {
+export default function Card(props) {
   return (
     <div>
       <div className="w-full">
