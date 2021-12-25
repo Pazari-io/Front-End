@@ -20,11 +20,54 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+const switchRequest = () => {
+  return window.ethereum.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: '0xA869' }],
+  })
+}
+
+const addChainRequest = () => {
+  return window.ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: '0xA869',
+        chainName: 'Avalanche FUJI C-Chain',
+        rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+        blockExplorerUrls: ['https://testnet.snowtrace.io/'],
+        nativeCurrency: {
+          name: 'AVAX',
+          symbol: 'AVAX',
+          decimals: 18,
+        },
+      },
+    ],
+  })
+}
+
 export default function Nav() {
   const [colorTheme, setTheme] = useDarkMode();
 
   const router = useRouter();
-  const { authenticate, isAuthenticated ,logout, enableWeb3, account } = useMoralis();
+  const { authenticate, isAuthenticated ,logout, enableWeb3, account, chainId, web3 } = useMoralis();
+
+  useEffect(() => {
+    const main = async () => {
+      if(account !== null && chainId !== "0xA869" && window.ethereum){
+        try {
+          await switchRequest()
+        } catch (error) {
+          if (error.code === 4902) {
+            try {
+              await addChainRequest()
+              await switchRequest()
+            } catch (addError) {}
+          }
+        }
+      }}
+    main();
+  }, [chainId, account])
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -119,7 +162,7 @@ export default function Nav() {
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
                     onClick={async () => {
                       await authenticate()
-                      enableWeb3()
+                      enableWeb3();
                     }}
                   />
                 )}
