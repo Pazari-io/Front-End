@@ -37,7 +37,7 @@ export default function Home() {
       </div>
 
       <div className="py-14">
-        <div className="flex items-center justify-between w-full py-4 px-28 ">
+        <div className="flex items-center justify-between w-full px-4 py-4 md:px-18 lg:px-28 ">
           <Link href="/books">
             <span className="px-2 mx-2 text-center bg-gray-300 rounded-lg cursor-pointer dark:bg-gray-800 md:w-1/3">
               <Image src={Books} alt="Picture of the author" width={256} height={256} />

@@ -6,8 +6,8 @@ export default function AvaxPrice(props) {
   if (!props.usd) {
     const { data, error } = useSWR('/api/ticker', fetcher);
 
-    if (error) return <div>failed to load</div>;
-    if (!data) return <div>loading...</div>;
+    if (error) return <div className="text-red-500">failed to load</div>;
+    if (!data) return <div className="dark:text-gray-300">loading...</div>;
 
     return (
       <div className="flex items-center justify-center font-bold text-gray-400 dark:text-gray-300 ">
