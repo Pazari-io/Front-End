@@ -1,63 +1,63 @@
-import { useRouter } from 'next/router';
-import Image from 'next/image';
+import Nav from '../../../components/NavBar';
+import Slider from '../../../components/Slider';
+import Footer from '../../../components/Footer';
+import { SwiperSlide } from 'swiper/react';
+import Card from '../../../components/Card';
+import Pagination from '../../../components/Pagination';
+const bookSlides = (
+  <>
+    <SwiperSlide>
+      <Card type="book" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="book" />
+    </SwiperSlide>
+    <SwiperSlide>
+      <Card type="book" />
+    </SwiperSlide>
+  </>
+);
 
-export default function Home() {
-  const router = useRouter();
-  let slug = router.query.slug;
-
+export default function Profile(props) {
   return (
-    <div>
-      <div className="flex justify-center w-full pt-10 bg-orange-300 ">
-        <Image
-          src={'/HP.jpeg'}
-          alt="Picture of something nice"
-          width={250}
-          height={300}
-          className="rounded-lg cursor-pointer"
+    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
+      <Nav />
+
+      <div className="contrainer px-14 ">
+        <div className="flex items-center justify-center w-full px-4 py-4 md:px-18 lg:px-28 ">
+          <h1 className="text-2xl dark:text-gray-300">Awesome Author </h1>
+          <img
+            className="w-10 h-10 mx-2"
+            src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"></img>
+        </div>
+
+        <p className="px-8 py-2 mb-4">
+          Adam Silvera is the New York Times bestselling author of They Both Die at the End, More
+          Happy Than Not, and History Is All You Left Me and—together with Becky Albertalli—coauthor
+          of What If It’s Us. He was named a Publishers Weekly Flying Start. Adam was born and
+          raised in the Bronx. He was a bookseller before shifting to children’s publishing and has
+          worked at a literary development company and a creative writing website for teens and as a
+          book reviewer of children’s and young adult novels. He is tall for no reason and lives in
+          Los Angeles. Visit him online at www.adamsilvera.com.
+        </p>
+
+        <hr className="my-4 border-indigo-600" />
+        <input
+          type="text"
+          placeholder="Search ..."
+          className="w-1/3 rounded-lg dark:bg-gray-700 dark:text-gray-300"
         />
-      </div>
-      <p className="flex justify-center w-full pt-4 text-xl font-bold text-white bg-orange-300 ">
-        Harry Potter
-      </p>
 
-      <div className="flex justify-between w-full pt-4 text-sm text-gray-100 bg-orange-300 px-14">
-        <p>Rating</p>
-        <p>Pages</p>
-        <p>Language</p>
-        <p>Audio</p>
+        <h1 className="py-8 text-2xl dark:text-indigo-600">Latest releases </h1>
+
+        <Slider slides={bookSlides} />
+        <Slider slides={bookSlides} />
+        <Slider slides={bookSlides} />
+
+        <Pagination />
       </div>
 
-      <div className="flex justify-between w-full pt-4 text-lg font-bold text-white bg-orange-300 px-14">
-        <p>4.7</p>
-        <p>240</p>
-        <p>ENG</p>
-        <p>0.2 Hr</p>
-      </div>
-
-      <h1 className="px-8 py-2 text-2xl font-bold">What's it about?</h1>
-
-      <p className="px-8">
-        Harry Potter is a series of seven fantasy novels written by British author J. K. Rowling.
-        The novels chronicle the lives of a young wizard, Harry Potter, and his friends Hermione
-        Granger and Ron Weasley, all of whom are students at Hogwarts School of Witchcraft and
-        Wizardry. The main story arc concerns Harry's struggle against Lord Voldemort, a dark wizard
-        who intends to become immortal, overthrow the wizard governing body known as the Ministry of
-        Magic and subjugate all wizards and Muggles (non-magical people).
-      </p>
-
-      <h1 className="px-8 py-2 text-2xl font-bold">Who's it for?</h1>
-
-      <p className="px-8">
-        Since the release of the first novel, Harry Potter and the Philosopher's Stone, on 26 June
-        1997, the books have found immense popularity, positive reviews, and commercial success
-        worldwide. They have attracted a wide adult audience as well as younger readers and are
-        often considered cornerstones of modern young adult literature.[2] As of February 2018, the
-        books have sold more than 500 million copies worldwide, making them the best-selling book
-        series in history, and have been translated into eighty languages.[3] The last four books
-        consecutively set records as the fastest-selling books in history, with the final instalment
-        selling roughly 2.7 million copies in the United Kingdom and 8.3 million copies in the
-        United States within twenty-four hours of its release.
-      </p>
-    </div>
+      <Footer />
+    </main>
   );
 }

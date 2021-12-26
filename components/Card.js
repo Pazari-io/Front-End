@@ -114,15 +114,20 @@ export default function Card(props) {
           <div className="flex items-center justify-between p-4 text-xs text-gray-700 border-t ">
             <div className="flex items-center">
               <span className="flex items-center dark:text-gray-300">Verifed Author</span>
+
               <img
                 src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"
                 className="w-4 h-4 mx-1 rounded-full"
               />
             </div>
-            <img
-              src="https://www.pikpng.com/pngl/m/382-3822530_j-k-rowling-blond-clipart.png"
-              className="w-10 h-10 rounded-full"
-            />
+            <Link href="/publishers/details/4">
+              <a>
+                <img
+                  src="https://www.pikpng.com/pngl/m/382-3822530_j-k-rowling-blond-clipart.png"
+                  className="w-10 h-10 rounded-full"
+                />
+              </a>
+            </Link>
           </div>
         </span>
       </div>
