@@ -71,7 +71,7 @@ export default function Dashboard() {
                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                       />
                     </svg>
-                    <p class="underline ">Upload</p>
+                    <p className="underline ">Upload</p>
                   </div>
                 </button>
               )}
@@ -196,92 +196,92 @@ export default function Dashboard() {
               </p>
             </Tab.Panel>
             <Tab.Panel>
-              <div class="flex flex-col mx-14">
-                <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                  <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
-                    <div class="overflow-hidden shadow-md sm:rounded-lg">
-                      <table class="min-w-full">
-                        <thead class="bg-gray-100 dark:bg-gray-700">
+              <div className="flex flex-col mx-14">
+                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                    <div className="overflow-hidden shadow-md sm:rounded-lg">
+                      <table className="min-w-full">
+                        <thead className="bg-gray-100 dark:bg-gray-700">
                           <tr>
                             <th
                               scope="col"
-                              class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                              className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                               Name
                             </th>
                             <th
                               scope="col"
-                              class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                              className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                               Category
                             </th>
                             <th
                               scope="col"
-                              class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                              className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                               Price
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Awsome Video
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Perfect Photo
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               +$2999
                             </td>
                           </tr>
 
-                          <tr class="bg-gray-50 border-b dark:bg-gray-700 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="border-b bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Amazing Audio
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Desktop Pc
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               +$1999
                             </td>
                           </tr>
 
-                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Perfect Photo
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Phone
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               +$999
                             </td>
                           </tr>
 
-                          <tr class="bg-gray-50 border-b dark:bg-gray-700 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="border-b bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Top Game Asset
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Accessories
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500  whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               +$99
                             </td>
                           </tr>
 
-                          <tr class="bg-white dark:bg-gray-800">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="bg-white dark:bg-gray-800">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Best Book
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               E-books
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               +$599
                             </td>
                           </tr>
@@ -291,105 +291,105 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div class="mx-14">
+              <div className="mx-14">
                 <Pagination />
               </div>
             </Tab.Panel>
             <Tab.Panel>
-              <div class="flex flex-col mx-14">
-                <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                  <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
-                    <div class="overflow-hidden shadow-md sm:rounded-lg">
-                      <table class="min-w-full">
-                        <thead class="bg-gray-100 dark:bg-gray-700">
+              <div className="flex flex-col mx-14">
+                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                    <div className="overflow-hidden shadow-md sm:rounded-lg">
+                      <table className="min-w-full">
+                        <thead className="bg-gray-100 dark:bg-gray-700">
                           <tr>
                             <th
                               scope="col"
-                              class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                              className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                               Name
                             </th>
                             <th
                               scope="col"
-                              class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                              className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                               Category
                             </th>
                             <th
                               scope="col"
-                              class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                              className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                               Link
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Awsome Video
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Perfect Photo
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400 ">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400 ">
                               <a className="px-4 py-2 bg-gray-300 rounded-lg dark:bg-gray-900">
                                 Download
                               </a>
                             </td>
                           </tr>
 
-                          <tr class="bg-gray-50 border-b dark:bg-gray-700 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="border-b bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Amazing Audio
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Desktop Pc
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               <a className="px-4 py-2 bg-gray-300 rounded-lg dark:bg-gray-900">
                                 Download
                               </a>
                             </td>
                           </tr>
 
-                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Perfect Photo
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Phone
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               <a className="px-4 py-2 bg-gray-300 rounded-lg dark:bg-gray-900">
                                 Download
                               </a>
                             </td>
                           </tr>
 
-                          <tr class="bg-gray-50 border-b dark:bg-gray-700 dark:border-gray-600">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="border-b bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Top Game Asset
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               Accessories
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500  whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               <a className="px-4 py-2 bg-gray-300 rounded-lg dark:bg-gray-900">
                                 Download
                               </a>
                             </td>
                           </tr>
 
-                          <tr class="bg-white dark:bg-gray-800">
-                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <tr className="bg-white dark:bg-gray-800">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               Best Book
                             </td>
 
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               E-books
                             </td>
-                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
+                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
                               <a className="px-4 py-2 bg-gray-300 rounded-lg dark:bg-gray-900">
                                 Download
                               </a>
@@ -401,7 +401,7 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div class="mx-14">
+              <div className="mx-14">
                 <Pagination />
               </div>
             </Tab.Panel>
