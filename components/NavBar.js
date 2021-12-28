@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
@@ -20,11 +20,54 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+const switchRequest = () => {
+  return window.ethereum.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: '0xA869' }],
+  })
+}
+
+const addChainRequest = () => {
+  return window.ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: '0xA869',
+        chainName: 'Avalanche FUJI C-Chain',
+        rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+        blockExplorerUrls: ['https://testnet.snowtrace.io/'],
+        nativeCurrency: {
+          name: 'AVAX',
+          symbol: 'AVAX',
+          decimals: 18,
+        },
+      },
+    ],
+  })
+}
+
 export default function Nav() {
   const [colorTheme, setTheme] = useDarkMode();
 
   const router = useRouter();
-  const { authenticate, isAuthenticated, logout, user } = useMoralis();
+  const { authenticate, isAuthenticated ,logout, enableWeb3, account, chainId, web3 } = useMoralis();
+
+  useEffect(() => {
+    const main = async () => {
+      if(account !== null && chainId !== "0xA869" && window.ethereum){
+        try {
+          await switchRequest()
+        } catch (error) {
+          if (error.code === 4902) {
+            try {
+              await addChainRequest()
+              await switchRequest()
+            } catch (addError) {}
+          }
+        }
+      }}
+    main();
+  }, [chainId, account])
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -112,19 +155,21 @@ export default function Nav() {
                   <LoginIcon className="w-6 h-6" aria-hidden="true" />
                 </button> */}
 
-                {!isAuthenticated && (
+                {(account === null || !isAuthenticated) && (
                   <img
                     className="w-8 h-8 ml-4 mr-4"
+                    alt=''
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
-                    onClick={() => {
-                      authenticate({ provider: 'metamask', signingMessage: 'LFG metamask !' });
+                    onClick={async () => {
+                      await authenticate()
+                      enableWeb3();
                     }}
                   />
                 )}
 
                 {/* Profile dropdown */}
 
-                {isAuthenticated && (
+                {account !== null && isAuthenticated && (
                   <Menu as="div" className="relative z-30 ml-3">
                     <div>
                       <Menu.Button className="flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
