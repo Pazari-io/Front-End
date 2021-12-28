@@ -5,7 +5,7 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useDarkMode from '../hooks/useDarkMode';
-import { useMoralis } from 'react-moralis';
+import { useMoralis, useNativeBalance, useChain } from 'react-moralis';
 import AvaxPrice from './AvaxPrice';
 import Image from 'next/image';
 import Pazari from '../public/images/Pazari.png';
@@ -20,54 +20,92 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const switchRequest = () => {
-  return window.ethereum.request({
-    method: 'wallet_switchEthereumChain',
-    params: [{ chainId: '0xA869' }],
-  })
-}
+// const switchRequest = () => {
+//   return window.ethereum.request({
+//     method: 'wallet_switchEthereumChain',
+//     params: [{ chainId: '0xA869' }]
+//   });
+// };
 
-const addChainRequest = () => {
-  return window.ethereum.request({
-    method: 'wallet_addEthereumChain',
-    params: [
-      {
-        chainId: '0xA869',
-        chainName: 'Avalanche FUJI C-Chain',
-        rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
-        blockExplorerUrls: ['https://testnet.snowtrace.io/'],
-        nativeCurrency: {
-          name: 'AVAX',
-          symbol: 'AVAX',
-          decimals: 18,
-        },
-      },
-    ],
-  })
-}
+// const addChainRequest = () => {
+//   return window.ethereum.request({
+//     method: 'wallet_addEthereumChain',
+//     params: [
+//       {
+//         chainId: '0xA869',
+//         chainName: 'Avalanche FUJI C-Chain',
+//         rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+//         blockExplorerUrls: ['https://testnet.snowtrace.io/'],
+//         nativeCurrency: {
+//           name: 'AVAX',
+//           symbol: 'AVAX',
+//           decimals: 18
+//         }
+//       }
+//     ]
+//   });
+// };
 
+//   // if (account !== null && chainId !== '0xA869' && window.ethereum) {
+//   //   try {
+//   //     await switchRequest();
+//   //   } catch (error) {
+//   //     if (error.code === 4902) {
+//   //       try {
+//   //         await addChainRequest();
+//   //         await switchRequest();
+//   //       } catch (addError) {}
+//   //     }
+//   //   }
+// }
 export default function Nav() {
   const [colorTheme, setTheme] = useDarkMode();
 
   const router = useRouter();
-  const { authenticate, isAuthenticated ,logout, enableWeb3, account, chainId, web3 } = useMoralis();
+  const {
+    authenticate,
+    isAuthenticated,
+    logout,
+    enableWeb3,
+    account,
+    chainId,
+    web3,
+    isWeb3Enabled,
+    isWeb3EnableLoading
+    //web3EnableError
+  } = useMoralis();
+
+  const { switchNetwork } = useChain();
+
+  const NativeBalance = () => {
+    const {
+      //   getBalance,
+      data: balance,
+      // nativeToken,
+      error,
+      isLoading
+    } = useNativeBalance({ chain: '0xA869' });
+
+    if (!account || !isAuthenticated) return null;
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error getting balance...</div>;
+
+    // seems balance.formated doesn't work on testnet for some reason
+    return <div>{(balance.balance / Math.pow(10, 18)).toString()}</div>;
+  };
 
   useEffect(() => {
     const main = async () => {
-      if(account !== null && chainId !== "0xA869" && window.ethereum){
-        try {
-          await switchRequest()
-        } catch (error) {
-          if (error.code === 4902) {
-            try {
-              await addChainRequest()
-              await switchRequest()
-            } catch (addError) {}
-          }
-        }
-      }}
+      if (isAuthenticated && account && !isWeb3Enabled && !isWeb3EnableLoading) {
+        enableWeb3();
+      }
+      if (isWeb3Enabled && chainId !== '0xA869') {
+        await switchNetwork('0xA869');
+      }
+    };
     main();
-  }, [chainId, account])
+  }, [chainId, account, isWeb3Enabled, isAuthenticated]);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -158,11 +196,11 @@ export default function Nav() {
                 {(account === null || !isAuthenticated) && (
                   <img
                     className="w-8 h-8 ml-4 mr-4"
-                    alt=''
+                    alt=""
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
                     onClick={async () => {
-                      await authenticate()
-                      enableWeb3();
+                      await authenticate();
+                      //enableWeb3();
                     }}
                   />
                 )}

@@ -17,12 +17,14 @@ export default function Slider(props) {
   let len = props.slides.props.children.length;
   let slideCount = len && len < 3 ? len : 3;
   if (len == 0) {
-    return  <div className="py-4">
-      <ClientOnly>
-        <div>No {props.type} matches the given criteria.  Please try a new search!</div>
-      </ClientOnly>
-    </div>
-  } 
+    return (
+      <div className="py-4">
+        <ClientOnly>
+          <div>No {props.type} matches the given criteria. Please try a new search!</div>
+        </ClientOnly>
+      </div>
+    );
+  }
 
   return (
     <div className="py-4">

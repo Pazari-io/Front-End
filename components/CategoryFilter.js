@@ -14,7 +14,7 @@ import Pagination from './Pagination';
 
 import Card from './Card';
 import { SwiperSlide } from 'swiper/react';
-import { useMoralisQuery } from "react-moralis";
+import { useMoralisQuery } from 'react-moralis';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -30,31 +30,33 @@ const subCategories = [
 ];
 
 function getMarketItems(type) {
-    const{data, error, isLoading} = useMoralisQuery("MarketplaceItems", query =>
-        query
-          .equalTo("type", type)
-          .ascending("itemID"),
-        [type]
-    );
-    if (error) {
-        return <span>Error getting items from Moralis</span>;
-    }
-    if (isLoading) {
-        return <span>Loading items...</span>;
-    }
-    return data;
-
+  const { data, error, isLoading } = useMoralisQuery(
+    'MarketplaceItems',
+    (query) => query.equalTo('type', type).ascending('itemID'),
+    [type]
+  );
+  if (error) {
+    return <span>Error getting items from Moralis</span>;
+  }
+  if (isLoading) {
+    return <span>Loading items...</span>;
+  }
+  return data;
 }
 
 function getSlides(type) {
-    let items = getMarketItems(type);
-    let res = [];
-    for (let i = 0; i < items.length; i++) {
-        let item = items[i];
-        let slide = <SwiperSlide><Card type={type} item={item}/></SwiperSlide>;
-        res.push(slide);
-    }
-    return <>{res}</>;
+  let items = getMarketItems(type);
+  let res = [];
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
+    let slide = (
+      <SwiperSlide key={Math.random().toString()}>
+        <Card type={type} item={item} />
+      </SwiperSlide>
+    );
+    res.push(slide);
+  }
+  return <>{res}</>;
 }
 
 function classNames(...classes) {
@@ -312,7 +314,9 @@ export default function CategoriesFilter(props) {
               <div className="lg:col-span-3">
                 {/* main category content */}
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
-                <div>{props.type && <Slider slides={getSlides(props.type)} type={props.type}/>}</div>
+                <div>
+                  {props.type && <Slider slides={getSlides(props.type)} type={props.type} />}
+                </div>
 
                 <Pagination />
                 {/* /End replace */}
