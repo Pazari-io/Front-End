@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
+
 const LoadCover = (props) => {
+  //TODO this should be coming dynamically from ERC1155 url
   switch (props.type) {
     case 'book':
       return (
@@ -23,6 +25,8 @@ const LoadCover = (props) => {
           type="video/mp4"></video>
       );
     case 'photo':
+    case 'game':
+    case 'graphics':
       return (
         <div>
           <img
@@ -37,11 +41,30 @@ const LoadCover = (props) => {
   }
 };
 
-export default function Card(props) {
-  return (
-    <div>
-      <div className="w-full">
-        <span className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
+function displayStars() {
+    let res = [];
+    let rating = 3;
+    for (let i = 1; i <= 5; i++) {
+        let classFill = "w-4 h-4 text-yellow-500 fill-current";
+        if (rating < i) {
+          classFill = "w-4 h-4 fill-current";
+
+        }
+        let star = <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              className={classFill}>
+              <path d="M8.128 19.825a1.586 1.586 0 0 1-1.643-.117 1.543 1.543 0 0 1-.53-.662 1.515 1.515 0 0 1-.096-.837l.736-4.247-3.13-3a1.514 1.514 0 0 1-.39-1.569c.09-.271.254-.513.475-.698.22-.185.49-.306.776-.35L8.66 7.73l1.925-3.862c.128-.26.328-.48.577-.633a1.584 1.584 0 0 1 1.662 0c.25.153.45.373.577.633l1.925 3.847 4.334.615c.29.042.562.162.785.348.224.186.39.43.48.704a1.514 1.514 0 0 1-.404 1.58l-3.13 3 .736 4.247c.047.282.014.572-.096.837-.111.265-.294.494-.53.662a1.582 1.582 0 0 1-1.643.117l-3.865-2-3.865 2z"></path>
+            </svg>;
+        res.push(star);
+    }
+
+    return <div className="flex items-center p-4 text-sm text-gray-600">{res}<span className="ml-2 text-gray-200">34 verfied review</span></div>;
+}
+
+function generateItem(item, props) {
+
+  return <span className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
           <Link href={`/products/details/${Math.random(1, 9999999999)}`}>
             <a className="cursor-pointer">
               <div className="relative overflow-hidden">
@@ -60,7 +83,7 @@ export default function Card(props) {
             </p>
             <div className="flex items-center justify-between mt-3">
               <div>
-                <span className="text-lg font-bold dark:text-indigo-600">45,00</span>&nbsp;
+                <span className="text-lg font-bold dark:text-indigo-600">Item {item.get("itemID")}</span>&nbsp;
                 <span className="text-sm font-semibold dark:text-indigo-600">$</span>
               </div>
 
@@ -68,48 +91,16 @@ export default function Card(props) {
                 <img
                   className="w-6 h-6"
                   src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"></img>
-                <h3 className="px-2 text-lg font-bold">0.454</h3>
+                <h3 className="px-2 text-lg font-bold">{item.get("price")}</h3>
               </div>
             </div>
           </div>
           <div className="p-4 text-xs text-gray-700 border-t border-b">
             <span className="flex items-center mb-1 dark:text-gray-300">
-              #Ebook #Asset #Audio #Video
+              #Ebook #Asset #Audio #{props.type}
             </span>
           </div>
-          <div className="flex items-center p-4 text-sm text-gray-600">
-            <svg
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 text-yellow-500 fill-current">
-              <path d="M8.128 19.825a1.586 1.586 0 0 1-1.643-.117 1.543 1.543 0 0 1-.53-.662 1.515 1.515 0 0 1-.096-.837l.736-4.247-3.13-3a1.514 1.514 0 0 1-.39-1.569c.09-.271.254-.513.475-.698.22-.185.49-.306.776-.35L8.66 7.73l1.925-3.862c.128-.26.328-.48.577-.633a1.584 1.584 0 0 1 1.662 0c.25.153.45.373.577.633l1.925 3.847 4.334.615c.29.042.562.162.785.348.224.186.39.43.48.704a1.514 1.514 0 0 1-.404 1.58l-3.13 3 .736 4.247c.047.282.014.572-.096.837-.111.265-.294.494-.53.662a1.582 1.582 0 0 1-1.643.117l-3.865-2-3.865 2z"></path>
-            </svg>
-            <svg
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 text-yellow-500 fill-current">
-              <path d="M8.128 19.825a1.586 1.586 0 0 1-1.643-.117 1.543 1.543 0 0 1-.53-.662 1.515 1.515 0 0 1-.096-.837l.736-4.247-3.13-3a1.514 1.514 0 0 1-.39-1.569c.09-.271.254-.513.475-.698.22-.185.49-.306.776-.35L8.66 7.73l1.925-3.862c.128-.26.328-.48.577-.633a1.584 1.584 0 0 1 1.662 0c.25.153.45.373.577.633l1.925 3.847 4.334.615c.29.042.562.162.785.348.224.186.39.43.48.704a1.514 1.514 0 0 1-.404 1.58l-3.13 3 .736 4.247c.047.282.014.572-.096.837-.111.265-.294.494-.53.662a1.582 1.582 0 0 1-1.643.117l-3.865-2-3.865 2z"></path>
-            </svg>
-            <svg
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 text-yellow-500 fill-current">
-              <path d="M8.128 19.825a1.586 1.586 0 0 1-1.643-.117 1.543 1.543 0 0 1-.53-.662 1.515 1.515 0 0 1-.096-.837l.736-4.247-3.13-3a1.514 1.514 0 0 1-.39-1.569c.09-.271.254-.513.475-.698.22-.185.49-.306.776-.35L8.66 7.73l1.925-3.862c.128-.26.328-.48.577-.633a1.584 1.584 0 0 1 1.662 0c.25.153.45.373.577.633l1.925 3.847 4.334.615c.29.042.562.162.785.348.224.186.39.43.48.704a1.514 1.514 0 0 1-.404 1.58l-3.13 3 .736 4.247c.047.282.014.572-.096.837-.111.265-.294.494-.53.662a1.582 1.582 0 0 1-1.643.117l-3.865-2-3.865 2z"></path>
-            </svg>
-            <svg
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 text-yellow-500 fill-current">
-              <path d="M8.128 19.825a1.586 1.586 0 0 1-1.643-.117 1.543 1.543 0 0 1-.53-.662 1.515 1.515 0 0 1-.096-.837l.736-4.247-3.13-3a1.514 1.514 0 0 1-.39-1.569c.09-.271.254-.513.475-.698.22-.185.49-.306.776-.35L8.66 7.73l1.925-3.862c.128-.26.328-.48.577-.633a1.584 1.584 0 0 1 1.662 0c.25.153.45.373.577.633l1.925 3.847 4.334.615c.29.042.562.162.785.348.224.186.39.43.48.704a1.514 1.514 0 0 1-.404 1.58l-3.13 3 .736 4.247c.047.282.014.572-.096.837-.111.265-.294.494-.53.662a1.582 1.582 0 0 1-1.643.117l-3.865-2-3.865 2z"></path>
-            </svg>
-            <svg
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 fill-current">
-              <path d="M8.128 19.825a1.586 1.586 0 0 1-1.643-.117 1.543 1.543 0 0 1-.53-.662 1.515 1.515 0 0 1-.096-.837l.736-4.247-3.13-3a1.514 1.514 0 0 1-.39-1.569c.09-.271.254-.513.475-.698.22-.185.49-.306.776-.35L8.66 7.73l1.925-3.862c.128-.26.328-.48.577-.633a1.584 1.584 0 0 1 1.662 0c.25.153.45.373.577.633l1.925 3.847 4.334.615c.29.042.562.162.785.348.224.186.39.43.48.704a1.514 1.514 0 0 1-.404 1.58l-3.13 3 .736 4.247c.047.282.014.572-.096.837-.111.265-.294.494-.53.662a1.582 1.582 0 0 1-1.643.117l-3.865-2-3.865 2z"></path>
-            </svg>
-            <span className="ml-2 text-gray-200">34 verfied review</span>
-          </div>
+            {displayStars()}
 
           <div className="flex items-center justify-between p-4 text-xs text-gray-700 border-t ">
             <div className="flex items-center">
@@ -129,8 +120,18 @@ export default function Card(props) {
               </a>
             </Link>
           </div>
-        </span>
-      </div>
+        </span>;
+}
+
+function getItems(props) {
+    let res = generateItem(props.item, props);
+    return <div className="w-full">{res}</div>;
+}
+
+export default function Card(props) {
+  return (
+    <div>
+      {getItems(props)}
     </div>
   );
 }

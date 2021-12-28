@@ -150,7 +150,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CategoryFilter books={[1, 2]} filters={filters} />
+      <CategoryFilter type="book" filters={filters} />
       <Footer />
     </main>
   );

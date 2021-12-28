@@ -96,7 +96,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CategoryFilter videos={[1, 2]} filters={filters} />
+      <CategoryFilter type="video" filters={filters} />
       <Footer />
     </main>
   );

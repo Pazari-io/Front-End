@@ -14,6 +14,7 @@ import Pagination from './Pagination';
 
 import Card from './Card';
 import { SwiperSlide } from 'swiper/react';
+import { useMoralisQuery } from "react-moralis";
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -28,47 +29,33 @@ const subCategories = [
   // { name: 'Guides', href: '#' }
 ];
 
-const bookSlides = (
-  <>
-    <SwiperSlide>
-      <Card type="book" />
-    </SwiperSlide>
-    <SwiperSlide>
-      <Card type="book" />
-    </SwiperSlide>
-    <SwiperSlide>
-      <Card type="book" />
-    </SwiperSlide>
-  </>
-);
+function getMarketItems(type) {
+    const{data, error, isLoading} = useMoralisQuery("MarketplaceItems", query =>
+        query
+          .equalTo("type", type)
+          .ascending("itemID"),
+        [type]
+    );
+    if (error) {
+        return <span>Error getting items from Moralis</span>;
+    }
+    if (isLoading) {
+        return <span>Loading items...</span>;
+    }
+    return data;
 
-const videoSlides = (
-  <>
-    <SwiperSlide>
-      <Card type="video" />
-    </SwiperSlide>
-    <SwiperSlide>
-      <Card type="video" />
-    </SwiperSlide>
-    <SwiperSlide>
-      <Card type="video" />
-    </SwiperSlide>
-  </>
-);
+}
 
-const photoSlides = (
-  <>
-    <SwiperSlide>
-      <Card type="photo" />
-    </SwiperSlide>
-    <SwiperSlide>
-      <Card type="photo" />
-    </SwiperSlide>
-    <SwiperSlide>
-      <Card type="photo" />
-    </SwiperSlide>
-  </>
-);
+function getSlides(type) {
+    let items = getMarketItems(type);
+    let res = [];
+    for (let i = 0; i < items.length; i++) {
+        let item = items[i];
+        let slide = <SwiperSlide><Card type={type} item={item}/></SwiperSlide>;
+        res.push(slide);
+    }
+    return <>{res}</>;
+}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -325,11 +312,7 @@ export default function CategoriesFilter(props) {
               <div className="lg:col-span-3">
                 {/* main category content */}
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
-                <div>{props.books && <Slider slides={bookSlides} />}</div>
-                <div>{props.videos && <Slider slides={videoSlides} />}</div>
-                <div>{props.photos && <Slider slides={photoSlides} />}</div>
-                <div>{props.games && <Slider slides={photoSlides} />}</div>
-                <div>{props.graphics && <Slider slides={photoSlides} />}</div>
+                <div>{props.type && <Slider slides={getSlides(props.type)} type={props.type}/>}</div>
 
                 <Pagination />
                 {/* /End replace */}

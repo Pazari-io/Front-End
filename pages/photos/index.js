@@ -72,7 +72,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CategoryFilter photos={[1, 2]} filters={filters} />
+      <CategoryFilter type="photo" filters={filters} />
       <Footer />
     </main>
   );
