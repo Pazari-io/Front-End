@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
+
 const LoadCover = (props) => {
+  //TODO this should be coming dynamically from ERC1155 url
   switch (props.type) {
     case 'book':
       return (
@@ -23,6 +25,8 @@ const LoadCover = (props) => {
           type="video/mp4"></video>
       );
     case 'photo':
+    case 'game':
+    case 'graphics':
       return (
         <div>
           <img
@@ -39,7 +43,7 @@ const LoadCover = (props) => {
 
 function displayStars() {
     let res = [];
-    let rating = 4;
+    let rating = 3;
     for (let i = 1; i <= 5; i++) {
         let classFill = "w-4 h-4 text-yellow-500 fill-current";
         if (rating < i) {
@@ -58,12 +62,9 @@ function displayStars() {
     return <div className="flex items-center p-4 text-sm text-gray-600">{res}<span className="ml-2 text-gray-200">34 verfied review</span></div>;
 }
 
-export default function Card(props) {
-  //TODO need to integrate Moralis to the card
-  return (
-    <div>
-      <div className="w-full">
-        <span className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
+function generateItem(item, props) {
+
+  return <span className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
           <Link href={`/products/details/${Math.random(1, 9999999999)}`}>
             <a className="cursor-pointer">
               <div className="relative overflow-hidden">
@@ -82,7 +83,7 @@ export default function Card(props) {
             </p>
             <div className="flex items-center justify-between mt-3">
               <div>
-                <span className="text-lg font-bold dark:text-indigo-600">45,00</span>&nbsp;
+                <span className="text-lg font-bold dark:text-indigo-600">Item {item.get("itemID")}</span>&nbsp;
                 <span className="text-sm font-semibold dark:text-indigo-600">$</span>
               </div>
 
@@ -90,13 +91,13 @@ export default function Card(props) {
                 <img
                   className="w-6 h-6"
                   src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"></img>
-                <h3 className="px-2 text-lg font-bold">0.454</h3>
+                <h3 className="px-2 text-lg font-bold">{item.get("price")}</h3>
               </div>
             </div>
           </div>
           <div className="p-4 text-xs text-gray-700 border-t border-b">
             <span className="flex items-center mb-1 dark:text-gray-300">
-              #Ebook #Asset #Audio #Video
+              #Ebook #Asset #Audio #{props.type}
             </span>
           </div>
             {displayStars()}
@@ -119,8 +120,18 @@ export default function Card(props) {
               </a>
             </Link>
           </div>
-        </span>
-      </div>
+        </span>;
+}
+
+function getItems(props) {
+    let res = generateItem(props.item, props);
+    return <div className="w-full">{res}</div>;
+}
+
+export default function Card(props) {
+  return (
+    <div>
+      {getItems(props)}
     </div>
   );
 }

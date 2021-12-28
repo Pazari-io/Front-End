@@ -76,7 +76,7 @@ export default function Games() {
         </div>
       </div>
 
-      <CategoryFilter photos={[1, 2]} filters={filters} />
+      <CategoryFilter type="game" filters={filters} />
       <Footer />
     </main>
   );
