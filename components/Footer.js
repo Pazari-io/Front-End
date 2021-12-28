@@ -150,8 +150,8 @@ export default function Footer() {
             </button>
           </form>
         </div> */}
-        <div className="flex items-center justify-center pt-10 font-light text-center sm:pt-12">
-          Made with <span className="px-1 text-red-500"> &hearts; </span> by our Pazari Team
+        <div className="flex items-center justify-center pt-10 font-bold text-center sm:pt-12">
+          Made with <span className="px-1 text-red-500"> &hearts; </span> by Pazari Team
         </div>
       </div>
     </footer>
