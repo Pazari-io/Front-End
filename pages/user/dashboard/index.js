@@ -269,7 +269,7 @@ export default function Dashboard() {
                               Accessories
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-green-400">
-                              +$99
+                              +$999
                             </td>
                           </tr>
 
