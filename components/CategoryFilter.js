@@ -30,7 +30,6 @@ const subCategories = [
 ];
 
 function getMarketItems(type) {
-    // const{data, error, isLoading} = useMoralisQuery("MarketplaceItems");
     const{data, error, isLoading} = useMoralisQuery("MarketplaceItems", query =>
         query
           .equalTo("type", type)
