@@ -26,7 +26,7 @@ const LoadCover = (props) => {
       );
     case 'photo':
     case 'game':
-    case 'graphics':
+    case 'graphic':
       return (
         <div>
           <img
