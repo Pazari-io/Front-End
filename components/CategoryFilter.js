@@ -13,6 +13,7 @@ import AudioPlayer from './AudioPlayer';
 import Pagination from './Pagination';
 
 import Card from './Card';
+import SearchInput from './SearchInput';
 import { SwiperSlide } from 'swiper/react';
 import { useMoralisQuery } from 'react-moralis';
 
@@ -29,12 +30,33 @@ const subCategories = [
   // { name: 'Guides', href: '#' }
 ];
 
-function getMarketItems(type) {
-  const { data, error, isLoading } = useMoralisQuery(
-    'MarketplaceItems',
-    (query) => query.equalTo('type', type).ascending('itemID'),
-    [type]
-  );
+function basicQuery(query, type, searchText) {
+    return query
+        .equalTo('type', type)
+        .ascending('itemID');
+}
+
+function searchQuery(query, type, searchText) {
+    return query
+        .equalTo('type', type)
+        .startsWith('title', searchText)
+        .ascending('itemID');
+}
+
+function getMarketItems(type, searchText) {
+  //TODO use fullText() ? Has performance impact
+  console.log("searchText: " + searchText);
+  let queryType;
+  if (searchText !== '') {
+    queryType = searchQuery;
+  } else {
+    queryType = basicQuery;
+  }
+  const {data, error, isLoading} = useMoralisQuery(
+      'MarketplaceItems',
+      (query) => queryType(query, type, searchText),
+      [queryType, type, searchText]
+    );
   if (error) {
     return <span>Error getting items from Moralis</span>;
   }
@@ -44,8 +66,8 @@ function getMarketItems(type) {
   return data;
 }
 
-function getSlides(type) {
-  let items = getMarketItems(type);
+function getSlides(type, searchText) {
+  let items = getMarketItems(type, searchText);
   let res = [];
   for (let i = 0; i < items.length; i++) {
     let item = items[i];
@@ -65,6 +87,11 @@ function classNames(...classes) {
 
 export default function CategoriesFilter(props) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const updateSearch = (text) => {
+    setSearchText(text);
+  }
+
 
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-gray-300">
@@ -180,12 +207,7 @@ export default function CategoriesFilter(props) {
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-indigo-600">
               Filters
             </h1>
-
-            <input
-              type="text"
-              placeholder="Search ..."
-              className="w-1/3 rounded-lg dark:bg-gray-700 dark:text-gray-300"
-            />
+            <SearchInput updateSearch={updateSearch} />
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
@@ -315,7 +337,7 @@ export default function CategoriesFilter(props) {
                 {/* main category content */}
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
                 <div>
-                  {props.type && <Slider slides={getSlides(props.type)} type={props.type} />}
+                  {props.type && <Slider slides={getSlides(props.type, searchText)} type={props.type}/>}
                 </div>
 
                 <Pagination />

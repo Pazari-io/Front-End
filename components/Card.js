@@ -83,7 +83,7 @@ function generateItem(item, props) {
         <span className="inline-block px-2 py-1 text-xs font-semibold leading-none tracking-wide text-indigo-800 uppercase bg-indigo-200 rounded-full">
           New
         </span>
-        <h2 className="mt-2 mb-2 font-bold">Purus Ullamcorper Inceptos Nibh</h2>
+        <h2 className="mt-2 mb-2 font-bold">{item.get('title')}</h2>
         <p className="text-sm">
           Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec ullamcorper nulla non
           metus auctor fringilla.
