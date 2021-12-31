@@ -178,7 +178,7 @@ export default function Detail() {
               </button>
             </div>
             <hr className="my-8 border-gray-400"></hr>
-            <h4 className="my-2 font-bond">Higlights</h4>
+            <h4 className="my-2 font-bond">Changelog</h4>
             <div className="flex flex-col gap-8 px-2 dark:text-gray-400">
               <div>
                 <ul className="text-gray-900 list-disc list-inside text-normal dark:text-gray-500">
