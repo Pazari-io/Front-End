@@ -30,50 +30,62 @@ const subCategories = [
   // { name: 'Guides', href: '#' }
 ];
 
-function basicQuery(query, type, searchText) {
+function basicQuery(query, type, searchText, catFilters) {
     return query
         .equalTo('type', type)
         .ascending('itemID');
 }
 
-function searchQuery(query, type, searchText) {
+function searchQuery(query, type, searchText, catFilters) {
     return query
         .equalTo('type', type)
         .startsWith('title', searchText)
         .ascending('itemID');
 }
 
-function getMarketItems(type, searchText) {
+function filterQuery(query, type, searchText, catFilters) {
+    return query
+        .equalTo('type', type)
+        .containedIn('category', Array.from(catFilters))
+        .ascending('itemID');
+}
+
+function getMarketItems(props, searchText) {
   //TODO use fullText() ? Has performance impact
-  console.log("searchText: " + searchText);
   let queryType;
+  //TODO decorator pattern
   if (searchText !== '') {
+    console.log("Search query");
     queryType = searchQuery;
+  } else if (props.catFilters.size >  0) {
+    console.log("Filter query");
+    queryType = filterQuery;
   } else {
+    console.log("Basic query");
     queryType = basicQuery;
   }
   const {data, error, isLoading} = useMoralisQuery(
       'MarketplaceItems',
-      (query) => queryType(query, type, searchText),
-      [queryType, type, searchText]
+      (query) => queryType(query, props.type, searchText, props.catFilters),
+      [queryType, props.type, searchText, props.catFilters]
     );
   if (error) {
-    return <span>Error getting items from Moralis</span>;
+    console.log("Moralis error: " + error);
   }
   if (isLoading) {
-    return <span>Loading items...</span>;
+    console.log("Moralis isLoading: " + isLoading);
   }
   return data;
 }
 
-function getSlides(type, searchText) {
-  let items = getMarketItems(type, searchText);
+function getSlides(props, searchText) {
+  let items = getMarketItems(props, searchText);
   let res = [];
   for (let i = 0; i < items.length; i++) {
     let item = items[i];
     let slide = (
       <SwiperSlide key={Math.random().toString()}>
-        <Card type={type} item={item} />
+        <Card type={props.type} item={item} />
       </SwiperSlide>
     );
     res.push(slide);
@@ -337,7 +349,7 @@ export default function CategoriesFilter(props) {
                 {/* main category content */}
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
                 <div>
-                  {props.type && <Slider slides={getSlides(props.type, searchText)} type={props.type}/>}
+                  {props.type && <Slider slides={getSlides(props, searchText)} type={props.type}/>}
                 </div>
 
                 <Pagination />

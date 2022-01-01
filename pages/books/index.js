@@ -1,6 +1,7 @@
 import Nav from '../../components/NavBar';
 import CategoryFilter from '../../components/CategoryFilter';
 import Footer from '../../components/Footer';
+import { useState } from 'react';
 
 const filters = [
   {
@@ -79,55 +80,71 @@ let bookCategories = [
   'Art',
   'Aarchitecture',
   'Autobiography',
-  'Anthology',
-  'Biography',
-  'Business',
-  'Children',
-  'Crafts',
+  // 'Anthology',
+  // 'Biography',
+  // 'Business',
+  // 'Children',
+  // 'Crafts',
   'Classic',
-  'Cookbook',
-  'Comic',
-  'Diary',
-  'Encyclopedia',
+  // 'Cookbook',
+  // 'Comic',
+  // 'Diary',
+  // 'Encyclopedia',
   'Drama',
-  'Guide',
-  'Fairytale',
-  'Security',
-  'Fitness',
-  'Health',
+  // 'Guide',
+  // 'Fairytale',
+  // 'Security',
+  // 'Fitness',
+  // 'Health',
   'Fantasy',
-  'History',
-  'Home',
-  'Historical',
-  'Garden',
-  'Humor',
-  'Horror',
-  'Journal',
-  'Mystery',
-  'Math',
-  'Paranormal',
-  'Memoir',
-  'Philosophy',
-  'Poetry',
-  'Prayer',
-  'Political',
-  'Religion',
-  'Romance',
-  'Fiction',
-  'Review',
-  'Short',
-  'Science',
-  'Suspense',
-  'Help',
-  'Thriller',
-  'Sports',
-  'Western',
-  'Travel',
-  'Young',
-  'Crime'
+  // 'History',
+  // 'Home',
+  // 'Historical',
+  // 'Garden',
+  // 'Humor',
+  // 'Horror',
+  // 'Journal',
+  // 'Mystery',
+  // 'Math',
+  // 'Paranormal',
+  // 'Memoir',
+  // 'Philosophy',
+  // 'Poetry',
+  // 'Prayer',
+  // 'Political',
+  // 'Religion',
+  // 'Romance',
+  // 'Fiction',
+  // 'Review',
+  // 'Short',
+  // 'Science',
+  // 'Suspense',
+  // 'Help',
+  // 'Thriller',
+  // 'Sports',
+  // 'Western',
+  // 'Travel',
+  // 'Young',
+  // 'Crime'
 ];
 
 export default function Home() {
+  const [catFilters, setFilters] = useState(new Set());
+  const updateSearch= (text) => {
+    if (!catFilters.has(text)) {
+      let newFilters = new Set(catFilters);
+      newFilters.add(text);
+      setFilters(newFilters);
+    } else {
+      let newFilters = new Set(catFilters);
+      newFilters.delete(text);
+      setFilters(newFilters);
+    }
+  }
+
+  let classNameOn = "px-4 py-2 text-base text-white bg-indigo-500 rounded-full ";
+  let classNameOff = "px-4 py-2 text-base text-white bg-orange-500 rounded-full ";
+
   return (
     <main className="min-h-screen mx-auto dark:bg-gray-900">
       <Nav />
@@ -141,16 +158,20 @@ export default function Home() {
           {bookCategories.map((category) => {
             return (
               <div className="inline-flex px-2 py-1" key={category}>
-                <span className="px-4 py-2 text-base text-white bg-indigo-500 rounded-full ">
+                <button 
+                  key={category}
+                  className={catFilters.has(category) ? classNameOff : classNameOn}
+                  onClick={() =>updateSearch(category)}
+                  >
                   {category}
-                </span>
+                </button>
               </div>
             );
           })}
         </div>
       </div>
 
-      <CategoryFilter type="book" filters={filters} />
+      <CategoryFilter type="book" filters={filters} catFilters={catFilters}/>
       <Footer />
     </main>
   );
