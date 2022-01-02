@@ -15,7 +15,7 @@ import Pagination from './Pagination';
 import Card from './Card';
 import SearchInput from './SearchInput';
 import { SwiperSlide } from 'swiper/react';
-import { useMoralisQuery } from 'react-moralis';
+import { getMarketItemsFromDB } from './MoralisDAO';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -30,56 +30,8 @@ const subCategories = [
   // { name: 'Guides', href: '#' }
 ];
 
-function basicQuery(query, type, searchText, catFilters) {
-    return query
-        .equalTo('type', type)
-        .ascending('itemID');
-}
-
-function searchQuery(query, type, searchText, catFilters) {
-    return query
-        .equalTo('type', type)
-        .startsWith('title', searchText)
-        .ascending('itemID');
-}
-
-function filterQuery(query, type, searchText, catFilters) {
-    return query
-        .equalTo('type', type)
-        .containedIn('category', Array.from(catFilters))
-        .ascending('itemID');
-}
-
-function getMarketItems(props, searchText) {
-  //TODO use fullText() ? Has performance impact
-  let queryType;
-  //TODO decorator pattern
-  if (searchText !== '') {
-    console.log("Search query");
-    queryType = searchQuery;
-  } else if (props.catFilters.size >  0) {
-    console.log("Filter query");
-    queryType = filterQuery;
-  } else {
-    console.log("Basic query");
-    queryType = basicQuery;
-  }
-  const {data, error, isLoading} = useMoralisQuery(
-      'MarketplaceItems',
-      (query) => queryType(query, props.type, searchText, props.catFilters),
-      [queryType, props.type, searchText, props.catFilters]
-    );
-  if (error) {
-    console.log("Moralis error: " + error);
-  }
-  if (isLoading) {
-    console.log("Moralis isLoading: " + isLoading);
-  }
-  return data;
-}
-
 function getSlides(props, searchText) {
-  let items = getMarketItems(props, searchText);
+  let items = getMarketItemsFromDB(props, searchText);
   let res = [];
   for (let i = 0; i < items.length; i++) {
     let item = items[i];
