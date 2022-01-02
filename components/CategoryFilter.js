@@ -299,6 +299,7 @@ export default function CategoriesFilter(props) {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 {/* main category content */}
+                {/* //TODO Add filtering for the audio player */}
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
                 <div>
                   {props.type && <Slider slides={getSlides(props, searchText)} type={props.type}/>}

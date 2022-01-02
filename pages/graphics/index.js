@@ -1,6 +1,4 @@
-import Nav from '../../components/NavBar';
-import CategoryFilter from '../../components/CategoryFilter';
-import Footer from '../../components/Footer';
+import PageTypes from '../pageTypes.js';
 
 const filters = [
   {
@@ -51,30 +49,5 @@ let photoCategories = [
 ];
 
 export default function Graphics() {
-  return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900">
-      <Nav />
-
-      <div className="bg-white dark:bg-gray-900 ">
-        <div className="px-4 mx-auto sm:py-24 lg:py-12 sm:px-6 lg:px-8">
-          <h1 className="py-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-indigo-600">
-            Explore categories
-          </h1>
-
-          {photoCategories.map((category) => {
-            return (
-              <div className="inline-flex px-2 py-1" key={category}>
-                <span className="px-4 py-2 text-base text-white bg-indigo-500 rounded-full ">
-                  {category}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <CategoryFilter type="graphic" filters={filters} />
-      <Footer />
-    </main>
-  );
+  return <PageTypes categories={photoCategories} type="graphic" filters={filters}/>
 }

@@ -1,6 +1,7 @@
 import Nav from '../../components/NavBar';
 import CategoryFilter from '../../components/CategoryFilter';
 import Footer from '../../components/Footer';
+import { useState } from 'react';
 
 const filters = [
   {
@@ -87,6 +88,24 @@ let audioCategories = [
 ];
 
 export default function Home() {
+  const [catFilters, setFilters] = useState(new Set());
+
+  //Used to update the current filters.  If a filter is already selected it will toggle off.
+  const updateSearch = (text) => {
+    if (!catFilters.has(text)) {
+      let newFilters = new Set(catFilters);
+      newFilters.add(text);
+      setFilters(newFilters);
+    } else {
+      let newFilters = new Set(catFilters);
+      newFilters.delete(text);
+      setFilters(newFilters);
+    }
+  }
+
+  let classNameOn = "px-4 py-2 text-base text-white bg-indigo-500 rounded-full ";
+  let classNameOff = "px-4 py-2 text-base text-white bg-orange-500 rounded-full ";
+
   return (
     <main className="min-h-screen mx-auto dark:bg-gray-900">
       <Nav />
@@ -100,16 +119,20 @@ export default function Home() {
           {audioCategories.map((category) => {
             return (
               <div className="inline-flex px-2 py-1" key={category}>
-                <span className="px-4 py-2 text-base text-white bg-indigo-500 rounded-full ">
+                <button
+                  key={category}
+                  className={catFilters.has(category) ? classNameOff : classNameOn}
+                  onClick={() => updateSearch(category)}
+                >
                   {category}
-                </span>
+                </button>
               </div>
             );
           })}
         </div>
       </div>
 
-      <CategoryFilter audioUrls={audioUrls} filters={filters} />
+      <CategoryFilter audioUrls={audioUrls} filters={filters} catFilters={catFilters}/>
       <Footer />
     </main>
   );
