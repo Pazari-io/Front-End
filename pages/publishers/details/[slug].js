@@ -6,7 +6,7 @@ import Card from '../../../components/Card';
 import Pagination from '../../../components/Pagination';
 const bookSlides = (
   <>
-    <SwiperSlide>
+    {/* <SwiperSlide>
       <Card type="book" />
     </SwiperSlide>
     <SwiperSlide>
@@ -14,7 +14,7 @@ const bookSlides = (
     </SwiperSlide>
     <SwiperSlide>
       <Card type="book" />
-    </SwiperSlide>
+    </SwiperSlide> */}
   </>
 );
 
@@ -50,9 +50,9 @@ export default function Profile(props) {
 
         <h1 className="py-8 text-2xl dark:text-indigo-600">Latest releases </h1>
 
+        {/* <Slider slides={bookSlides} />
         <Slider slides={bookSlides} />
-        <Slider slides={bookSlides} />
-        <Slider slides={bookSlides} />
+        <Slider slides={bookSlides} /> */}
 
         <Pagination />
       </div>
