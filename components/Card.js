@@ -2,14 +2,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const LoadCover = (props) => {
-  //TODO this should be coming dynamically from ERC1155 url
-  switch (props.type) {
+  if (!props.previewUrl|| props.previewUrl== '') {
+    return null;
+  }
+
+    switch (props.type) {
     case 'book':
       return (
         <div>
           <img
             className="object-cover w-full h-full "
-            src="https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"
+            src={props.previewUrl}
             alt=""
           />
         </div>
@@ -21,7 +24,7 @@ const LoadCover = (props) => {
           onMouseOver={(event) => event.target.play()}
           onMouseOut={(event) => event.target.pause()}
           className="object-cover w-full h-full "
-          src="https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"
+          src={props.previewUrl}
           type="video/mp4"></video>
       );
     case 'photo':
@@ -31,7 +34,7 @@ const LoadCover = (props) => {
         <div>
           <img
             className="object-cover w-full h-full "
-            src="https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"
+            src={props.previewUrl}
             alt=""
           />
         </div>
@@ -75,7 +78,7 @@ function generateItem(item, props) {
       <Link href={`/products/details/${Math.random(1, 9999999999)}`}>
         <a className="cursor-pointer">
           <div className="relative overflow-hidden">
-            <LoadCover type={props.type} />
+            <LoadCover previewUrl={item.get('previewUrl')} type={props.type}/>
           </div>
         </a>
       </Link>

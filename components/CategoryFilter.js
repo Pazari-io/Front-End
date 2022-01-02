@@ -15,7 +15,7 @@ import Pagination from './Pagination';
 import Card from './Card';
 import SearchInput from './SearchInput';
 import { SwiperSlide } from 'swiper/react';
-import { getMarketItemsFromDB } from './MoralisDAO';
+import { getProductsFromDB } from './MoralisDAO';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -31,7 +31,7 @@ const subCategories = [
 ];
 
 function getSlides(props, searchText) {
-  let items = getMarketItemsFromDB(props, searchText);
+  let items = getProductsFromDB(props, searchText);
   let res = [];
   for (let i = 0; i < items.length; i++) {
     let item = items[i];

@@ -9,10 +9,24 @@
 const Moralis = require('moralis/node');
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID;
-Moralis.start({ serverUrl, appId });
+const masterKey = process.env.NEXT_PUBLIC_MORALIS_MASTER_KEY; //Do not use this in front end, only for seeding data
+Moralis.start({ serverUrl, appId, masterKey });
 
 // Add a user to the admin role
 const createAdmin = async (user) => {
+  const Role = Moralis.Object.extend('_Role');
+  const query = new Moralis.Query(Role);
+  query.equalTo('name', 'Administrator');
+  let found;
+  await query.find({useMasterKey: true}).then((results) => {
+    console.log(results);
+    if (results.length > 0) {
+      found = results[0];
+    }
+  });
+  if (found) return found;
+
+  console.log("Creating admin role");
   const roleACL = new Moralis.ACL();
   roleACL.setPublicReadAccess(true);
   const role = new Moralis.Role('Administrator', roleACL);
@@ -30,11 +44,11 @@ const createAdmin = async (user) => {
 
 // Fields
 //- type string (string) // 'book' || 'audio' || 'video' || 'graphic' || 'game' || 'photo'
-//- categories (list) // all categories
+//- subCategories (list) // all subCategories
 //- filters (list) // all filters for that category
 
 // create categories and filters only admin can write everyone can read it
-const createCategory = async (type, categories, filters) => {
+const createCategory = async (type, subCategories, filters) => {
   // only admin can write to this object
   const acl = new Moralis.ACL();
   acl.setRoleWriteAccess('Administrator', true);
@@ -43,20 +57,20 @@ const createCategory = async (type, categories, filters) => {
   const Category = Moralis.Object.extend('Category');
   const category = new Category();
 
-  query = new Moralis.Query(Category);
+  let query = new Moralis.Query(Category);
   query.equalTo('type', type);
-  found = false;
+  let found;
   await query.find().then((results) => {
     if (results.length > 0) {
-      found = true;
+      found = results[0];
     }
   });
 
   // only allow unique types
-  if (found) return;
+  if (found) return found;
 
   category.set('type', type);
-  category.addUnique('categories', categories);
+  category.addUnique('subCategories', subCategories);
   category.addUnique('filters', filters);
 
   category.setACL(acl);
@@ -119,18 +133,20 @@ const createPrivateLinks = async (encryptedUrl, ipfsUrl, user) => {
 
 // -Fields
 // - title (string) // title
-// - tags (list)
+// - category (Category) //category of the product (book, video, etc)
+// - subCategory (list)
 // - description (string) // long string of prodcut info allows youtube embeds
 // - unit (int) // how many copies avaiable
 // - views (int) // amount of views on this product
 // - price (int)  // in usd
-// - productImageUrls (list) //  some products have multiple images (like game assets for slider) except stock photos
 // - previewUrl (string) // url to show on front , watermarket copy
+// - productImageUrls (list) //  some products have multiple images (like game assets for slider) except stock photos
 
 const createProduct = async (
   user,
+  category,
   title,
-  tags,
+  subCategory,
   description,
   unit,
   price,
@@ -151,7 +167,8 @@ const createProduct = async (
   const product = new Product();
 
   product.set('title', title);
-  product.set('tags', tags);
+  product.set('category', category);
+  product.set('subCategory',subCategory);
   product.set('description', description);
   product.set('unit', unit);
   product.set('views', 0);
@@ -212,6 +229,7 @@ const createProfile = async (user, name, about, link, avatar, cover, notificaton
   const profiles = await profileExistQuery.find();
   if (profiles[0]) {
     console.log('profile already exists');
+    return;
   }
 
   const profile = new Profile();
@@ -239,6 +257,106 @@ const createProfile = async (user, name, about, link, avatar, cover, notificaton
 
   // handle error
   await profile.save();
+};
+
+const saveItems = async (user, category, count) => {
+  console.log("SaveItems category: " + category.get('type') + ", count: " + count);
+  let type = category.get('type');
+  for (let i = 0; i < count; i++) {
+    let price = Math.floor(Math.random() * 20);
+    await createProduct(
+      user,
+      category,
+      categorySeedMap[type][i].title,
+      categorySeedMap[type][i].subCategory,
+      categorySeedMap[type][i].description,
+      40,
+      price,
+      categorySeedMap[type][i].previewUrl,
+      ['http://url.com/1.png', 'http://url.com/1.png', 'http://url.com/1.png'],
+      ['pro', 'personal', 'exclusive'],
+      { v1: 'this is a change', v2: 'this is best change' }
+    );
+  }
+}
+
+const getAllProducts = async (type) => {
+  const Product = Moralis.Object.extend('Product');
+  const Category = Moralis.Object.extend('Category');
+  let query = new Moralis.Query(Product);
+  let catQuery = new Moralis.Query(Category);
+  catQuery.equalTo('type', type);
+  query.matchesQuery('category', catQuery);
+  await query.find().then((results) => {
+    if (results.length > 0) {
+      console.log("Product results");
+      console.log(results);
+    } else{
+      console.log("no results found");
+    }
+  });
+
+
+}
+
+const seed = async () => {
+  const User = Moralis.Object.extend("User");
+  const query = new Moralis.Query(User);
+
+  let user = null;
+  await query.get('yTxSNTO3Dac1aIsAfGCAkAsC', {useMasterKey: true}).then((result) => {
+    user = result;
+  }, (error) => {
+    console.log("Error getting user: " + error);
+  });
+  if (!user) {
+    console.log("No user found, exiting...");
+    return;
+  }
+
+  //example category creation with ACL need to do for all types
+  // let bookCategory = await createCategory('book', bookCategories, bookFilters);
+  let videoCategory = await createCategory('video', videoCategories, videoFilters);
+
+  //example create user with admin role example
+  await createAdmin(user);
+
+  //example create a user profile
+  await createProfile(
+      user,
+      'Name',
+      'About Author blah blah lorem',
+      'Link',
+      'Avatar.com/1.png',
+      'Cover.com/2.png',
+      {
+        setting: 'ok'
+      }
+    );
+
+  
+
+    // getAllProducts("book");
+  // example create a product
+  // saveItems(user, bookCategory, 5);
+  saveItems(user, videoCategory, 5);
+};
+seed();
+
+
+const categorySeedMap = {
+  "book" : [ {title : "Moby Dick", description: "A tale about a whale", subCategory: "Classic", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "Game of Thrones", description: "Story about Westeros", subCategory: "Fantasy", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "Of Mice and Men", description: "Lennie", subCategory: "Classic", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "Intro to Algorithms", description: "Not a fun book", subCategory: "Programming", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "1984", description: "Big brother", subCategory: "Classic", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+           ],
+  "video" : [ {title : "Foo", description: "Blah blah", subCategory: "Classic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Bar", description: "Blah blah", subCategory: "Fantasy", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Foobar", description: "Blah", subCategory: "Classic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Blah", description: "Blah", subCategory: "Programming", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Test", description: "Blah", subCategory: "Classic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+           ]
 };
 
 const bookFilters = [
@@ -331,47 +449,5 @@ let bookCategories = [
   'Crime'
 ];
 
-const seed = async () => {
-  const User = Moralis.Object.extend('User');
-  const query = new Moralis.Query(User);
-
-  let user = null;
-  await query.get('QEz0JDPCrCCViMNbAToYp6et').then((result) => {
-    user = result;
-  });
-
-  //example category creation with ACL need to do for all types
-  //await createCategory('Books', bookCategories, bookCategories);
-
-  //example create user with admin role example
-  //await createAdmin(user);
-
-  //example create a user profile
-  //await createProfile(
-  //     user,
-  //     'Name',
-  //     'About Author blah blah lorem',
-  //     'Link',
-  //     'Avatar.com/1.png',
-  //     'Cover.com/2.png',
-  //     {
-  //       setting: 'ok'
-  //     }
-  //   );
-  // };
-
-  // example create a product
-  await createProduct(
-    user,
-    'Awesome Product',
-    ['nice', 'good', 'lel'],
-    'This is my the best creation',
-    40,
-    4000,
-    'http://url.com/1.png',
-    ['http://url.com/1.png', 'http://url.com/1.png', 'http://url.com/1.png'],
-    ['pro', 'personal', 'exclusive'],
-    { v1: 'this is a change', v2: 'this is best change' }
-  );
-};
-seed();
+let videoCategories = bookCategories;
+let videoFilters = bookFilters;

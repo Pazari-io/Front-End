@@ -1,12 +1,14 @@
-import { useMoralisQuery } from 'react-moralis';
+import { MoralisContext, useMoralisQuery } from 'react-moralis';
+import { Moralis } from 'moralis';
 
 
-function basicQuery(query, type) {
-    return query.equalTo('type', type);
+function basicQuery(query, catQuery, props) {
+    catQuery.equalTo('type', props.type);
+    return query.matchesQuery('category', catQuery);
 }
 
 function filterQuery(query, catFilters) {
-    return query.containedIn('category', Array.from(catFilters));
+    return query.containedIn('subCategory', Array.from(catFilters));
 }
 
 function searchQuery(query, searchText) {
@@ -22,7 +24,9 @@ function querySort(query) {
  * Can be easily modified to extend the filtering functionality.
  */
 function buildQuery(query, props, searchText) {
-  query = basicQuery(query, props.type);
+  const Category = Moralis.Object.extend('Category');
+  let catQuery = new Moralis.Query(Category);
+  query = basicQuery(query, catQuery, props);
   if (searchText !== '') {
     console.log("Search query");
     query = searchQuery(query, searchText);
@@ -37,11 +41,11 @@ function buildQuery(query, props, searchText) {
 }
 
 
-export const getMarketItemsFromDB = (props, searchText) => {
+export const getProductsFromDB = (props, searchText) => {
   //TODO use fullText() ? Has performance impact
 
   const {data, error, isLoading} = useMoralisQuery(
-      'MarketplaceItems',
+      'Product',
       (query) => buildQuery(query, props, searchText),
       [props, searchText]
     );
