@@ -16,7 +16,7 @@ function searchQuery(query, searchText) {
 }
 
 function querySort(query) {
-    return query.ascending('itemID');
+    return query.ascending('price');
 }
 
 /*
@@ -28,11 +28,9 @@ function buildQuery(query, props, searchText) {
   let catQuery = new Moralis.Query(Category);
   query = basicQuery(query, catQuery, props);
   if (searchText !== '') {
-    console.log("Search query");
     query = searchQuery(query, searchText);
   } 
   if (props.catFilters.size >  0) {
-    console.log("Filter query");
     query = filterQuery(query, props.catFilters);
   } 
   query = querySort(query);
