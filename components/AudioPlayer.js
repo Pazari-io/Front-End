@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-
+import Link from 'next/link';
 const formWaveSurferOptions = (ref) => ({
   container: ref,
   waveColor: '#eee',
@@ -118,6 +118,30 @@ export default function AudioPlayer(props) {
                   <div>
                     <h3 className="px-2 text-xl font-bold">Toccata and Fugue</h3>
                   </div>
+
+                  <div className="flex justify-between">
+                    <div className="flex items-center justify-center mx-4">
+                      <span className="flex items-center text-lg dark:text-gray-300">
+                        Verifed Author
+                      </span>
+
+                      <img
+                        src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"
+                        className="w-4 h-4 mx-1 rounded-full"
+                      />
+                    </div>
+                    <div>
+                      <Link href="/publishers/details/4">
+                        <a>
+                          <img
+                            src="https://www.pikpng.com/pngl/m/382-3822530_j-k-rowling-blond-clipart.png"
+                            className="w-10 h-10 rounded-full"
+                          />
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+
                   <div className="flex items-center">
                     <img
                       className="w-6 h-6"
