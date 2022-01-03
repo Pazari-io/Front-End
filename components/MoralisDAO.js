@@ -58,3 +58,18 @@ export const getProductsFromDB = (props, searchText) => {
   return data;
 }
 
+export const getCategoriesFromDB = (props) => {
+  const {data, error, isLoading} = useMoralisQuery(
+      'Category',
+      (query) => query.equalTo('type', props.type),
+      [props.type]
+    );
+  if (error) {
+    console.log("Moralis error getting categories: " + error);
+  }
+  if (isLoading) {
+    console.log("Moralis isLoading getting categories: " + isLoading);
+  }
+  return data;
+}
+

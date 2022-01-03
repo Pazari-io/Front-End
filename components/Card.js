@@ -29,7 +29,7 @@ const LoadCover = (props) => {
       );
     case 'photo':
     case 'game':
-    case 'graphics':
+    case 'graphic':
       return (
         <div>
           <img
@@ -88,17 +88,16 @@ function generateItem(item, props) {
         </span>
         <h2 className="mt-2 mb-2 font-bold">{item.get('title')}</h2>
         <p className="text-sm">
-          Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec ullamcorper nulla non
-          metus auctor fringilla.
+          {item.get('description')}
         </p>
         <div className="flex items-center justify-between mt-3">
-          <div>
+          {/* <div>
             <span className="text-lg font-bold dark:text-indigo-600">
               Item {item.get('itemID')}
             </span>
             &nbsp;
             <span className="text-sm font-semibold dark:text-indigo-600">$</span>
-          </div>
+          </div> */}
 
           <div className="flex items-center">
             <img

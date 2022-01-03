@@ -2,6 +2,7 @@ import Nav from '../components/NavBar';
 import CategoryFilter from '../components/CategoryFilter';
 import Footer from '../components/Footer';
 import { useState } from 'react';
+import { getCategoriesFromDB } from '../components/MoralisDAO';
 
 export default function PageTypes(props) {
     const [catFilters, setFilters] = useState(new Set());
@@ -21,6 +22,13 @@ export default function PageTypes(props) {
 
     let classNameOn = "px-4 py-2 text-base text-white bg-indigo-500 rounded-full ";
     let classNameOff = "px-4 py-2 text-base text-white bg-orange-500 rounded-full ";
+    let categoriesObj = getCategoriesFromDB(props);
+    let subCategories = [];
+    let filters = [];
+    if (categoriesObj && categoriesObj.length !== 0) {
+        subCategories = categoriesObj[0].get('subCategories')[0];
+        filters = categoriesObj[0].get('filters')[0];
+    } 
 
     return (
         <main className="min-h-screen mx-auto dark:bg-gray-900">
@@ -32,7 +40,7 @@ export default function PageTypes(props) {
                         Explore categories
                     </h1>
 
-                    {props.categories.map((category) => {
+                    {subCategories.map((category) => {
                         return (
                             <div className="inline-flex px-2 py-1" key={category}>
                                 <button
@@ -48,7 +56,7 @@ export default function PageTypes(props) {
                 </div>
             </div>
 
-            <CategoryFilter type={props.type} filters={props.filters} catFilters={catFilters} />
+            <CategoryFilter type={props.type} filters={filters} catFilters={catFilters} audioUrls={props.audioUrls} />
             <Footer />
         </main>
     );

@@ -6,6 +6,9 @@
 // CPL needs to be set before production
 // no create field, mostly read only tables
 
+
+const filters = require('./filters.js');
+const subCategories = require('./subCategories.js');
 const Moralis = require('moralis/node');
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID;
@@ -19,7 +22,6 @@ const createAdmin = async (user) => {
   query.equalTo('name', 'Administrator');
   let found;
   await query.find({useMasterKey: true}).then((results) => {
-    console.log(results);
     if (results.length > 0) {
       found = results[0];
     }
@@ -315,8 +317,12 @@ const seed = async () => {
   }
 
   //example category creation with ACL need to do for all types
-  // let bookCategory = await createCategory('book', bookCategories, bookFilters);
-  let videoCategory = await createCategory('video', videoCategories, videoFilters);
+  let bookCategory = await createCategory('book', subCategories.bookCategories, filters.bookFilters);
+  let videoCategory = await createCategory('video', subCategories.videoCategories, filters.videoFilters);
+  let gameCategory = await createCategory('game', subCategories.gameCategories, filters.gameFilters);
+  let graphicCategory = await createCategory('graphic', subCategories.graphicCategories, filters.graphicFilters);
+  let photoCategory = await createCategory('photo', subCategories.photoCategories, filters.photoFilters);
+  let audioCategory = await createCategory('audio', subCategories.audioCategories, filters.audioFilters);
 
   //example create user with admin role example
   await createAdmin(user);
@@ -338,8 +344,12 @@ const seed = async () => {
 
     // getAllProducts("book");
   // example create a product
-  // saveItems(user, bookCategory, 5);
+  saveItems(user, bookCategory, 5);
   saveItems(user, videoCategory, 5);
+  saveItems(user, gameCategory, 2);
+  saveItems(user, graphicCategory, 1);
+  saveItems(user, photoCategory, 5);
+  saveItems(user, audioCategory, 5);
 };
 seed();
 
@@ -351,103 +361,34 @@ const categorySeedMap = {
              {title : "Intro to Algorithms", description: "Not a fun book", subCategory: "Programming", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
              {title : "1984", description: "Big brother", subCategory: "Classic", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
            ],
-  "video" : [ {title : "Foo", description: "Blah blah", subCategory: "Classic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
-             {title : "Bar", description: "Blah blah", subCategory: "Fantasy", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
-             {title : "Foobar", description: "Blah", subCategory: "Classic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
-             {title : "Blah", description: "Blah", subCategory: "Programming", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
-             {title : "Test", description: "Blah", subCategory: "Classic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+  "video" : [ {title : "Foo", description: "Blah blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Bar", description: "Blah blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Foobar", description: "Blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Blah", description: "Blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Test", description: "Blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+           ],
+  "game" : [ {title : "Foo", description: "Blah blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Bar", description: "Blah blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Foobar", description: "Blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Blah", description: "Blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Test", description: "Blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+           ],
+  "graphic" : [ {title : "Foo", description: "Blah blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Bar", description: "Blah blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Foobar", description: "Blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Blah", description: "Blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Test", description: "Blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+           ],
+  "photo" : [ {title : "Foo", description: "Blah blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Bar", description: "Blah blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Foobar", description: "Blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Blah", description: "Blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Test", description: "Blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+           ],
+  "audio" : [ {title : "Foo", description: "Blah blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Bar", description: "Blah blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Foobar", description: "Blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Blah", description: "Blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Test", description: "Blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
            ]
 };
-
-const bookFilters = [
-  {
-    id: 'properties',
-    name: 'Properties',
-    options: [
-      { value: 'verfied', label: 'Verfied publisher', checked: true },
-      { value: 'exclusive', label: 'Exclusive release', checked: true },
-      { value: 'hasaudio', label: 'With audio', checked: false },
-      { value: 'waterfree', label: 'No watermarks', checked: false },
-      { value: 'permissions', label: 'Full permissions', checked: false }
-    ]
-  },
-  {
-    id: 'age',
-    name: 'Age',
-    options: [
-      { value: 'every', label: 'Every age', checked: false },
-      { value: 'kids', label: 'Kids', checked: false },
-      { value: 'young', label: 'Young adults', checked: true },
-      { value: 'adults', label: '+18', checked: false }
-    ]
-  },
-  {
-    id: 'length',
-    name: 'Length',
-    options: [
-      { value: 'lessthan100', label: 'Less than 100 pages', checked: false },
-      { value: 'morethan100', label: 'More than 100 pages', checked: false },
-      { value: 'morethan300', label: 'More than 300 pages', checked: false }
-    ]
-  }
-];
-
-let bookCategories = [
-  'Computer',
-  'Programming',
-  'Design',
-  'Action',
-  'Adventure',
-  'Art',
-  'Aarchitecture',
-  'Autobiography',
-  'Anthology',
-  'Biography',
-  'Business',
-  'Children',
-  'Crafts',
-  'Classic',
-  'Cookbook',
-  'Comic',
-  'Diary',
-  'Encyclopedia',
-  'Drama',
-  'Guide',
-  'Fairytale',
-  'Security',
-  'Fitness',
-  'Health',
-  'Fantasy',
-  'History',
-  'Home',
-  'Historical',
-  'Garden',
-  'Humor',
-  'Horror',
-  'Journal',
-  'Mystery',
-  'Math',
-  'Paranormal',
-  'Memoir',
-  'Philosophy',
-  'Poetry',
-  'Prayer',
-  'Political',
-  'Religion',
-  'Romance',
-  'Fiction',
-  'Review',
-  'Short',
-  'Science',
-  'Suspense',
-  'Help',
-  'Thriller',
-  'Sports',
-  'Western',
-  'Travel',
-  'Young',
-  'Crime'
-];
-
-let videoCategories = bookCategories;
-let videoFilters = bookFilters;
