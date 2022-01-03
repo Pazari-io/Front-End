@@ -54,8 +54,7 @@ export default function CategoriesFilter(props) {
   const [searchText, setSearchText] = useState('');
   const updateSearch = (text) => {
     setSearchText(text);
-  }
-
+  };
 
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-gray-300">
@@ -299,11 +298,16 @@ export default function CategoriesFilter(props) {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 {/* main category content */}
-                {/* //TODO Add filtering for the audio player */}
-                <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
-                <div>
-                  {props.type && <Slider slides={getSlides(props, searchText)} type={props.type}/>}
-                </div>
+
+                {props.audioUrls ? (
+                  <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
+                ) : (
+                  <div>
+                    {props.type && (
+                      <Slider slides={getSlides(props, searchText)} type={props.type} />
+                    )}
+                  </div>
+                )}
 
                 <Pagination />
                 {/* /End replace */}
