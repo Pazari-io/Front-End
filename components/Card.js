@@ -2,14 +2,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const LoadCover = (props) => {
-  //TODO this should be coming dynamically from ERC1155 url
-  switch (props.type) {
+  if (!props.previewUrl|| props.previewUrl== '') {
+    return null;
+  }
+
+    switch (props.type) {
     case 'book':
       return (
         <div>
           <img
             className="object-cover w-full h-full "
-            src="https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"
+            src={props.previewUrl}
             alt=""
           />
         </div>
@@ -21,17 +24,17 @@ const LoadCover = (props) => {
           onMouseOver={(event) => event.target.play()}
           onMouseOut={(event) => event.target.pause()}
           className="object-cover w-full h-full "
-          src="https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"
+          src={props.previewUrl}
           type="video/mp4"></video>
       );
     case 'photo':
     case 'game':
-    case 'graphics':
+    case 'graphic':
       return (
         <div>
           <img
             className="object-cover w-full h-full "
-            src="https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"
+            src={props.previewUrl}
             alt=""
           />
         </div>
@@ -75,7 +78,7 @@ function generateItem(item, props) {
       <Link href={`/products/details/${Math.random(1, 9999999999)}`}>
         <a className="cursor-pointer">
           <div className="relative overflow-hidden">
-            <LoadCover type={props.type} />
+            <LoadCover previewUrl={item.get('previewUrl')} type={props.type}/>
           </div>
         </a>
       </Link>
@@ -83,19 +86,18 @@ function generateItem(item, props) {
         <span className="inline-block px-2 py-1 text-xs font-semibold leading-none tracking-wide text-indigo-800 uppercase bg-indigo-200 rounded-full">
           New
         </span>
-        <h2 className="mt-2 mb-2 font-bold">Purus Ullamcorper Inceptos Nibh</h2>
+        <h2 className="mt-2 mb-2 font-bold">{item.get('title')}</h2>
         <p className="text-sm">
-          Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec ullamcorper nulla non
-          metus auctor fringilla.
+          {item.get('description')}
         </p>
         <div className="flex items-center justify-between mt-3">
-          <div>
+          {/* <div>
             <span className="text-lg font-bold dark:text-indigo-600">
               Item {item.get('itemID')}
             </span>
             &nbsp;
             <span className="text-sm font-semibold dark:text-indigo-600">$</span>
-          </div>
+          </div> */}
 
           <div className="flex items-center">
             <img

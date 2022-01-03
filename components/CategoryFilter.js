@@ -13,8 +13,9 @@ import AudioPlayer from './AudioPlayer';
 import Pagination from './Pagination';
 
 import Card from './Card';
+import SearchInput from './SearchInput';
 import { SwiperSlide } from 'swiper/react';
-import { useMoralisQuery } from 'react-moralis';
+import { getProductsFromDB } from './MoralisDAO';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -29,29 +30,14 @@ const subCategories = [
   // { name: 'Guides', href: '#' }
 ];
 
-function getMarketItems(type) {
-  const { data, error, isLoading } = useMoralisQuery(
-    'MarketplaceItems',
-    (query) => query.equalTo('type', type).ascending('itemID'),
-    [type]
-  );
-  if (error) {
-    return <span>Error getting items from Moralis</span>;
-  }
-  if (isLoading) {
-    return <span>Loading items...</span>;
-  }
-  return data;
-}
-
-function getSlides(type) {
-  let items = getMarketItems(type);
+function getSlides(props, searchText) {
+  let items = getProductsFromDB(props, searchText);
   let res = [];
   for (let i = 0; i < items.length; i++) {
     let item = items[i];
     let slide = (
       <SwiperSlide key={Math.random().toString()}>
-        <Card type={type} item={item} />
+        <Card type={props.type} item={item} />
       </SwiperSlide>
     );
     res.push(slide);
@@ -65,6 +51,11 @@ function classNames(...classes) {
 
 export default function CategoriesFilter(props) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const updateSearch = (text) => {
+    setSearchText(text);
+  }
+
 
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-gray-300">
@@ -180,12 +171,7 @@ export default function CategoriesFilter(props) {
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-indigo-600">
               Filters
             </h1>
-
-            <input
-              type="text"
-              placeholder="Search ..."
-              className="w-1/3 rounded-lg dark:bg-gray-700 dark:text-gray-300"
-            />
+            <SearchInput updateSearch={updateSearch} />
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
@@ -313,9 +299,10 @@ export default function CategoriesFilter(props) {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 {/* main category content */}
+                {/* //TODO Add filtering for the audio player */}
                 <div>{props.audioUrls && <AudioPlayer audioUrls={props.audioUrls} />}</div>
                 <div>
-                  {props.type && <Slider slides={getSlides(props.type)} type={props.type} />}
+                  {props.type && <Slider slides={getSlides(props, searchText)} type={props.type}/>}
                 </div>
 
                 <Pagination />

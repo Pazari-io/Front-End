@@ -6,13 +6,29 @@
 // CPL needs to be set before production
 // no create field, mostly read only tables
 
+
+const filters = require('./filters.js');
+const subCategories = require('./subCategories.js');
 const Moralis = require('moralis/node');
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID;
-Moralis.start({ serverUrl, appId });
+const masterKey = process.env.NEXT_PUBLIC_MORALIS_MASTER_KEY; //Do not use this in front end, only for seeding data
+Moralis.start({ serverUrl, appId, masterKey });
 
 // Add a user to the admin role
 const createAdmin = async (user) => {
+  const Role = Moralis.Object.extend('_Role');
+  const query = new Moralis.Query(Role);
+  query.equalTo('name', 'Administrator');
+  let found;
+  await query.find({useMasterKey: true}).then((results) => {
+    if (results.length > 0) {
+      found = results[0];
+    }
+  });
+  if (found) return found;
+
+  console.log("Creating admin role");
   const roleACL = new Moralis.ACL();
   roleACL.setPublicReadAccess(true);
   const role = new Moralis.Role('Administrator', roleACL);
@@ -30,11 +46,11 @@ const createAdmin = async (user) => {
 
 // Fields
 //- type string (string) // 'book' || 'audio' || 'video' || 'graphic' || 'game' || 'photo'
-//- categories (list) // all categories
+//- subCategories (list) // all subCategories
 //- filters (list) // all filters for that category
 
 // create categories and filters only admin can write everyone can read it
-const createCategory = async (type, categories, filters) => {
+const createCategory = async (type, subCategories, filters) => {
   // only admin can write to this object
   const acl = new Moralis.ACL();
   acl.setRoleWriteAccess('Administrator', true);
@@ -43,20 +59,20 @@ const createCategory = async (type, categories, filters) => {
   const Category = Moralis.Object.extend('Category');
   const category = new Category();
 
-  query = new Moralis.Query(Category);
+  let query = new Moralis.Query(Category);
   query.equalTo('type', type);
-  found = false;
+  let found;
   await query.find().then((results) => {
     if (results.length > 0) {
-      found = true;
+      found = results[0];
     }
   });
 
   // only allow unique types
-  if (found) return;
+  if (found) return found;
 
   category.set('type', type);
-  category.addUnique('categories', categories);
+  category.addUnique('subCategories', subCategories);
   category.addUnique('filters', filters);
 
   category.setACL(acl);
@@ -119,18 +135,20 @@ const createPrivateLinks = async (encryptedUrl, ipfsUrl, user) => {
 
 // -Fields
 // - title (string) // title
-// - tags (list)
+// - category (Category) //category of the product (book, video, etc)
+// - subCategory (list)
 // - description (string) // long string of prodcut info allows youtube embeds
 // - unit (int) // how many copies avaiable
 // - views (int) // amount of views on this product
 // - price (int)  // in usd
-// - productImageUrls (list) //  some products have multiple images (like game assets for slider) except stock photos
 // - previewUrl (string) // url to show on front , watermarket copy
+// - productImageUrls (list) //  some products have multiple images (like game assets for slider) except stock photos
 
 const createProduct = async (
   user,
+  category,
   title,
-  tags,
+  subCategory,
   description,
   unit,
   price,
@@ -151,7 +169,8 @@ const createProduct = async (
   const product = new Product();
 
   product.set('title', title);
-  product.set('tags', tags);
+  product.set('category', category);
+  product.set('subCategory',subCategory);
   product.set('description', description);
   product.set('unit', unit);
   product.set('views', 0);
@@ -212,6 +231,7 @@ const createProfile = async (user, name, about, link, avatar, cover, notificaton
   const profiles = await profileExistQuery.find();
   if (profiles[0]) {
     console.log('profile already exists');
+    return;
   }
 
   const profile = new Profile();
@@ -241,137 +261,134 @@ const createProfile = async (user, name, about, link, avatar, cover, notificaton
   await profile.save();
 };
 
-const bookFilters = [
-  {
-    id: 'properties',
-    name: 'Properties',
-    options: [
-      { value: 'verfied', label: 'Verfied publisher', checked: true },
-      { value: 'exclusive', label: 'Exclusive release', checked: true },
-      { value: 'hasaudio', label: 'With audio', checked: false },
-      { value: 'waterfree', label: 'No watermarks', checked: false },
-      { value: 'permissions', label: 'Full permissions', checked: false }
-    ]
-  },
-  {
-    id: 'age',
-    name: 'Age',
-    options: [
-      { value: 'every', label: 'Every age', checked: false },
-      { value: 'kids', label: 'Kids', checked: false },
-      { value: 'young', label: 'Young adults', checked: true },
-      { value: 'adults', label: '+18', checked: false }
-    ]
-  },
-  {
-    id: 'length',
-    name: 'Length',
-    options: [
-      { value: 'lessthan100', label: 'Less than 100 pages', checked: false },
-      { value: 'morethan100', label: 'More than 100 pages', checked: false },
-      { value: 'morethan300', label: 'More than 300 pages', checked: false }
-    ]
+const saveItems = async (user, category, count) => {
+  console.log("SaveItems category: " + category.get('type') + ", count: " + count);
+  let type = category.get('type');
+  for (let i = 0; i < count; i++) {
+    let price = Math.floor(Math.random() * 20);
+    await createProduct(
+      user,
+      category,
+      categorySeedMap[type][i].title,
+      categorySeedMap[type][i].subCategory,
+      categorySeedMap[type][i].description,
+      40,
+      price,
+      categorySeedMap[type][i].previewUrl,
+      ['http://url.com/1.png', 'http://url.com/1.png', 'http://url.com/1.png'],
+      ['pro', 'personal', 'exclusive'],
+      { v1: 'this is a change', v2: 'this is best change' }
+    );
   }
-];
+}
 
-let bookCategories = [
-  'Computer',
-  'Programming',
-  'Design',
-  'Action',
-  'Adventure',
-  'Art',
-  'Aarchitecture',
-  'Autobiography',
-  'Anthology',
-  'Biography',
-  'Business',
-  'Children',
-  'Crafts',
-  'Classic',
-  'Cookbook',
-  'Comic',
-  'Diary',
-  'Encyclopedia',
-  'Drama',
-  'Guide',
-  'Fairytale',
-  'Security',
-  'Fitness',
-  'Health',
-  'Fantasy',
-  'History',
-  'Home',
-  'Historical',
-  'Garden',
-  'Humor',
-  'Horror',
-  'Journal',
-  'Mystery',
-  'Math',
-  'Paranormal',
-  'Memoir',
-  'Philosophy',
-  'Poetry',
-  'Prayer',
-  'Political',
-  'Religion',
-  'Romance',
-  'Fiction',
-  'Review',
-  'Short',
-  'Science',
-  'Suspense',
-  'Help',
-  'Thriller',
-  'Sports',
-  'Western',
-  'Travel',
-  'Young',
-  'Crime'
-];
+const getAllProducts = async (type) => {
+  const Product = Moralis.Object.extend('Product');
+  const Category = Moralis.Object.extend('Category');
+  let query = new Moralis.Query(Product);
+  let catQuery = new Moralis.Query(Category);
+  catQuery.equalTo('type', type);
+  query.matchesQuery('category', catQuery);
+  await query.find().then((results) => {
+    if (results.length > 0) {
+      console.log("Product results");
+      console.log(results);
+    } else{
+      console.log("no results found");
+    }
+  });
+
+
+}
 
 const seed = async () => {
-  const User = Moralis.Object.extend('User');
+  const User = Moralis.Object.extend("User");
   const query = new Moralis.Query(User);
 
   let user = null;
-  await query.get('QEz0JDPCrCCViMNbAToYp6et').then((result) => {
+  await query.get('yTxSNTO3Dac1aIsAfGCAkAsC', {useMasterKey: true}).then((result) => {
     user = result;
+  }, (error) => {
+    console.log("Error getting user: " + error);
   });
+  if (!user) {
+    console.log("No user found, exiting...");
+    return;
+  }
 
   //example category creation with ACL need to do for all types
-  //await createCategory('Books', bookCategories, bookCategories);
+  let bookCategory = await createCategory('book', subCategories.bookCategories, filters.bookFilters);
+  let videoCategory = await createCategory('video', subCategories.videoCategories, filters.videoFilters);
+  let gameCategory = await createCategory('game', subCategories.gameCategories, filters.gameFilters);
+  let graphicCategory = await createCategory('graphic', subCategories.graphicCategories, filters.graphicFilters);
+  let photoCategory = await createCategory('photo', subCategories.photoCategories, filters.photoFilters);
+  let audioCategory = await createCategory('audio', subCategories.audioCategories, filters.audioFilters);
 
   //example create user with admin role example
-  //await createAdmin(user);
+  await createAdmin(user);
 
   //example create a user profile
-  //await createProfile(
-  //     user,
-  //     'Name',
-  //     'About Author blah blah lorem',
-  //     'Link',
-  //     'Avatar.com/1.png',
-  //     'Cover.com/2.png',
-  //     {
-  //       setting: 'ok'
-  //     }
-  //   );
-  // };
+  await createProfile(
+      user,
+      'Name',
+      'About Author blah blah lorem',
+      'Link',
+      'Avatar.com/1.png',
+      'Cover.com/2.png',
+      {
+        setting: 'ok'
+      }
+    );
 
+  
+
+    // getAllProducts("book");
   // example create a product
-  await createProduct(
-    user,
-    'Awesome Product',
-    ['nice', 'good', 'lel'],
-    'This is my the best creation',
-    40,
-    4000,
-    'http://url.com/1.png',
-    ['http://url.com/1.png', 'http://url.com/1.png', 'http://url.com/1.png'],
-    ['pro', 'personal', 'exclusive'],
-    { v1: 'this is a change', v2: 'this is best change' }
-  );
+  saveItems(user, bookCategory, 5);
+  saveItems(user, videoCategory, 5);
+  saveItems(user, gameCategory, 2);
+  saveItems(user, graphicCategory, 1);
+  saveItems(user, photoCategory, 5);
+  saveItems(user, audioCategory, 5);
 };
 seed();
+
+
+const categorySeedMap = {
+  "book" : [ {title : "Moby Dick", description: "A tale about a whale", subCategory: "Classic", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "Game of Thrones", description: "Story about Westeros", subCategory: "Fantasy", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "Of Mice and Men", description: "Lennie", subCategory: "Classic", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "Intro to Algorithms", description: "Not a fun book", subCategory: "Programming", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+             {title : "1984", description: "Big brother", subCategory: "Classic", previewUrl: "https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format"},
+           ],
+  "video" : [ {title : "Foo", description: "Blah blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Bar", description: "Blah blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Foobar", description: "Blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Blah", description: "Blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Test", description: "Blah", subCategory: "Sports", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+           ],
+  "game" : [ {title : "Foo", description: "Blah blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Bar", description: "Blah blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Foobar", description: "Blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Blah", description: "Blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Test", description: "Blah", subCategory: "Creatures", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+           ],
+  "graphic" : [ {title : "Foo", description: "Blah blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Bar", description: "Blah blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Foobar", description: "Blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Blah", description: "Blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Test", description: "Blah", subCategory: "Backgrounds", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+           ],
+  "photo" : [ {title : "Foo", description: "Blah blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Bar", description: "Blah blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Foobar", description: "Blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Blah", description: "Blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+             {title : "Test", description: "Blah", subCategory: "Fashion", previewUrl: "https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg"},
+           ],
+  "audio" : [ {title : "Foo", description: "Blah blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Bar", description: "Blah blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Foobar", description: "Blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Blah", description: "Blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+             {title : "Test", description: "Blah", subCategory: "Cinematic", previewUrl: "https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4"},
+           ]
+};
