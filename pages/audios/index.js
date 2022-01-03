@@ -5,9 +5,6 @@ const audioUrls = [
   'https://www.mfiles.co.uk/mp3-downloads/franz-schubert-standchen-serenade.mp3'
 ];
 
-
-
 export default function Home() {
-  return <PageTypes audioUrls={audioUrls}/>
-
+  return <PageTypes audioUrls={audioUrls} type="audio" />;
 }
