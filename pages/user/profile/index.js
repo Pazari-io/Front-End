@@ -1,19 +1,117 @@
-import { useEffect } from 'react';
-import Nav from '../../../components/NavBar';
+import { useEffect, useState } from 'react';
+  import Nav from '../../../components/NavBar';
 import Footer from '../../../components/Footer';
 import { useMoralis } from 'react-moralis';
-import { useRouter } from 'next/router';
-export default function Profile() {
-  const router = useRouter();
+// import { Moralis } from 'Moralis';
+// import { useRouter } from 'next/router';
+import { getProfileFromDB } from '../../../components/MoralisDAO';
+import { displayUserLoginButton } from '../../../components/util/ErrorDisplays';
+// import { create } from 'wavesurfer.js';
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/');
+async function createProfile(Moralis, user, name, about, link, avatar, cover, notificatons, setCreatedProfile) {
+  // ACL setup
+  const acl = new Moralis.ACL();
+
+  // only the owner can edit the profile
+  acl.setWriteAccess(user.id, true);
+  // public can read the profile
+  acl.setPublicReadAccess(true);
+  acl.setPublicWriteAccess(false);
+
+  const Profile = Moralis.Object.extend('Profile');
+
+  const profileExistQuery = new Moralis.Query(Profile);
+  profileExistQuery.equalTo('user', user);
+  const profiles = await profileExistQuery.find();
+  if (profiles[0]) {
+    console.log('profile already exists');
+    return profiles[0];
+  }
+
+  const profile = new Profile();
+  profile.setACL(acl);
+  profile.set('name', name);
+  profile.set('about', about);
+  profile.set('link', link);
+  profile.set('avatar', avatar);
+  profile.set('cover', cover);
+  profile.set('notification', notificatons);
+  profile.set('contractAddr', '');
+
+  let Verified = Moralis.Object.extend('Verified');
+  let verified = new Verified();
+
+  let verifiedACL = new Moralis.ACL();
+  verifiedACL.setPublicReadAccess(true);
+  verifiedACL.setRoleWriteAccess('Administrator', true);
+  verified.setACL(verifiedACL);
+  verified.set('isVerified', 'false');
+  await verified.save();
+  profile.set('verified', verified);
+
+  // relation to user
+  profile.set('user', user);
+  profile.set('userId', user.id);
+
+  // handle error
+  await profile.save();
+  setCreatedProfile(profile);
+  // return profile;
+};
+
+
+function saveProfile(user, profile, Moralis, createdProfile, setCreatedProfile) {
+  console.log("saving profile");
+  if (profile.length == 0) {
+    createProfile(Moralis, user, 'Name', 'Sample description', 'http://example.com', '', '', { setting: 'ok'}, setCreatedProfile );
+    console.log('created new profile!');
+    //save new profile
+  } else {
+    //update existing profile
+    if (createdProfile) {
+      profile = createdProfile;
+    } else {
+      profile = profile[0];
     }
-  });
+    setCreatedProfile(profile);
+    console.log('update profile...');
+  }
+}
 
-  const { isAuthenticated } = useMoralis();
+function createdProfileDisplay(createdProfileDisplay) {
+  if (createdProfileDisplay) {
+    return <span className="text-left px-4 text-indigo-500">Updated profile!</span>;
+  }
+  return <p></p>;
+}
 
+export default function Profile() {
+  const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
+  const [createdProfile, setCreatedProfile] = useState('');
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     router.push('/');
+  //   }
+  // });
+
+
+  let profile = getProfileFromDB(user);
+  console.log(profile);
+  if (!user) {
+      return displayUserLoginButton(authenticate);
+  }
+//  - name (string) // Full name
+//  - email (string) // To recive notifications
+//  - about (string) // Author description
+//  - link  (string) // publisher personal url
+//  - verified (bool) // Default false
+//  - avatar (string) // avatar
+//  - cover (string) // banner image
+//  - contractAddr (string) //Reference to PazariToken contract that this user owns
+//  - notification (dict) // {"promotion" :false , "sells" : true }
+//  - userId (string) // User table has some protected access
   return (
     isAuthenticated && (
       <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
@@ -29,7 +127,6 @@ export default function Profile() {
               </div>
             </div>
             <div className="mt-5 md:mt-0 md:col-span-2">
-              <form action="#" method="POST">
                 <div className="shadow sm:rounded-md sm:overflow-hidden">
                   <div className="px-4 py-5 my-1 space-y-6 bg-white dark:bg-gray-800 sm:p-6">
                     <div className="grid grid-cols-3 gap-6">
@@ -52,6 +149,27 @@ export default function Profile() {
                           />
                         </div>
                       </div>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="about"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Username
+                      </label>
+                      <div className="mt-1">
+                        <textarea
+                          id="about"
+                          name="about"
+                          rows={3}
+                          className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm dark:border-indigo-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700"
+                          placeholder="Username..."
+                          defaultValue={''}
+                        />
+                      </div>
+                      <p className="mt-2 text-sm text-gray-500">
+                        Username, this is the name users will see!
+                      </p>
                     </div>
 
                     <div>
@@ -135,14 +253,14 @@ export default function Profile() {
                     </div>
                   </div>
                   <div className="px-4 py-3 text-right bg-gray-50 dark:bg-gray-900 sm:px-6">
+                      {createdProfileDisplay(createdProfile)}
                     <button
-                      type="submit"
+                      onClick={() => saveProfile(user, profile, Moralis, createdProfile, setCreatedProfile)}
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                       Save
                     </button>
                   </div>
                 </div>
-              </form>
             </div>
           </div>
         </div>
@@ -170,7 +288,6 @@ export default function Profile() {
               </div>
             </div>
             <div className="mt-5 md:mt-0 md:col-span-2">
-              <form action="#" method="POST">
                 <div className="overflow-hidden shadow sm:rounded-md">
                   <div className="px-4 py-5 space-y-6 bg-white dark:bg-gray-800 sm:p-6">
                     <fieldset>
@@ -294,7 +411,6 @@ export default function Profile() {
                     </button>
                   </div>
                 </div>
-              </form>
             </div>
           </div>
         </div>

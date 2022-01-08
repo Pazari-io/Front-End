@@ -136,6 +136,7 @@ const createPrivateLinks = async (encryptedUrl, ipfsUrl, user) => {
 // - title (string) // title
 // - category (Category) //category of the product (book, video, etc)
 // - subCategory (list)
+// - addedToMarketplace (bool) //The product can be created without adding it to the marketplace...this should be fixed
 // - description (string) // long string of prodcut info allows youtube embeds
 // - unit (int) // how many copies avaiable
 // - views (int) // amount of views on this product
@@ -144,10 +145,11 @@ const createPrivateLinks = async (encryptedUrl, ipfsUrl, user) => {
 // - productImageUrls (list) //  some products have multiple images (like game assets for slider) except stock photos
 
 const createProduct = async (
-  user,
+  profile,
   category,
   title,
   subCategory,
+  addedToMarketplace,
   description,
   unit,
   price,
@@ -160,7 +162,7 @@ const createProduct = async (
   const acl = new Moralis.ACL();
 
   // only the owner can edit the profile
-  acl.setWriteAccess(user.id, true);
+  acl.setWriteAccess(profile.get('userId'), true);
   // public can read the profile
   acl.setPublicReadAccess(true);
 
@@ -170,6 +172,7 @@ const createProduct = async (
   product.set('title', title);
   product.set('category', category);
   product.set('subCategory', subCategory);
+  product.set('addedToMarketplace', addedToMarketplace);
   product.set('description', description);
   product.set('unit', unit);
   product.set('views', 0);
@@ -179,8 +182,8 @@ const createProduct = async (
   product.set('license', license);
   product.set('changeLog', changeLogs);
 
-  // relation to user
-  product.set('user', user);
+  // relation to profile
+  product.set('profile', profile);
 
   await product.save();
 };
@@ -189,7 +192,7 @@ const createProduct = async (
 
 // - ACL/CLP
 //   - only current user can write to fields
-//   - public can read link, name, verfied , image, cover
+//   - public can read link, name, verified , image, cover
 //   - only owner can read the email/write
 //   - only admins can write verified field
 
@@ -208,10 +211,12 @@ You can add a pointer to the private data from the public one.
 //  - email (string) // To recive notifications
 //  - about (string) // Author description
 //  - link  (string) // publisher personal url
-//  - verfied (bool) // Default false
+//  - verified (bool) // Default false
 //  - avatar (string) // avatar
 //  - cover (string) // banner image
+//  - contractAddr (string) //Reference to PazariToken contract that this user owns
 //  - notification (dict) // {"promotion" :false , "sells" : true }
+//  - userId (string) // User table has some protected access
 const createProfile = async (user, name, about, link, avatar, cover, notificatons) => {
   // ACL setup
   const acl = new Moralis.ACL();
@@ -230,7 +235,7 @@ const createProfile = async (user, name, about, link, avatar, cover, notificaton
   const profiles = await profileExistQuery.find();
   if (profiles[0]) {
     console.log('profile already exists');
-    return;
+    return profiles[0];
   }
 
   const profile = new Profile();
@@ -241,23 +246,26 @@ const createProfile = async (user, name, about, link, avatar, cover, notificaton
   profile.set('avatar', avatar);
   profile.set('cover', cover);
   profile.set('notification', notificatons);
+  profile.set('contractAddr', '');
 
-  let Verfied = Moralis.Object.extend('Verfied');
-  let verfied = new Verfied();
+  let Verified = Moralis.Object.extend('Verified');
+  let verified = new Verified();
 
   verifiedACL = new Moralis.ACL();
   verifiedACL.setPublicReadAccess(true);
   verifiedACL.setRoleWriteAccess('Administrator', true);
-  verfied.setACL(verifiedACL);
-  verfied.set('isVerfied', 'false');
-  await verfied.save();
-  profile.set('verified', verfied);
+  verified.setACL(verifiedACL);
+  verified.set('isVerified', 'false');
+  await verified.save();
+  profile.set('verified', verified);
 
   // relation to user
   profile.set('user', user);
+  profile.set('userId', user.id);
 
   // handle error
   await profile.save();
+  return profile;
 };
 
 const saveItems = async (user, category, count) => {
@@ -270,6 +278,7 @@ const saveItems = async (user, category, count) => {
       category,
       categorySeedMap[type][i].title,
       categorySeedMap[type][i].subCategory,
+      false,
       categorySeedMap[type][i].description,
       40,
       price,
@@ -298,12 +307,29 @@ const getAllProducts = async (type) => {
   });
 };
 
+const getAllProfiles = async (id) => {
+  const Profile = Moralis.Object.extend('Profile');
+  let query = new Moralis.Query(Profile);
+
+  console.log(id);
+  query.equalTo('userId', id);
+  await query.find().then((results) => {
+    if (results.length > 0) {
+      console.log('Profile results');
+      console.log(results);
+    } else {
+      console.log('no results found');
+    }
+  });
+
+}
+
 const seed = async () => {
   const User = Moralis.Object.extend('User');
   const query = new Moralis.Query(User);
 
   let user = null;
-  await query.get('QEz0JDPCrCCViMNbAToYp6et', { useMasterKey: true }).then(
+  await query.get('Gi9FOIcDpauvCQUIxk9qUVJN', { useMasterKey: true }).then(
     (result) => {
       user = result;
     },
@@ -352,7 +378,7 @@ const seed = async () => {
   await createAdmin(user);
 
   //example create a user profile
-  await createProfile(
+  let profile = await createProfile(
     user,
     'Name',
     'About Author blah blah lorem',
@@ -365,13 +391,14 @@ const seed = async () => {
   );
 
   // getAllProducts("book");
+  // getAllProfiles(user.id);
   // example create a product
-  saveItems(user, bookCategory, 5);
-  saveItems(user, videoCategory, 5);
-  saveItems(user, gameCategory, 2);
-  saveItems(user, graphicCategory, 1);
-  saveItems(user, photoCategory, 5);
-  saveItems(user, audioCategory, 5);
+  saveItems(profile, bookCategory, 5);
+  saveItems(profile, videoCategory, 5);
+  saveItems(profile, gameCategory, 2);
+  saveItems(profile, graphicCategory, 1);
+  saveItems(profile, photoCategory, 5);
+  saveItems(profile, audioCategory, 5);
 };
 seed();
 

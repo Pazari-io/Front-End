@@ -100,7 +100,8 @@ export default function Nav() {
       if (isAuthenticated && account && !isWeb3Enabled && !isWeb3EnableLoading) {
         enableWeb3();
       }
-      if (isWeb3Enabled && chainId !== '0xA869') {
+      //0xA869 - avax testnet, 0x539 local
+      if (isWeb3Enabled && chainId !== '0xA869' && chainId !== '0x539') {
         await switchNetwork('0xA869');
       }
     };
@@ -228,6 +229,19 @@ export default function Nav() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95">
                       <Menu.Items className="absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <Link href="/upload">
+                              <a
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700'
+                                )}>
+                                Upload Item
+                              </a>
+                            </Link>
+                          )}
+                        </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
                             <Link href="/user/profile">
