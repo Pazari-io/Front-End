@@ -71,7 +71,6 @@ export const getCategoriesFromDB = (props) => {
 
 
 export const getProfileFromDB = (user) => {
-  console.log(user);
   let id = '';
   if (user !== null) {
     id = user.id;
