@@ -1,104 +1,81 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Nav from '../../components/NavBar';
 import Footer from '../../components/Footer';
-import { useMoralis, useMoralisFile } from 'react-moralis';
-// import { Moralis } from 'Moralis';
+import { useMoralis } from 'react-moralis';
 import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Tab } from '@headlessui/react';
-import { Fragment } from 'react/cjs/react.production.min';
-import Pagination from '../../components/Pagination';
-import Link from 'next/link';
-import { getProfileFromDB, getProductForProfileNoMarketplace } from '../../components/MoralisDAO';
+import { getProfileFromDB, getTokenForProfile } from '../../components/MoralisDAO';
 import { displayUserLoginButton, displayProfileButton } from '../../components/util/ErrorDisplays';
+import { pazariMvpAbi } from '../../components/util/abiUtil';
 import { ethers } from 'ethers';
 
-/*
-1. User clicks 'Create new token' - FactoryPazariTokenMVP.newPazariTokenMVP is triggered and we save the address of new contract
-2. User clicks 'Create new item' - PazariTokenMVP.createNewToken is triggered with the new contract address
-3. User clicks 'Upload to marketplace' - Marketplace.createMarketItem is triggered
-//This process is obviously way too complicated, so waiting for wrapper contract we can use
-*/
 const FACTORY_ADDRESS = '0xD373d7993AF55DcA04392FD7a5776F9eE7d1fe5b';
-const FACTORY_ADDRESS_LOCAL = '0xf9a92AC8AC2Ad8EB8eF04F134bb51AA4A800E660';
 const MARKETPLACE_ADDRESS = '0x34D068C19B140F7CB21E8EC3ADdA47011c7bb34f';
 const PAZARI_TOKEN_ADDRESS = '0x9D9644A6691df2cc45Ce6717F53DEb7dA78712C2';
-const FACTORY_ABI = [
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'tokenAddr',
-        type: 'address'
-      },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address'
-      }
-    ],
-    name: 'PazariTokenCreated',
-    type: 'event'
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address[]',
-        name: '_contractOwners',
-        type: 'address[]'
-      }
-    ],
-    name: 'newPazariTokenMVP',
-    outputs: [
-      {
-        internalType: 'address',
-        name: 'newContract',
-        type: 'address'
-      }
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  }
-];
-function createNewContract(user, signer) {
-  console.log('Uploading ebook');
-  console.log(user.get('ethAddress'));
-  const factoryPazariTokenMVP = new ethers.Contract(FACTORY_ADDRESS_LOCAL, FACTORY_ABI, signer);
+// const FACTORY_ADDRESS_LOCAL = '0xf9a92AC8AC2Ad8EB8eF04F134bb51AA4A800E660';
+const FACTORY_ADDRESS_LOCAL = '0xa513e6e4b8f2a923d98304ec87f64353c4d5c853';
+const MARKETPLACE_ADDRESS_LOCAL = '0x5fc8d32690cc91d4c39d9d3abcbd16989f875707';
+const ROUTER_ADDRESS_LOCAL = '0xdc64a140aa3e981100a9beca4e685f962f0cf6c9';
+const PAZARI_MVP_ADDRESS_GANACHE = '0x1A98c616f5e2f6E7E6bcf864Ac7D981e692bAd9a';
+// const PAZARI_MVP_ADDRESS_HARDHAT = '0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6';
 
-  factoryPazariTokenMVP.connect(signer);
-  factoryPazariTokenMVP.newPazariTokenMVP([user.get('ethAddress')]);
-  //TODO update contractAddr in profile after creating new contract.
-  // Or else reference the TokenCreated contract
+function createNewContract(signer, tokenData, units, price, Moralis) {
+  saveToIpfs(Moralis, tokenData).then(url => {
+    const pazariMVP = new ethers.Contract(PAZARI_MVP_ADDRESS_GANACHE, pazariMvpAbi, signer);
+
+    pazariMVP.connect(signer);
+    pazariMVP.newUser(url, units, price);
+
+  });
 }
 
-function uploadEbook(user, signer) {
-  console.log('Uploading ebook');
-  console.log(user.get('ethAddress'));
-  // const provider = new ethers.providers.Web3Provider(window.ethereum);
-  // const signer = provider.getSigner();
-  const factoryPazariTokenMVP = new ethers.Contract(FACTORY_ADDRESS_LOCAL, FACTORY_ABI, signer);
-  // const Marketplace = new ether
-  factoryPazariTokenMVP.connect(signer);
-  factoryPazariTokenMVP.newPazariTokenMVP([user.get('ethAddress')]);
+async function saveToIpfs(Moralis, data) {
+  let dataFile = {base64: btoa(JSON.stringify(data))};
+  const file = new Moralis.File('data.json', dataFile);
+  await file.saveIPFS();
+  return file.ipfs();
 }
 
-function doUpload(profile, user, signer) {
-  if (!profile.get('contractAddr') || profile.get('contractAddr') === '') {
+function createNewItem(signer, tokenData, units, price, Moralis) {
+  console.log('Uploading new item');
+  saveToIpfs(Moralis, tokenData).then(url => {
+    const pazariMVP = new ethers.Contract(PAZARI_MVP_ADDRESS_GANACHE, pazariMvpAbi, signer);
+
+    pazariMVP.connect(signer);
+    pazariMVP.newTokenListing(url, units, price);
+
+  });
+
+}
+
+function doUpload(token, signer, tokenData, units, price, Moralis) {
+  if (token === '') {
     //Need to upload the contract
     console.log('uploadContract');
-    createNewContract(user, signer);
+    createNewContract(signer, tokenData, units, price, Moralis);
   } else {
-    console.log('create that item');
+    console.log('create new item for token: ' + token);
+    createNewItem(signer, tokenData, units, price, Moralis);
   }
 }
 
+/*
+Process:
+1. User clicks 'Create new token' - 
+  1.1 Metadata is uploaded to IPFS.
+  1.2 PazariToken.newUser/newTokenListing is triggered
+  1.3 We listen to the events and save data to our tables (in progress)
+  1.4 Front end all updates beautifully
+*/
 export default function Upload() {
-  const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
-
+  const [tokenData, setTokenData] = useState({
+      name: '',
+      description: '',
+      cover_image: '',
+  });
+  const [units, setUnits] = useState(0);
+  const [price, setPrice] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -108,7 +85,7 @@ export default function Upload() {
     }
   });
 
-  const { isAuthenticated, authenticate, user } = useMoralis();
+  const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log(acceptedFiles[0]);
@@ -127,7 +104,9 @@ export default function Upload() {
     accept: '.jpg, .jpeg, .png .pdf .mp4 .mp3 .webp .webm ' // add more extention
   });
 
+
   let profile = getProfileFromDB(user);
+  let tokens = getTokenForProfile(user);
   if (!user) {
     return displayUserLoginButton(authenticate);
   }
@@ -135,6 +114,10 @@ export default function Upload() {
     return displayProfileButton();
   }
   profile = profile[0];
+  let token = '';
+  if (tokens.length !== 0) {
+      token = tokens[0].get('tokenAddr');
+  }
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -154,15 +137,30 @@ export default function Upload() {
             <input
               type="text"
               className="w-full px-4 py-1 border rounded-lg dark:bg-gray-700 dark:text-gray-400 dark:border-indigo-400 "
+              value={tokenData.name}
+              onChange={(event) => setTokenData({
+                  ...tokenData,
+                  name: event.target.value
+              })}
             />
             <p>Project description</p>
 
-            <textarea className="w-full px-4 py-2 my-2 border rounded-lg dark:border-indigo-400 h-44 dark:bg-gray-700 dark:text-gray-400" />
+            <textarea 
+                className="w-full px-4 py-2 my-2 border rounded-lg dark:border-indigo-400 h-44 dark:bg-gray-700 dark:text-gray-400" 
+                value={tokenData.description}
+                onChange={(event) => setTokenData({
+                  ...tokenData,
+                  description: event.target.value
+                })}
+            
+            />
 
             <div className="flex">
-              <p>Units sold from 1 to N</p>
+              <p className="px-2">Units sold from 1 to N</p>
               <input
                 type="text"
+                value={units}
+                onChange={(event) => setUnits(event.target.value)}
                 placeholder="3"
                 className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
               />
@@ -170,20 +168,16 @@ export default function Upload() {
               <input
                 placeholder="100"
                 type="text"
+                value={price}
+                onChange={(event) => setPrice(event.target.value)}
                 className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
               />
 
-              <p className="px-2">Buy and Bang price in USD</p>
-              <input
-                placeholder="10000"
-                type="text"
-                className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
-              />
             </div>
 
             <button
               className="absolute w-24 px-4 py-2 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
-              onClick={() => doUpload(profile, user, signer)}>
+              onClick={() => doUpload(token, signer, tokenData, units, price, Moralis)}>
               Save
             </button>
           </div>

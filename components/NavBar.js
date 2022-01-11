@@ -100,8 +100,10 @@ export default function Nav() {
       if (isAuthenticated && account && !isWeb3Enabled && !isWeb3EnableLoading) {
         enableWeb3();
       }
-      //0xA869 - avax testnet, 0x539 local
-      if (isWeb3Enabled && chainId !== '0xA869' && chainId !== '0x539') {
+      //0xA869 - avax testnet
+      //0x539 - ganache
+      //0x7a69 - hardhat
+      if (isWeb3Enabled && chainId !== '0xA869' && chainId !== '0x539' && chainId !== '0x7a69') {
         await switchNetwork('0xA869');
       }
     };

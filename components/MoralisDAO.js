@@ -128,3 +128,23 @@ export const getProductForProfileNoMarketplace = (user) => {
   }
   return data;
 };
+
+//Gets the token for current user.  This is important so we know whether to create a new token or use an existing one.
+export const getTokenForProfile = (user) => {
+  let userAddr = '';
+  if (user) {
+    userAddr = user.get('ethAddress');
+  }
+  const { data, error, isLoading } = useMoralisQuery(
+    'PazariToken',
+    (query) => query.equalTo('sender', userAddr),
+    [userAddr]
+  );
+  if (error) {
+    console.log('Moralis error getting categories: ' + error);
+  }
+  if (isLoading) {
+    console.log('Moralis isLoading getting categories: ' + isLoading);
+  }
+  return data;
+};
