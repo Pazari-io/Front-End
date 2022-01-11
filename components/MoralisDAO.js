@@ -68,3 +68,83 @@ export const getCategoriesFromDB = (props) => {
   }
   return data;
 };
+
+
+export const getProfileFromDB = (user) => {
+  let id = '';
+  if (user !== null) {
+    id = user.id;
+  }
+
+  const { data, error, isLoading } = useMoralisQuery(
+    'Profile',
+    (query) => query.equalTo('userId',id),
+    [id]
+  );
+  if (error) {
+    console.log('Moralis error getting categories: ' + error);
+  }
+  if (isLoading) {
+    console.log('Moralis isLoading getting categories: ' + isLoading);
+  }
+  return data;
+};
+
+
+
+export const getProductForProfile = (user) => {
+  const { data, error, isLoading } = useMoralisQuery(
+    'Product',
+    (query) => query.equalTo('user', user),
+    [user]
+  );
+  if (error) {
+    console.log('Moralis error getting categories: ' + error);
+  }
+  if (isLoading) {
+    console.log('Moralis isLoading getting categories: ' + isLoading);
+  }
+  return data;
+};
+
+export const getProductForProfileNoMarketplace = (user) => {
+  console.log("Getting products");
+  const Profile = Moralis.Object.extend('Profile');
+  let profileQuery = new Moralis.Query(Profile);
+  console.log(user);
+  const { data, error, isLoading } = useMoralisQuery(
+    'Product',
+    (query) => { profileQuery.equalTo('userId', user.id);
+      return query.matchesQuery('profile', profileQuery)
+                    .equalTo('addedToMarketplace', false);
+        }      ,
+    [profileQuery, user.id]
+  );
+  if (error) {
+    console.log('Moralis error getting categories: ' + error);
+  }
+  if (isLoading) {
+    console.log('Moralis isLoading getting categories: ' + isLoading);
+  }
+  return data;
+};
+
+//Gets the token for current user.  This is important so we know whether to create a new token or use an existing one.
+export const getTokenForProfile = (user) => {
+  let userAddr = '';
+  if (user) {
+    userAddr = user.get('ethAddress');
+  }
+  const { data, error, isLoading } = useMoralisQuery(
+    'PazariToken',
+    (query) => query.equalTo('sender', userAddr),
+    [userAddr]
+  );
+  if (error) {
+    console.log('Moralis error getting categories: ' + error);
+  }
+  if (isLoading) {
+    console.log('Moralis isLoading getting categories: ' + isLoading);
+  }
+  return data;
+};
