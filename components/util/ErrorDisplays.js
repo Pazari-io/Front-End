@@ -1,6 +1,6 @@
 import Nav from '../NavBar';
 import Link from 'next/link';
-import Profile from '../../public/images/Profile.png';
+import WhyOne from '../../public/images/WhyOne.png';
 import Image from 'next/image';
 
 export const displayUserLoginButton = (authenticate) => {
@@ -51,7 +51,7 @@ export const displayProfileButton = () => {
           <Image
             alt="Profile"
             className="my-4 rounded-lg"
-            src={Profile}
+            src={WhyOne}
             placeholder="blur"
             width={700}
             height={475}
