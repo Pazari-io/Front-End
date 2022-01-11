@@ -6,7 +6,10 @@ import {
 } from '@heroicons/react/outline';
 import Nav from '../components/NavBar';
 import Footer from '../components/Footer';
-
+import Banner from '../public/images/Banner.png';
+import WhyOne from '../public/images/WhyOne.png';
+import WhyTwo from '../public/images/WhyTwo.png';
+import Image from 'next/image';
 const navigation = [
   { name: 'Marketplace', href: '#', current: true },
   { name: 'Learn', href: '#', current: false },
@@ -46,43 +49,29 @@ export default function About() {
     <main className="min-h-screen mx-auto dark:bg-gray-900">
       <Nav />
 
-      <div className="relative overflow-hidden bg-white dark:bg-gray-900 ">
-        <div className="max-w-full mx-auto bg-gray-300 dark:bg-gray-900 ">
-          <div className="relative z-10 pt-4 pb-8 bg-gray-300 dark:bg-gray-900 roundled-lg sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <div className="px-4 mx-auto mt-10 max-w-7xl sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28 ">
-              <div className="sm:text-center lg:text-left ">
-                <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-                  <span className="block text-indigo-600 xl:inline">
-                    Indie Digital Publication Revolution On Avalanche
-                  </span>
-                </h1>
-                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  We plan to change the way publication works by working on the future join us.
-                </p>
-                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                  <div className="rounded-md shadow">
-                    {/* <a
-                    href="#"
-                    className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                  >
-                    Our Story
-                  </a> */}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mb-2 lg:absolute lg:inset-y-0 lg:right-0 lg:w-full">
-          <img
-            className="object-cover w-full h-56 rounded-lg z-4 sm:h-72 md:h-96 lg:w-full lg:h-full"
-            src="https://images.unsplash.com/photo-1542856809-e1230214be24?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2688&q=80"
-            alt=""
-          />
-        </div>
+      {/* <hr className="mx-4 mb-2 border-purple-400 border-dashed " /> */}
+
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        {/* <div className="lg:text-center">
+          <p className="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-gray-900 dark:text-indigo-600 sm:text-4xl">
+            Indie publication revolution on avalanche
+          </p>
+          <p className="max-w-2xl mt-4 text-xl text-gray-500 lg:mx-auto">
+            Empowering the world’s most influential and respected publications
+          </p>
+        </div> */}
       </div>
 
-      {/* <hr className="mx-4 mb-2 border-purple-400 border-dashed " /> */}
+      <div className="text-center py-14">
+        <Image
+          alt="Banner"
+          src={Banner}
+          placeholder="blur"
+          width={1000}
+          height={500}
+          className="rounded-lg"
+        />
+      </div>
 
       <div className="py-12 bg-white dark:bg-gray-800">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -93,6 +82,11 @@ export default function About() {
             <p className="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-gray-900 dark:text-indigo-600 sm:text-4xl">
               A better way to publish and purchase
             </p>
+            <div className="flex">
+              <Image src={WhyOne}></Image>
+              <Image src={WhyTwo}></Image>
+            </div>
+
             <p className="max-w-2xl mt-4 text-xl text-gray-500 lg:mx-auto">
               changing fees from 30% to 7%{' '}
             </p>

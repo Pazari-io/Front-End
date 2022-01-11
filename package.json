@@ -21,7 +21,8 @@
     "react-moralis": "^0.3.11",
     "swiper": "^7.3.2",
     "swr": "^1.1.1",
-    "wavesurfer.js": "^5.2.0"
+    "wavesurfer.js": "^5.2.0",
+    "formidable": "^2.0.1"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",

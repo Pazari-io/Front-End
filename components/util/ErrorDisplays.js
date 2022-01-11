@@ -1,5 +1,7 @@
 import Nav from '../NavBar';
 import Link from 'next/link';
+import Profile from '../../public/images/Profile.png';
+import Image from 'next/image';
 
 export const displayUserLoginButton = (authenticate) => {
   return (
@@ -24,22 +26,38 @@ export const displayUserLoginButton = (authenticate) => {
       </div>
     </main>
   );
-}
+};
 
 export const displayProfileButton = () => {
-    return (
-      <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-        <Nav />
-        <div className="flex justify-center py-2">
-          <h2>Please create a profile before uploading an item</h2>
+  return (
+    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
+      <Nav />
+
+      <div class="grid grid-cols-2 gap-4 ">
+        <div className="py-24 text-center">
+          <div className="flex flex-col items-center justify-center">
+            <div>To start publishing assets, you need to update your profile. </div>
+            <div>
+              <Link href="/user/profile">
+                <a className="inline-flex justify-center px-4 py-2 mx-4 my-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  Update Profile
+                </a>
+              </Link>
+            </div>
+          </div>
         </div>
-        <div className="flex justify-center py-2">
-          <Link href="/user/profile">
-            <a className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              Your Profile
-            </a>
-          </Link>
+
+        <div className="py-12">
+          <Image
+            alt="Profile"
+            className="my-4 rounded-lg"
+            src={Profile}
+            placeholder="blur"
+            width={700}
+            height={475}
+          />
         </div>
-      </main>
-    );
-}
+      </div>
+    </main>
+  );
+};

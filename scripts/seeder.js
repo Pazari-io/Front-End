@@ -321,15 +321,14 @@ const getAllProfiles = async (id) => {
       console.log('no results found');
     }
   });
-
-}
+};
 
 const seed = async () => {
   const User = Moralis.Object.extend('User');
   const query = new Moralis.Query(User);
 
   let user = null;
-  await query.get('Gi9FOIcDpauvCQUIxk9qUVJN', { useMasterKey: true }).then(
+  await query.get('QEz0JDPCrCCViMNbAToYp6et', { useMasterKey: true }).then(
     (result) => {
       user = result;
     },

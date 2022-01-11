@@ -14,6 +14,7 @@ import Photos from '../public/images/Photos.png';
 //import Socials from '../public/images/Socials.png';
 import Videos from '../public/images/Videos.png';
 import Graphics from '../public/images/Graphics.png';
+import Banner from '../public/images/Banner.png';
 
 // if you see SVG console errors it seems to be a react
 // bug https://github.com/facebook/react/issues/15187
