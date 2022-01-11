@@ -8,7 +8,6 @@ import { useDropzone } from 'react-dropzone';
 import { Tab } from '@headlessui/react';
 import { Fragment } from 'react/cjs/react.production.min';
 import Pagination from '../../../components/Pagination';
-
 export default function Dashboard() {
   const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
 
@@ -22,8 +21,36 @@ export default function Dashboard() {
 
   const { isAuthenticated } = useMoralis();
 
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles[0]);
+  const onDrop = useCallback(async (acceptedFiles) => {
+    let file = acceptedFiles[0];
+
+    // const reader = new FileReader();
+    // // reader.onload = () => {
+    // //   const fileAsBinaryString = reader.result;
+    // //   // furture file content magic check here
+    // // };
+    // reader.onabort = () => console.log('file reading was aborted');
+    // reader.onerror = () => {
+    //   console.log('file reading has failed');
+    //   return;
+    // };
+    // reader.readAsBinaryString(file);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    await fetch('/api/uploader', {
+      method: 'POST',
+      body: formData
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.error) {
+          console.log(json.error);
+        } else {
+          //console.log(json);
+          //saveFile(json);
+        }
+      });
 
     // acceptedFiles.forEach((file) => {
     //   console.log(file);
@@ -36,7 +63,7 @@ export default function Dashboard() {
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
-    accept: '.jpg, .jpeg, .png .pdf .mp4 .mp3 .webp .webm ' // add more extention
+    accept: 'jpg, .jpeg, .png, .pdf, .mp4, .mp3, .webp, .webm ' // add more extention
   });
 
   return (
