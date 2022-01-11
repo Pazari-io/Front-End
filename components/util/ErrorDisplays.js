@@ -33,7 +33,7 @@ export const displayProfileButton = () => {
     <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
       <Nav />
 
-      <div class="grid grid-cols-2 gap-4 ">
+      <div className="grid grid-cols-2 gap-4 ">
         <div className="py-24 text-center">
           <div className="flex flex-col items-center justify-center">
             <div>To start publishing assets, you need to update your profile. </div>
