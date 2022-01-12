@@ -1,75 +1,10 @@
-
 import { useEffect, useState } from 'react';
 import Nav from './NavBar';
 import Footer from './Footer';
 import { getProfileFromDB } from './MoralisDAO';
-
-async function createProfile(Moralis, user) {
-  // ACL setup
-  const acl = new Moralis.ACL();
-
-  // only the owner can edit the profile
-  acl.setWriteAccess(user.id, true);
-  // public can read the profile
-  acl.setPublicReadAccess(true);
-  acl.setPublicWriteAccess(false);
-
-  const Profile = Moralis.Object.extend('Profile');
-
-  console.log(profile);
-  const profileExistQuery = new Moralis.Query(Profile);
-  profileExistQuery.equalTo('user', user);
-  const profiles = await profileExistQuery.find();
-  if (profiles[0]) {
-    console.log('profile already exists');
-    return profiles[0];
-  }
-
-  const profile = new Profile();
-  profile.setACL(acl);
-
-  let Verified = Moralis.Object.extend('Verified');
-  let verified = new Verified();
-
-  let verifiedACL = new Moralis.ACL();
-  verifiedACL.setPublicReadAccess(true);
-  verifiedACL.setRoleWriteAccess('Administrator', true);
-  verified.setACL(verifiedACL);
-  verified.set('isVerified', 'false');
-  await verified.save();
-  profile.set('verified', verified);
-
-  // relation to user
-  profile.set('user', user);
-  profile.set('userId', user.id);
-
-  // handle error
-  await profile.save();
-  window.location.reload();
-}
-
-function createNewProfile(Moralis, user) {
-  return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-      <Nav />
-      <div className="flex justify-center">
-        <div className="px-4 sm:px-0">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">Profile</h3>
-          <p className="px-12 py-4 mt-1 text-md text-gray-600">
-            Create profile to begin uploading items!
-          </p>
-        </div>
-      </div>
-      <div className="flex justify-center">
-        <button
-          className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => createProfile(Moralis, user)}>
-          Create Profile
-        </button>
-      </div>
-    </main>
-  );
-}
+import Zero from '../public/images/Zero.png';
+import Image from 'next/image';
+import ZeroProfile from './ZeroProfile';
 
 async function saveProfile(profile, setUpdatedProfile) {
   console.log('saving profile');
@@ -79,7 +14,7 @@ async function saveProfile(profile, setUpdatedProfile) {
 
 function updatedProfileDisplay(updatedProfileDisplay) {
   if (updatedProfileDisplay) {
-    return <span className="text-left px-4 text-indigo-500">Updated profile!</span>;
+    return <span className="px-4 text-left text-indigo-500">Updated profile!</span>;
   }
   return <p></p>;
 }
@@ -89,25 +24,55 @@ function updateProf(profile, field, event) {
 }
 
 export default function ProfileForm(props) {
+  const [profile, setProfile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   let Moralis = props.Moralis;
   let user = props.user;
-  const [updatedProfile, setUpdatedProfile] = useState(false);
-  let dbProfiles = getProfileFromDB(user);
-  if (dbProfiles.length === 0) {
-    return createNewProfile(Moralis, user);
-  }
-  let profile = dbProfiles[0];
 
-  //  - name (string) // Full name
-  //  - email (string) // To recive notifications
-  //  - about (string) // Author description
-  //  - link  (string) // publisher personal url
-  //  - verified (bool) // Default false
-  //  - avatar (string) // avatar
-  //  - cover (string) // banner image
-  //  - contractAddr (string) //Reference to PazariToken contract that this user owns
-  //  - notification (dict) // {"promotion" :false , "sells" : true }
-  //  - userId (string) // User table has some protected access
+  const getProfile = async () => {
+    setIsLoading(true);
+    const ProfileObject = Moralis.Object.extend('Profile');
+    const profileExistQuery = new Moralis.Query(ProfileObject);
+    profileExistQuery.equalTo('user', user);
+    const profiles = await profileExistQuery.find();
+
+    if (profiles.length > 0) {
+      const nQuery = new Moralis.Query(ProfileObject);
+      let profileObj = await nQuery.get(profiles[0]['id']);
+      //profileObj.then((obj) => console.log(obj));
+      setProfile(profileObj.attributes);
+      setIsLoading(false);
+      return;
+    }
+
+    setProfile(null);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  // return <></>;
+
+  if (isLoading) return <></>;
+  else if (!isLoading && profile !== null) return userProfile();
+  else return <ZeroProfile user={user} Moralis={Moralis} />;
+}
+
+//  - name (string) // Full name
+//  - email (string) // To recive notifications
+//  - about (string) // Author description
+//  - link  (string) // publisher personal url
+//  - verified (bool) // Default false
+//  - avatar (string) // avatar
+//  - cover (string) // banner image
+//  - contractAddr (string) //Reference to PazariToken contract that this user owns
+//  - notification (dict) // {"promotion" :false , "sells" : true }
+//  - userId (string) // User table has some protected access
+
+function userProfile() {
   return (
     <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
       <Nav />
@@ -140,8 +105,8 @@ export default function ProfileForm(props) {
                         type="text"
                         name="company-website"
                         id="company-website"
-                        value={profile.get('link')}
-                        onChange={(event) => updateProf(profile, 'link', event)}
+                        //value={profile.get('link')}
+                        //onChange={(event) => updateProf(profile, 'link', event)}
                         className="flex-1 block w-full border-gray-300 rounded-none dark:border-indigo-400 dark:bg-gray-700 focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
                         placeholder="www.example.com"
                       />
@@ -160,8 +125,8 @@ export default function ProfileForm(props) {
                       id="about"
                       name="about"
                       rows={3}
-                      value={profile.get('name')}
-                      onChange={(event) => updateProf(profile, 'name', event)}
+                      //value={profile['name']}
+                      //onChange={(event) => updateProf(profile, 'name', event)}
                       className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm dark:border-indigo-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700"
                       placeholder="Username..."
                     />
@@ -183,8 +148,8 @@ export default function ProfileForm(props) {
                       name="about"
                       className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm dark:border-indigo-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700"
                       placeholder="I am an awsome publisher."
-                      value={profile.get('about')}
-                      onChange={(event) => updateProf(profile, 'about', event)}
+                      // value={profile['about']}
+                      // onChange={(event) => updateProf(profile, 'about', event)}
                     />
                   </div>
                   <p className="mt-2 text-sm text-gray-500">
@@ -252,13 +217,13 @@ export default function ProfileForm(props) {
                 </div>
               </div>
               <div className="px-4 py-3 text-right bg-gray-50 dark:bg-gray-900 sm:px-6">
-                {updatedProfileDisplay(profile)}
+                {/* {updatedProfileDisplay(profile)}
                 <button
                   // type='submit'
                   onClick={() => saveProfile(profile, setUpdatedProfile)}
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   Save
-                </button>
+                </button> */}
               </div>
             </div>
             {/* </form> */}

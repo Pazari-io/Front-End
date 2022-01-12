@@ -62,13 +62,12 @@ export default function About() {
         </div> */}
       </div>
 
-      <div className="text-center py-14">
+      <div className="text-center pt-14">
         <Image
           alt="Banner"
           src={Banner}
           placeholder="blur"
-          width={1000}
-          height={500}
+          objectFit={'cover'}
           className="rounded-lg"
         />
       </div>

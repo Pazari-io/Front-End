@@ -1,5 +1,7 @@
 import { MoralisContext, useMoralisQuery } from 'react-moralis';
 import { Moralis } from 'moralis';
+import subCategories from '../scripts/subCategories';
+import { useState } from 'react';
 
 function basicQuery(query, catQuery, props) {
   catQuery.equalTo('type', props.type);
@@ -69,55 +71,28 @@ export const getCategoriesFromDB = (props) => {
   return data;
 };
 
-
-export const getProfileFromDB = (user) => {
-  let id = '';
-  if (user !== null) {
-    id = user.id;
+// for a single query ro loading needed
+export const getProfileFromDB = async (user) => {
+  const Profile = Moralis.Object.extend('Profile');
+  const profileExistQuery = new Moralis.Query(Profile);
+  profileExistQuery.equalTo('usezr', user);
+  const profiles = await profileExistQuery.find();
+  if (profiles.length > 0) {
+    return profiles[0]['id'];
   }
-
-  const { data, error, isLoading } = useMoralisQuery(
-    'Profile',
-    (query) => query.equalTo('userId',id),
-    [id]
-  );
-  if (error) {
-    console.log('Moralis error getting categories: ' + error);
-  }
-  if (isLoading) {
-    console.log('Moralis isLoading getting categories: ' + isLoading);
-  }
-  return data;
-};
-
-
-
-export const getProductForProfile = (user) => {
-  const { data, error, isLoading } = useMoralisQuery(
-    'Product',
-    (query) => query.equalTo('user', user),
-    [user]
-  );
-  if (error) {
-    console.log('Moralis error getting categories: ' + error);
-  }
-  if (isLoading) {
-    console.log('Moralis isLoading getting categories: ' + isLoading);
-  }
-  return data;
+  return null;
 };
 
 export const getProductForProfileNoMarketplace = (user) => {
-  console.log("Getting products");
+  console.log('Getting products');
   const Profile = Moralis.Object.extend('Profile');
   let profileQuery = new Moralis.Query(Profile);
-  console.log(user);
   const { data, error, isLoading } = useMoralisQuery(
     'Product',
-    (query) => { profileQuery.equalTo('userId', user.id);
-      return query.matchesQuery('profile', profileQuery)
-                    .equalTo('addedToMarketplace', false);
-        }      ,
+    (query) => {
+      profileQuery.equalTo('userId', user.id);
+      return query.matchesQuery('profile', profileQuery).equalTo('addedToMarketplace', false);
+    },
     [profileQuery, user.id]
   );
   if (error) {
