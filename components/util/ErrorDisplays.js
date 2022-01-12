@@ -56,7 +56,7 @@ export const displayProfileButton = () => {
       <div className="grid gap-4 md:grid-cols-2 ">
         <div className="py-24 text-center">
           <div className="flex flex-col items-center justify-center">
-            <div class="text-2xl">
+            <div className="text-2xl">
               To start publishing assets, you need to update your profile.{' '}
             </div>
             <div>
