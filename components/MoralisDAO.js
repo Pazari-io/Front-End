@@ -1,7 +1,9 @@
 import { MoralisContext, useMoralisQuery } from 'react-moralis';
 import { Moralis } from 'moralis';
 import subCategories from '../scripts/subCategories';
-import { useEffect, useState, useLayoutEffect } from 'react';
+import useQueryLoader from '../hooks/useQueryLoader';
+import { useState, useLayoutEffect } from 'react';
+
 function basicQuery(query, catQuery, props) {
   catQuery.equalTo('type', props.type);
   return query.matchesQuery('category', catQuery);
@@ -71,43 +73,46 @@ export const getCategoriesFromDB = (props) => {
 };
 
 export const getProfileFromDB = (user) => {
-  const { data, isFetching, error, isLoading } = useMoralisQuery(
+  const { data, isFetching, error } = useMoralisQuery(
     'Profile',
     (query) => query.equalTo('user', user),
     [user]
   );
 
-  let obj = { loaded: false, data: null };
+  let obj = { loaded: false, data: null, error: null };
   const [finalForm, SetFinalForm] = useState(obj);
 
   useLayoutEffect(() => {
-    // console.log('isFetching' + isFetching);
-    // console.log(data.length);
+    if (error) {
+      let obj = { loaded: true, data: null, error: error };
+      SetFinalForm(obj);
+      return;
+    }
 
-    if (!isFetching && data.length > 0) {
-      let obj = { loaded: true, data: data };
+    if (isFetching) {
+      let obj = { loaded: false, data: null, error: error };
       SetFinalForm(obj);
       return;
     }
 
     if (!isFetching && data.length === 0) {
-      let obj = { loaded: true, data: data };
+      let obj = { loaded: true, data: null, error: error };
       SetFinalForm(obj);
       return;
     }
 
-    let obj = { loaded: false, data: null };
-    SetFinalForm(obj);
-  }, [isFetching, data]);
+    if (!isFetching && data.length > 0) {
+      let obj = { loaded: true, data: data, error: error };
+      SetFinalForm(obj);
+      return;
+    }
+  }, [isFetching, data, error]);
 
-  if (error) {
-    console.log('Moralis error getting profile: ' + error);
-  }
-  if (isFetching) {
-    console.log('Moralis isLoading getting profile: ' + isLoading);
-  }
+  console.log(finalForm);
   return finalForm;
-  // return data;
+
+  // let output = useQueryLoader(data, isFetching, error);
+  // return output;
 };
 
 export const getProductForProfileNoMarketplace = (user) => {
