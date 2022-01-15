@@ -69,14 +69,14 @@ npm run start
 
 Our interface uses well-known open-source software to handle encryption, authorization, database management, and media processing. You can read more about each of them. Please consult with `packages.json` for the complete list.
 
-[React](https://github.com/facebook/react)
-[Next.js](https://github.com/vercel/next.js/)
-[Tailwindcss](https://github.com/tailwindlabs/tailwindcss
-[Moralis-SDK](https://github.com/MoralisWeb3/Moralis-JS-SDK)
-[React-Moralis](/https://github.com/MoralisWeb3/react-moralis)
-[Ethers.js](https://github.com/ethers-io/ethers.js)
-[Web3.js](https://github.com/ChainSafe/web3.js)
-[Filepond](https://github.com/pqina/filepond)
+- [React](https://github.com/facebook/react)
+- [Next.js](https://github.com/vercel/next.js/)
+- [Tailwindcss](https://github.com/tailwindlabs/tailwindcss
+- [Moralis-SDK](https://github.com/MoralisWeb3/Moralis-JS-SDK)
+- [React-Moralis](/https://github.com/MoralisWeb3/react-moralis)
+- [Ethers.js](https://github.com/ethers-io/ethers.js)
+- [Web3.js](https://github.com/ChainSafe/web3.js)
+- [Filepond](https://github.com/pqina/filepond)
 
 ## Security
 
