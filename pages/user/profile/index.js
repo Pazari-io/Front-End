@@ -429,46 +429,17 @@ function AuthenticatedProfile(props) {
   let Moralis = props.Moralis;
   let user = props.user;
 
-  // const [profile, setProfile] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // const getProfile = async () => {
-  //   setIsLoading(true);
-  //   const ProfileObject = Moralis.Object.extend('Profile');
-  //   const profileExistQuery = new Moralis.Query(ProfileObject);
-  //   profileExistQuery.equalTo('user', user);
-  //   const profiles = await profileExistQuery.find();
-
-  //   if (profiles.length > 0) {
-  //     setProfile(profiles[0]);
-  //     setIsLoading(false);
-  //     return;
-  //   }
-
-  //   setProfile(null);
-  //   setIsLoading(false);
-  // };
-
-  // // to avoid flashing between components
-  // useLayoutEffect(() => {
-  //   if (profile !== null) return;
-
-  //   getProfile();
-  // }, [profile]);
-
   let profile = getProfileFromDB(user);
 
-  if (profile.loaded === false && profile.data === null) return <></>;
-  if (profile.loaded === true && profile.data.length === 0)
-    return <ZeroProfile user={user} Moralis={Moralis} />;
-  else if (profile.loaded === true && profile.data.length > 0)
+  // loading
+  if (!profile.loaded) return <>Loading...</>;
+  // handle error
+  if (profile.error) return <>Error loading profile</>;
+  // profile loaded and has the data can use profile.data
+  if (profile.loaded && profile.data)
     return <UserProfile user={user} profile={profile.data[0]} Moralis={Moralis} />;
-
-  //return <UserProfile user={user} profile={pr[0]} />;
-
-  // if (isLoading) return <></>;
-  // else if (!isLoading && profile !== null) return <UserProfile user={user} profile={profile} />;
-  // else return <ZeroProfile user={user} Moralis={Moralis} />;
+  // profile is loaded but has no data
+  if (profile.loaded && !profile.data) return <ZeroProfile user={user} Moralis={Moralis} />;
 }
 
 export default function Profile() {

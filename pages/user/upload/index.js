@@ -128,7 +128,13 @@ export default function Upload() {
   const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
 
   let profile = getProfileFromDB(user);
-  let tokens = getTokenForProfile(user);
+  if (profile.loaded === false && profile.data === null) return <></>;
+  else if (profile.loaded === true && profile.data.length === 0) return displayProfileButton();
+  if (profile.loaded === true && profile.data.length > 0) profile = profile.data[0];
+
+  console.log(profile);
+
+  //let tokens = getTokenForProfile(user);
   let subCategories = getSubcategories(tokenData, setTokenData);
   console.log(subCategories);
   if (!user) {
