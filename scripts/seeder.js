@@ -11,7 +11,7 @@ const subCategories = require('./subCategories.js');
 const Moralis = require('moralis/node');
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID;
-const masterKey = process.env.NEXT_PUBLIC_MORALIS_MASTER_KEY; //Do not use this in front end, only for seeding data
+const masterKey = process.env.MORALIS_MASTER_KEY;
 Moralis.start({ serverUrl, appId, masterKey });
 
 // Add a user to the admin role
@@ -217,7 +217,7 @@ You can add a pointer to the private data from the public one.
 //  - contractAddr (string) //Reference to PazariToken contract that this user owns
 //  - notification (dict) // {"promotion" :false , "sells" : true }
 //  - userId (string) // User table has some protected access
-const createProfile = async (user, name, about, link, avatar, cover, notificatons) => {
+const createProfile = async (user, name, about, link, avatar, cover, level, notificatons) => {
   // ACL setup
   const acl = new Moralis.ACL();
 
@@ -242,6 +242,7 @@ const createProfile = async (user, name, about, link, avatar, cover, notificaton
   profile.setACL(acl);
   profile.set('name', name);
   profile.set('about', about);
+  profile.set('level', about);
   profile.set('link', link);
   profile.set('avatar', avatar);
   profile.set('cover', cover);

@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import Nav from './NavBar';
 import Zero from '../public/images/Zero.png';
 import Image from 'next/image';
-import { useMoralis } from 'react-moralis';
+import { useState } from 'react';
+import Nav from './NavBar';
 
 async function createProfile(Moralis, user, username, email) {
   // ACL setup
@@ -15,7 +14,6 @@ async function createProfile(Moralis, user, username, email) {
   acl.setPublicWriteAccess(false);
 
   const Profile = Moralis.Object.extend('Profile');
-
   const profile = new Profile();
   profile.setACL(acl);
 
@@ -32,7 +30,9 @@ async function createProfile(Moralis, user, username, email) {
 
   // relation to user
   profile.set('user', user);
-  profile.set('userId', user.id);
+
+  // verification level
+  profile.set('level', 0);
 
   // handle error
   await profile.save();
@@ -45,10 +45,9 @@ async function createProfile(Moralis, user, username, email) {
   window.location.reload();
 }
 
-export default function createNewProfile() {
+export default function ZeroProfile(props) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const { user, Moralis } = useMoralis();
 
   return (
     <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
@@ -91,7 +90,7 @@ export default function createNewProfile() {
             <div className="flex justify-center">
               <button
                 className="inline-flex items-center px-4 py-2 my-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={() => createProfile(Moralis, user, username, email)}>
+                onClick={() => createProfile(props.Moralis, props.user, username, email)}>
                 Create Profile
               </button>
             </div>

@@ -1,7 +1,7 @@
-import Nav from '../NavBar';
+import Nav from './NavBar';
 import Link from 'next/link';
-import Login from '../../public/images/Login.png';
-import Profile from '../../public/images/Profile.png';
+import Login from '../public/images/Login.png';
+import Profile from '../public/images/Profile.png';
 import Image from 'next/image';
 
 export const displayUserLoginButton = (authenticate) => {

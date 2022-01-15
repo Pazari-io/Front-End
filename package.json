@@ -13,16 +13,21 @@
     "@walletconnect/web3-provider": "^1.7.0",
     "coingecko-api": "^1.0.10",
     "ethers": "^5.5.3",
+    "filepond": "^4.30.3",
+    "filepond-plugin-image-exif-orientation": "^1.0.11",
+    "filepond-plugin-image-preview": "^4.6.10",
+    "formidable": "^2.0.1",
     "moralis": "0.0.176",
     "next": "12.0.7",
+    "next-themes": "^0.0.15",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-dropzone": "^11.4.2",
+    "react-filepond": "^7.1.1",
     "react-moralis": "^0.3.11",
     "swiper": "^7.3.2",
     "swr": "^1.1.1",
-    "wavesurfer.js": "^5.2.0",
-    "formidable": "^2.0.1"
+    "wavesurfer.js": "^5.2.0"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",

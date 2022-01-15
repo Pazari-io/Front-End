@@ -1,8 +1,7 @@
 import { MoralisContext, useMoralisQuery } from 'react-moralis';
 import { Moralis } from 'moralis';
 import subCategories from '../scripts/subCategories';
-import { useState } from 'react';
-
+import { useEffect, useState, useLayoutEffect } from 'react';
 function basicQuery(query, catQuery, props) {
   catQuery.equalTo('type', props.type);
   return query.matchesQuery('category', catQuery);
@@ -71,16 +70,44 @@ export const getCategoriesFromDB = (props) => {
   return data;
 };
 
-// for a single query ro loading needed
-export const getProfileFromDB = async (user) => {
-  const Profile = Moralis.Object.extend('Profile');
-  const profileExistQuery = new Moralis.Query(Profile);
-  profileExistQuery.equalTo('usezr', user);
-  const profiles = await profileExistQuery.find();
-  if (profiles.length > 0) {
-    return profiles[0]['id'];
+export const getProfileFromDB = (user) => {
+  const { data, isFetching, error, isLoading } = useMoralisQuery(
+    'Profile',
+    (query) => query.equalTo('user', user),
+    [user]
+  );
+
+  let obj = { loaded: false, data: null };
+  const [finalForm, SetFinalForm] = useState(obj);
+
+  useLayoutEffect(() => {
+    // console.log('isFetching' + isFetching);
+    // console.log(data.length);
+
+    if (!isFetching && data.length > 0) {
+      let obj = { loaded: true, data: data };
+      SetFinalForm(obj);
+      return;
+    }
+
+    if (!isFetching && data.length === 0) {
+      let obj = { loaded: true, data: data };
+      SetFinalForm(obj);
+      return;
+    }
+
+    let obj = { loaded: false, data: null };
+    SetFinalForm(obj);
+  }, [isFetching, data]);
+
+  if (error) {
+    console.log('Moralis error getting profile: ' + error);
   }
-  return null;
+  if (isFetching) {
+    console.log('Moralis isLoading getting profile: ' + isLoading);
+  }
+  return finalForm;
+  // return data;
 };
 
 export const getProductForProfileNoMarketplace = (user) => {

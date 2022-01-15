@@ -5,22 +5,24 @@ import { useMoralis } from 'react-moralis';
 import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { getProfileFromDB, getTokenForProfile } from '../../../components/MoralisDAO';
 import {
-  displayUserLoginButton,
-  displayProfileButton
-} from '../../../components/util/ErrorDisplays';
-import { pazariMvpAbi } from '../../../components/util/abiUtil';
+  getProfileFromDB,
+  getTokenForProfile,
+  getCategoriesFromDB
+} from '../../../components/MoralisDAO';
+import { displayUserLoginButton, displayProfileButton } from '../../../components/UserLoader';
+import { pazariMvpAbi, FACTORY_ABI } from '../../../contracts/abi';
 import { ethers } from 'ethers';
 
 const FACTORY_ADDRESS = '0xD373d7993AF55DcA04392FD7a5776F9eE7d1fe5b';
 const MARKETPLACE_ADDRESS = '0x34D068C19B140F7CB21E8EC3ADdA47011c7bb34f';
 const PAZARI_TOKEN_ADDRESS = '0x9D9644A6691df2cc45Ce6717F53DEb7dA78712C2';
 // const FACTORY_ADDRESS_LOCAL = '0xf9a92AC8AC2Ad8EB8eF04F134bb51AA4A800E660';
-const FACTORY_ADDRESS_LOCAL = '0xa513e6e4b8f2a923d98304ec87f64353c4d5c853';
+const FACTORY_ADDRESS_LOCAL = '0xCF3E28A7352Ae6bF1aaA3E02698370fd88FEd311';
 const MARKETPLACE_ADDRESS_LOCAL = '0x5fc8d32690cc91d4c39d9d3abcbd16989f875707';
 const ROUTER_ADDRESS_LOCAL = '0xdc64a140aa3e981100a9beca4e685f962f0cf6c9';
-const PAZARI_MVP_ADDRESS_GANACHE = '0x1A98c616f5e2f6E7E6bcf864Ac7D981e692bAd9a';
+// const PAZARI_MVP_ADDRESS_GANACHE = '0x634E2bA437D792Ea4D0A1Fd751AF7117112E8618';
+const PAZARI_MVP_ADDRESS_GANACHE = '0xC2bF42E77699f0a3C157bBE9fA23B2861Cd5a96c';
 // const PAZARI_MVP_ADDRESS_HARDHAT = '0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6';
 
 function createNewContract(signer, tokenData, units, price, Moralis) {
@@ -39,25 +41,61 @@ async function saveToIpfs(Moralis, data) {
   return file.ipfs();
 }
 
-function createNewItem(signer, tokenData, units, price, Moralis) {
+function createNewItem(user, signer, tokenData, units, price, Moralis) {
   console.log('Uploading new item');
   saveToIpfs(Moralis, tokenData).then((url) => {
     const pazariMVP = new ethers.Contract(PAZARI_MVP_ADDRESS_GANACHE, pazariMvpAbi, signer);
-
     pazariMVP.connect(signer);
     pazariMVP.newTokenListing(url, units, price);
   });
 }
 
-function doUpload(token, signer, tokenData, units, price, Moralis) {
+function doUpload(user, token, signer, tokenData, units, price, Moralis) {
   if (token === '') {
     //Need to upload the contract
     console.log('uploadContract');
     createNewContract(signer, tokenData, units, price, Moralis);
   } else {
     console.log('create new item for token: ' + token);
-    createNewItem(signer, tokenData, units, price, Moralis);
+    createNewItem(user, signer, tokenData, units, price, Moralis);
   }
+}
+
+function getSubcategories(tokenData, setTokenData) {
+  let categoriesObj = getCategoriesFromDB(tokenData.type);
+  let subCategories = [];
+  let options = [];
+  options.push(
+    <option key="defaultCat" disabled value="">
+      Subcategories:
+    </option>
+  );
+  if (categoriesObj && categoriesObj.length !== 0) {
+    subCategories = categoriesObj[0].get('subCategories')[0];
+    subCategories.forEach((cat) =>
+      options.push(
+        <option key={'sub' + cat} value={cat}>
+          {cat}
+        </option>
+      )
+    );
+  }
+
+  return (
+    <select
+      className="w-2/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
+      id="typeSelector"
+      name="typeSelector"
+      value={tokenData.subCategory}
+      onChange={(event) =>
+        setTokenData({
+          ...tokenData,
+          subCategory: event.target.value
+        })
+      }>
+      {options}
+    </select>
+  );
 }
 
 /*
@@ -72,6 +110,8 @@ export default function Upload() {
   const [tokenData, setTokenData] = useState({
     name: '',
     description: '',
+    type: '',
+    subCategory: '',
     cover_image: ''
   });
   const [units, setUnits] = useState(0);
@@ -87,35 +127,24 @@ export default function Upload() {
 
   const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
 
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles[0]);
-
-    // acceptedFiles.forEach((file) => {
-    //   console.log(file);
-    // });
-    //{error && console.log(error)}
-    //{isUploading && console.log("uploading")}
-    //saveFile("batman.jpeg", acceptedFiles[0]);
-    //saveFile("batman.jpeg", file, { saveIPFS: true });
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
-    onDrop,
-    accept: '.jpg, .jpeg, .png .pdf .mp4 .mp3 .webp .webm ' // add more extention
-  });
-
   let profile = getProfileFromDB(user);
   let tokens = getTokenForProfile(user);
+  let subCategories = getSubcategories(tokenData, setTokenData);
+  console.log(subCategories);
   if (!user) {
     return displayUserLoginButton(authenticate);
   }
-  if (profile.length == 0) {
-    return displayProfileButton();
-  }
-  profile = profile[0];
+
+  // if (profile.loaded === false && profile.data === null) return <></>;
+  // if (profile.loaded === true && profile.data.length === 0) return displayProfileButton();
+  // if (profile.loaded === true && profile.data.length > 0) profile = profile.data[0];
+
+  // // now have access to profile without flicker
+  // //console.log(profile);
+
   let token = '';
   if (tokens.length !== 0) {
-    token = tokens[0].get('tokenAddr');
+    token = tokens[0].get('tokenContract');
   }
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -157,7 +186,7 @@ export default function Upload() {
               }
             />
 
-            <div className="flex">
+            <div className="flex py-2">
               <p className="px-2">Units sold from 1 to N</p>
               <input
                 type="text"
@@ -175,35 +204,58 @@ export default function Upload() {
                 className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
               />
             </div>
+            <div className="flex py-2">
+              <p className="px-4">Item type</p>
+              <select
+                className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
+                id="typeSelector"
+                name="typeSelector"
+                value={tokenData.type}
+                onChange={(event) =>
+                  setTokenData({
+                    ...tokenData,
+                    type: event.target.value,
+                    subCategory: ''
+                  })
+                }>
+                <option key="default" disabled value="">
+                  Types:{' '}
+                </option>
+                <option key="book" value="book">
+                  Ebook
+                </option>
+                <option key="photo" value="photo">
+                  Photo
+                </option>
+                <option key="video" value="video">
+                  Video
+                </option>
+                <option key="audio" value="audio">
+                  Audio
+                </option>
+                <option key="game" value="game">
+                  Game
+                </option>
+                <option key="graphic" value="graphic">
+                  Graphic
+                </option>
+              </select>
+              <p className="px-4">Subcategory</p>
+              {subCategories}
+            </div>
 
             <button
               className="absolute w-24 px-4 py-2 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
-              onClick={() => doUpload(token, signer, tokenData, units, price, Moralis)}>
+              onClick={() => doUpload(user, token, signer, tokenData, units, price, Moralis)}>
               Save
             </button>
           </div>
 
-          <div
-            {...getRootProps()}
-            className="relative w-1/2 h-64 px-4 py-16 mx-auto my-6 text-center border-2 border-indigo-400 border-dashed rounded-lg dark:bg-gray-700">
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
-            ) : (
-              <>
-                <p>Drag 'n' drop some files here, or click to select files</p>
-                <p className="hidden md:block">
-                  Allowed extentions : .jpg, .jpeg, .png .pdf .mp4 .mp3 .webp .webm
-                </p>
-              </>
-            )}
+          <div className="relative w-1/2 h-64 px-4 py-16 mx-auto my-6 text-center border-2 border-indigo-400 border-dashed rounded-lg dark:bg-gray-700">
+            aha
           </div>
         </div>
 
-        <p className="py-4 mx-16">
-          To enable buy and bang button you need to sell set a price for buy and bang input or leave
-          it empty. and it will be removed from marketplace{' '}
-        </p>
         {/* </Tab.Panel>
           </Tab.Panels>
         </Tab.Group> */}
