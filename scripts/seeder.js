@@ -11,7 +11,7 @@ const subCategories = require('./subCategories.js');
 const Moralis = require('moralis/node');
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID;
-const masterKey = process.env.MORALIS_MASTER_KEY;
+const masterKey = process.env.NEXT_PUBLIC_MORALIS_MASTER_KEY;
 Moralis.start({ serverUrl, appId, masterKey });
 
 // Add a user to the admin role
@@ -328,8 +328,12 @@ const seed = async () => {
   const User = Moralis.Object.extend('User');
   const query = new Moralis.Query(User);
 
+  console.log(Moralis.masterKey);
+  console.log(Moralis.serverURL);
+  console.log(Moralis.applicationId)
+
   let user = null;
-  await query.get('QEz0JDPCrCCViMNbAToYp6et', { useMasterKey: true }).then(
+  await query.get('L10TbzEKj8BzT3QHep1Jub42', { useMasterKey: true }).then(
     (result) => {
       user = result;
     },
