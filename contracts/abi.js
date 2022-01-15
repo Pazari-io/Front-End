@@ -20,10 +20,120 @@ export const pazariMvpAbi = [
         internalType: 'address',
         name: '_stablecoin',
         type: 'address'
+      },
+      {
+        internalType: 'address[]',
+        name: '_admins',
+        type: 'address[]'
       }
     ],
     stateMutability: 'nonpayable',
     type: 'constructor'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'newAdmin',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'adminAuthorized',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'reason',
+        type: 'string'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'timestamp',
+        type: 'uint256'
+      }
+    ],
+    name: 'AdminAdded',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'oldAdmin',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'adminAuthorized',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'reason',
+        type: 'string'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'timestamp',
+        type: 'uint256'
+      }
+    ],
+    name: 'AdminRemoved',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'contractID',
+        type: 'uint256'
+      },
+      {
+        indexed: true,
+        internalType: 'uint16',
+        name: 'contractType',
+        type: 'uint16'
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'creatorAddress',
+        type: 'address'
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'factoryAddress',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'cloneAddress',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'timestamp',
+        type: 'uint256'
+      }
+    ],
+    name: 'ContractCloned',
+    type: 'event'
   },
   {
     anonymous: false,
@@ -57,41 +167,90 @@ export const pazariMvpAbi = [
         internalType: 'uint256',
         name: 'amount',
         type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'uri',
+        type: 'string'
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address'
       }
     ],
     name: 'NewTokenListed',
     type: 'event'
   },
   {
-    indexed: false,
-    internalType: 'address',
-    name: 'sender',
-    type: 'address'
-  },
-  {
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
         internalType: 'address',
         name: 'userAddress',
         type: 'address'
       },
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'tokenContract',
-        type: 'address'
-      },
-      {
-        indexed: true,
+        indexed: false,
         internalType: 'bytes32',
         name: 'routeID',
         type: 'bytes32'
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'tokenContractAddress',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'timestamp',
+        type: 'uint256'
       }
     ],
-    name: 'NewUserProfile',
+    name: 'NewUserCreated',
     type: 'event'
+  },
+  {
+    inputs: [],
+    name: '_msgSender',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_newAddress',
+        type: 'address'
+      },
+      {
+        internalType: 'string',
+        name: '_memo',
+        type: 'string'
+      }
+    ],
+    name: 'addAdmin',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool'
+      }
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
     inputs: [
@@ -105,19 +264,6 @@ export const pazariMvpAbi = [
     outputs: [
       {
         internalType: 'address',
-        name: '',
-        type: 'address'
-      }
-    ],
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    inputs: [],
-    name: 'factoryPazariTokenMVP',
-    outputs: [
-      {
-        internalType: 'contract FactoryPazariTokenMVP',
         name: '',
         type: 'address'
       }
@@ -156,11 +302,6 @@ export const pazariMvpAbi = [
             internalType: 'uint256',
             name: 'amount',
             type: 'uint256'
-          },
-          {
-            internalType: 'address',
-            name: 'owner',
-            type: 'address'
           },
           {
             internalType: 'uint256',
@@ -248,6 +389,77 @@ export const pazariMvpAbi = [
     type: 'function'
   },
   {
+    inputs: [],
+    name: 'iERC20',
+    outputs: [
+      {
+        internalType: 'contract IERC20',
+        name: '',
+        type: 'address'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'iFactoryPazariTokenMVP',
+    outputs: [
+      {
+        internalType: 'contract FactoryPazariTokenMVP',
+        name: '',
+        type: 'address'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'iMarketplace',
+    outputs: [
+      {
+        internalType: 'contract IMarketplace',
+        name: '',
+        type: 'address'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'iPaymentRouter',
+    outputs: [
+      {
+        internalType: 'contract IPaymentRouter',
+        name: '',
+        type: 'address'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    name: 'isAdmin',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -261,19 +473,6 @@ export const pazariMvpAbi = [
         internalType: 'uint256',
         name: '',
         type: 'uint256'
-      }
-    ],
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    inputs: [],
-    name: 'marketplace',
-    outputs: [
-      {
-        internalType: 'contract IMarketplace',
-        name: '',
-        type: 'address'
       }
     ],
     stateMutability: 'view',
@@ -308,35 +507,6 @@ export const pazariMvpAbi = [
         internalType: 'uint256',
         name: '',
         type: 'uint256'
-      }
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [
-      {
-        internalType: 'string',
-        name: '_URI',
-        type: 'string'
-      },
-      {
-        internalType: 'uint256',
-        name: '_amount',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: '_price',
-        type: 'uint256'
-      }
-    ],
-    name: 'newUser',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool'
       }
     ],
     stateMutability: 'nonpayable',
@@ -421,19 +591,6 @@ export const pazariMvpAbi = [
     type: 'function'
   },
   {
-    inputs: [],
-    name: 'paymentRouter',
-    outputs: [
-      {
-        internalType: 'contract IPaymentRouter',
-        name: '',
-        type: 'address'
-      }
-    ],
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -449,6 +606,11 @@ export const pazariMvpAbi = [
         internalType: 'uint256',
         name: '_amount',
         type: 'uint256'
+      },
+      {
+        internalType: 'address',
+        name: '_to',
+        type: 'address'
       }
     ],
     name: 'recoverNFT',
@@ -463,16 +625,27 @@ export const pazariMvpAbi = [
     type: 'function'
   },
   {
-    inputs: [],
-    name: 'stablecoin',
-    outputs: [
+    inputs: [
       {
-        internalType: 'contract IERC20',
-        name: '',
+        internalType: 'address',
+        name: '_oldAddress',
         type: 'address'
+      },
+      {
+        internalType: 'string',
+        name: '_memo',
+        type: 'string'
       }
     ],
-    stateMutability: 'view',
+    name: 'removeAdmin',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool'
+      }
+    ],
+    stateMutability: 'nonpayable',
     type: 'function'
   },
   {

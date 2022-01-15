@@ -10,6 +10,7 @@ import {
   getTokenForProfile,
   getCategoriesFromDB
 } from '../../../components/MoralisDAO';
+import ZeroProfile from '../../../components/ZeroProfile';
 import { displayUserLoginButton, displayProfileButton } from '../../../components/UserLoader';
 import { pazariMvpAbi, FACTORY_ABI } from '../../../contracts/abi';
 import { ethers } from 'ethers';
@@ -22,7 +23,7 @@ const FACTORY_ADDRESS_LOCAL = '0xCF3E28A7352Ae6bF1aaA3E02698370fd88FEd311';
 const MARKETPLACE_ADDRESS_LOCAL = '0x5fc8d32690cc91d4c39d9d3abcbd16989f875707';
 const ROUTER_ADDRESS_LOCAL = '0xdc64a140aa3e981100a9beca4e685f962f0cf6c9';
 // const PAZARI_MVP_ADDRESS_GANACHE = '0x634E2bA437D792Ea4D0A1Fd751AF7117112E8618';
-const PAZARI_MVP_ADDRESS_GANACHE = '0xC2bF42E77699f0a3C157bBE9fA23B2861Cd5a96c';
+const PAZARI_MVP_ADDRESS_GANACHE = '0xE1b80aDA46Bca26DBE8B939a7E0939A51a38c0ac';
 // const PAZARI_MVP_ADDRESS_HARDHAT = '0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6';
 
 function createNewContract(signer, tokenData, units, price, Moralis) {
@@ -50,15 +51,15 @@ function createNewItem(user, signer, tokenData, units, price, Moralis) {
   });
 }
 
-function doUpload(user, token, signer, tokenData, units, price, Moralis) {
-  if (token === '') {
-    //Need to upload the contract
-    console.log('uploadContract');
-    createNewContract(signer, tokenData, units, price, Moralis);
-  } else {
-    console.log('create new item for token: ' + token);
+function doUpload(user, signer, tokenData, units, price, Moralis) {
+  // if (token === '') {
+  //   //Need to upload the contract
+  //   console.log('uploadContract');
+  //   createNewContract(signer, tokenData, units, price, Moralis);
+  // } else {
+    // console.log('create new item for token: ' + token);
     createNewItem(user, signer, tokenData, units, price, Moralis);
-  }
+  // }
 }
 
 function getSubcategories(tokenData, setTokenData) {
@@ -106,7 +107,7 @@ Process:
   1.3 We listen to the events and save data to our tables (in progress)
   1.4 Front end all updates beautifully
 */
-export default function Upload() {
+function UploadForm(props) {
   const [tokenData, setTokenData] = useState({
     name: '',
     description: '',
@@ -116,47 +117,16 @@ export default function Upload() {
   });
   const [units, setUnits] = useState(0);
   const [price, setPrice] = useState(0);
-  const router = useRouter();
+  let user = props.user;
+  let Moralis = props.Moralis;
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      return <div></div>;
-      //   router.push('/');
-    }
-  });
 
-  const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
-
-  let profile = getProfileFromDB(user);
-  if (profile.loaded === false && profile.data === null) return <></>;
-  else if (profile.loaded === true && profile.data.length === 0) return displayProfileButton();
-  if (profile.loaded === true && profile.data.length > 0) profile = profile.data[0];
-
-  console.log(profile);
-
-  //let tokens = getTokenForProfile(user);
   let subCategories = getSubcategories(tokenData, setTokenData);
-  console.log(subCategories);
-  if (!user) {
-    return displayUserLoginButton(authenticate);
-  }
-
-  // if (profile.loaded === false && profile.data === null) return <></>;
-  // if (profile.loaded === true && profile.data.length === 0) return displayProfileButton();
-  // if (profile.loaded === true && profile.data.length > 0) profile = profile.data[0];
-
-  // // now have access to profile without flicker
-  // //console.log(profile);
-
-  let token = '';
-  if (tokens.length !== 0) {
-    token = tokens[0].get('tokenContract');
-  }
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   return (
-    isAuthenticated && (
+    (
       <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
         <Nav />
 
@@ -252,7 +222,7 @@ export default function Upload() {
 
             <button
               className="absolute w-24 px-4 py-2 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
-              onClick={() => doUpload(user, token, signer, tokenData, units, price, Moralis)}>
+              onClick={() => doUpload(user, signer, tokenData, units, price, Moralis)}>
               Save
             </button>
           </div>
@@ -271,3 +241,29 @@ export default function Upload() {
     )
   );
 }
+  function AuthenticatedProfile(props) {
+    let Moralis = props.Moralis;
+    let user = props.user;
+  
+    let profile = getProfileFromDB(user);
+  
+    // loading
+    if (!profile.loaded) return <>Loading...</>;
+    // handle error
+    if (profile.error) return <>Error loading profile</>;
+    // profile loaded and has the data can use profile.data
+    if (profile.loaded && profile.data)
+      return <UploadForm user={user} Moralis={Moralis} />;
+    // profile is loaded but has no data
+    if (profile.loaded && !profile.data) return <ZeroProfile user={user} Moralis={Moralis} />;
+  }
+  
+  export default function Upload() {
+    const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
+  
+    if (!user) {
+      return displayUserLoginButton(authenticate);
+    }
+  
+    return isAuthenticated && <AuthenticatedProfile user={user} Moralis={Moralis} />;
+  }
