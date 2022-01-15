@@ -24,8 +24,8 @@ import { useMoralisQuery } from 'react-moralis';
 
 export default function Home() {
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900">
-      <Nav />
+    <main className="mx-auto dark:bg-gray-900">
+      {/* <Nav /> */}
       {/* <Search /> */}
 
       <div>
@@ -86,7 +86,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }

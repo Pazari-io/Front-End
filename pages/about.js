@@ -46,8 +46,8 @@ const features = [
 
 export default function About() {
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900">
-      <Nav />
+    <main className="mx-auto dark:bg-gray-900">
+      {/* <Nav /> */}
 
       {/* <hr className="mx-4 mb-2 border-purple-400 border-dashed " /> */}
 
@@ -270,7 +270,7 @@ export default function About() {
         </div>
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }
