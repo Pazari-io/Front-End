@@ -34,7 +34,7 @@ export default function PageTypes(props) {
 
   return (
     <main className="min-h-screen mx-auto dark:bg-gray-900">
-      <Nav />
+      {/* <Nav /> */}
 
       <div className="bg-white dark:bg-gray-900 ">
         <div className="px-4 mx-auto sm:py-24 lg:py-12 sm:px-6 lg:px-8">
@@ -63,7 +63,7 @@ export default function PageTypes(props) {
         catFilters={catFilters}
         audioUrls={props.audioUrls}
       />
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }
