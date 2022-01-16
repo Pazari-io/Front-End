@@ -6,9 +6,7 @@ import Image from 'next/image';
 
 export const displayUserLoginButton = (authenticate) => {
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-      <Nav />
-
+    <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
       <div className="grid gap-4 md:grid-cols-2 ">
         <div className="py-24 text-center">
           <div className="flex flex-col items-center justify-center">
@@ -50,8 +48,7 @@ export const displayUserLoginButton = (authenticate) => {
 
 export const displayProfileButton = () => {
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-      <Nav />
+    <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
 
       <div className="grid gap-4 md:grid-cols-2 ">
         <div className="py-24 text-center">

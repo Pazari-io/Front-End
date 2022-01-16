@@ -50,8 +50,7 @@ export default function ZeroProfile(props) {
   const [email, setEmail] = useState('');
 
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-      <Nav />
+    <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
 
       <div className="grid gap-4 grids-cols-1 md:grid-cols-2 ">
         <div className="mx-auto">

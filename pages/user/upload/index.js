@@ -127,8 +127,7 @@ function UploadForm(props) {
   const signer = provider.getSigner();
   return (
     (
-      <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-        <Nav />
+      <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
 
         <div className="flex justify-center py-2">
           <div className="flex items-center px-1">
@@ -236,7 +235,6 @@ function UploadForm(props) {
           </Tab.Panels>
         </Tab.Group> */}
 
-        <Footer />
       </main>
     )
   );

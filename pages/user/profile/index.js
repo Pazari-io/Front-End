@@ -57,8 +57,7 @@ function UserProfile(props) {
   };
 
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-      <Nav />
+    <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
       <div>
         {profileSaved && <Modal title="Success !" description="Your profile saved successfully." />}
 
@@ -420,7 +419,6 @@ function UserProfile(props) {
           </div>
         </div>
       </div>
-      <Footer />
     </main>
   );
 }
