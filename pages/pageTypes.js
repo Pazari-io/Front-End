@@ -23,7 +23,7 @@ export default function PageTypes(props) {
 
   let classNameOn = 'px-4 py-2 text-base text-white bg-indigo-500 rounded-full ';
   let classNameOff = 'px-4 py-2 text-base text-white bg-orange-500 rounded-full ';
-  let categoriesObj = getCategoriesFromDB(props);
+  let categoriesObj = getCategoriesFromDB(props.type);
 
   let subCategories = [];
   let filters = [];
