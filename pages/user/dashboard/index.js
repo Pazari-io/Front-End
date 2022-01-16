@@ -68,8 +68,7 @@ export default function Dashboard() {
 
   return (
     isAuthenticated && (
-      <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-        <Nav />
+      <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
 
         <Tab.Group
           onChange={(index) => {
@@ -435,7 +434,6 @@ export default function Dashboard() {
           </Tab.Panels>
         </Tab.Group>
 
-        <Footer />
       </main>
     )
   );

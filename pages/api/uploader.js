@@ -36,10 +36,10 @@ export default async function handler(req, res) {
 
       //console.log(payload.toString('base64'));
 
-      fetch('http://localhost:1337/api/v1/auth/upload', {
+      fetch(process.env.PAZARI_ENGINE_ENDPOINT + '/auth/upload', {
         method: 'POST',
         headers: {
-          Authorization: 'Bearer ' + process.env.NEXT_ENGINE_API_KEY,
+          Authorization: 'Bearer ' + process.env.PAZARI_ENGINE_API_KEY,
           'Content-Type': 'multipart/form-data; boundary=X-PAZARI-BOUNDARY'
         },
         body: payload

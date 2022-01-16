@@ -4,11 +4,12 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useDarkMode from '../hooks/useDarkMode';
+//import useDarkMode from '../hooks/useDarkMode';
 import { useMoralis, useNativeBalance, useChain } from 'react-moralis';
 import AvaxPrice from './AvaxPrice';
 import Image from 'next/image';
 import Pazari from '../public/images/Pazari.png';
+import { useTheme } from 'next-themes';
 
 const navigation = [
   { name: 'MarketPlace', href: '/', current: false },
@@ -59,7 +60,9 @@ function classNames(...classes) {
 //   //   }
 // }
 export default function Nav() {
-  const [colorTheme, setTheme] = useDarkMode();
+  //  const [colorTheme, setTheme] = useDarkMode();
+
+  const { theme, setTheme } = useTheme();
 
   const router = useRouter();
   const {
@@ -157,9 +160,9 @@ export default function Nav() {
                   <AvaxPrice />
                 </div>
 
-                {colorTheme === 'light' ? (
+                {theme === 'light' ? (
                   <svg
-                    onClick={() => setTheme('light')}
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-8 text-gray-200 h-7"
                     fill="none"
@@ -174,7 +177,7 @@ export default function Nav() {
                   </svg>
                 ) : (
                   <svg
-                    onClick={() => setTheme('dark')}
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-8 text-gray-200 h-7"
                     fill="none"
@@ -202,7 +205,7 @@ export default function Nav() {
                     alt=""
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
                     onClick={async () => {
-                      await authenticate();
+                      await authenticate({ signingMessage: 'Pazari Authentication' });
                       //enableWeb3();
                     }}
                   />

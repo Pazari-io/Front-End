@@ -20,8 +20,7 @@ const bookSlides = (
 
 export default function Profile(props) {
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900 dark:text-gray-300">
-      <Nav />
+    <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
 
       <div className="contrainer px-14 ">
         <div className="flex items-center justify-center w-full px-4 py-4 md:px-18 lg:px-28 ">
@@ -57,7 +56,6 @@ export default function Profile(props) {
         <Pagination />
       </div>
 
-      <Footer />
     </main>
   );
 }

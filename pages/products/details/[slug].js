@@ -49,8 +49,7 @@ export default function Detail() {
   });
 
   return (
-    <main className="min-h-screen mx-auto dark:bg-gray-900">
-      <Nav />
+    <main className="mx-auto dark:bg-gray-900">
 
       <div className="container px-2 py-4 mx-auto md:flex">
         <div className="w-full py-10 rounded-lg md:w-1/2 px-14">
@@ -201,7 +200,6 @@ export default function Detail() {
         </div>
       </div>
 
-      <Footer />
     </main>
   );
 }
