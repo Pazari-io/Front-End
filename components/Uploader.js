@@ -24,14 +24,36 @@ export default function Uploader(props) {
 
       const Moralis = props.Moralis;
 
+      let moralisFile = new Moralis.File(file.name, file);;
       switch (props.type) {
         case 'profileCover':
-          const moralisFile = new Moralis.File(file.name, file);
-
           moralisFile.save().then(
             function () {
               // get the url only
-              props.setUpdatedProfile({ ...props.updatedProfile, cover: moralisFile._url });
+              props.setData({ ...props.data, cover: moralisFile._url });
+            },
+            function (error) {
+              console.log(error);
+            }
+          );
+          break;
+        case 'productPreviewUrl':
+          moralisFile.save().then(
+            function () {
+              // get the url only
+              props.setData({ ...props.data, previewUrl: moralisFile._url });
+            },
+            function (error) {
+              console.log(error);
+            }
+          );
+          break;
+        case 'productImageUrls':
+          moralisFile.save().then(
+            //TODO handle multiple
+            function () {
+              // get the url only
+              props.setData({ ...props.data, productImageUrls: [moralisFile._url] });
             },
             function (error) {
               console.log(error);
@@ -79,7 +101,7 @@ export default function Uploader(props) {
       <FilePond
         files={files}
         onupdatefiles={setFiles}
-        allowMultiple={false}
+        allowMultiple={props.allowMultiple}
         name="files"
         ona
         labelIdle='Drag & Drop your files or <span class="dark:text-gray-300">Browse</span>'

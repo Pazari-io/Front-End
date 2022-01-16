@@ -234,9 +234,10 @@ function UserProfile(props) {
 
                   <Uploader
                     type={'profileCover'}
-                    setUpdatedProfile={setUpdatedProfile}
-                    updatedProfile={updatedProfile}
+                    setData={setUpdatedProfile}
+                    data={updatedProfile}
                     Moralis={props.Moralis}
+                    allowMultiple={false}
                   />
                 </div>
               </div>

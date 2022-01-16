@@ -2,7 +2,7 @@
 To publish this moralis cloud function open up admin.moralis.io/servers and click 'Cloud Functions' on your server page.
 Then run the commands listed under 'Set up Cloud Functions in your IDE'
 */
-Moralis.Cloud.afterSave('TokenListingsss', (request) => {
+Moralis.Cloud.afterSave('TokenListingsssss', (request) => {
   let item = request.object;
   //Check if it's already been received.  Might have to change this logic for production
   if (request.object.get('confirmed')) {
@@ -43,11 +43,8 @@ Moralis.Cloud.afterSave('TokenListingsss', (request) => {
       product.set('unit', parseInt(item.get('amount')));
       product.set('views', 0);
       product.set('price', parseInt(item.get('price')));
-      product.set('productImageUrls', ['https://test.url']);
-      product.set(
-        'previewUrl',
-        'https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format'
-      ); // avaiable after watermark etc
+      product.set('productImageUrls', json.productImageUrls);
+      product.set('previewUrl', json.previewUrl); // avaiable after watermark etc
       product.set('license', ['pro', 'personal', 'exclusive']);
       product.set('changeLog', {
         v1: 'this is a change',

@@ -136,7 +136,7 @@ function generateItem(item, profile, props) {
                 </svg>
               </span>
             ) : (
-              <img src={profile.get('avatar')} className="w-10 h-10 rounded-full" />
+              <img src={profile.get('avatar')} className="w-12 h-12 rounded-full" />
             )}
           </a>
         </Link>

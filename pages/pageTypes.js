@@ -6,7 +6,6 @@ import { getCategoriesFromDB } from '../components/MoralisDAO';
 
 export default function PageTypes(props) {
   const [catFilters, setFilters] = useState(new Set());
-  console.log(props.type);
 
   //Used to update the current filters.  If a filter is already selected it will toggle off.
   const updateSearch = (text) => {
