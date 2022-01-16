@@ -19,8 +19,11 @@ Moralis.Cloud.afterSave('TokenListingsss', (request) => {
       catQuery.equalTo('type', json.type);
       const category = await catQuery.first();
 
+      const userQuery = new Moralis.Query('User');
+      userQuery.equalTo('ethAddress', item.get('sender'));
+      const user = await userQuery.first({useMasterKey: true}); //Need master key to query the user table.  This is fine since it's only called when event is triggered.
       const profileQuery = new Moralis.Query('Profile');
-      profileQuery.equalTo('ethAddress', item.get('sender'));
+      profileQuery.equalTo('user', user);
       const profile = await profileQuery.first();
 
       const acl = new Moralis.ACL();
