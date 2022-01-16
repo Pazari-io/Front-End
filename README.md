@@ -17,11 +17,13 @@ Ensure you have a `node.js 14+` installed; you can install yarn and use it as yo
 
 edit the `.env` file
 
+```yaml
 NEXT_PUBLIC_MORALIS_APP_ID=ID
 NEXT_PUBLIC_MORALIS_SERVER_ID=ID
 NEXT_PUBLIC_MORALIS_MASTER_KEY=KEY
 PAZARI_ENGINE_API_KEY=KEY
 PAZARI_ENGINE_ENDPOINT=ENDPOINT
+```
 
 Using yarn:
 
