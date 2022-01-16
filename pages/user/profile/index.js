@@ -14,12 +14,12 @@ import Modal from '../../../components/Modal';
 function UserProfile(props) {
   // state what we are updating
   let profileObject = {
-    link: '',
-    about: '',
-    cover: '',
-    avatar: '',
-    notifications: { sales: false, product: false },
-    socials: {}
+    link: props.profile.get('link'),
+    about: props.profile.get('about'),
+    cover: props.profile.get('cover'),
+    avatar: props.profile.get('avatar'),
+    notifications: props.profile.get('notifications'),
+    socials: props.profile.get('socials')
   };
 
   const avatarFile = useRef(null);
@@ -65,7 +65,7 @@ function UserProfile(props) {
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
               <p className="px-12 pb-4 text-2xl">
-                Howdy <span className="text-indigo-400"> {props.user.get('username')} </span>
+                Howdy <span className="text-indigo-400"> {props.profile.get('username')} </span>
                 {''}
               </p>
               <p className="px-12 mt-1 text-sm text-gray-500">

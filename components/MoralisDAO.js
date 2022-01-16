@@ -18,6 +18,11 @@ function searchQuery(query, searchText) {
   return query.fullText('title', searchText);
 }
 
+function queryIncludeProfile(query) {
+  // return query.include('profile').include(['profile.user']); //This doesn't work cause of permission issues
+  return query.include('profile');
+}
+
 function querySort(query) {
   return query.ascending('price');
 }
@@ -36,6 +41,7 @@ function buildQuery(query, props, searchText) {
   if (props.catFilters.size > 0) {
     query = filterQuery(query, props.catFilters);
   }
+  query = queryIncludeProfile(query);
   query = querySort(query);
   return query;
 }
@@ -108,7 +114,6 @@ export const getProfileFromDB = (user) => {
     }
   }, [isFetching, data, error]);
 
-  console.log(finalForm);
   return finalForm;
 
   // let output = useQueryLoader(data, isFetching, error);
