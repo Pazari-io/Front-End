@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useLayoutEffect } from 'react';
 import Nav from '../../../components/NavBar';
 import Footer from '../../../components/Footer';
 import ZeroProfile from '../../../components/ZeroProfile';
@@ -8,7 +8,6 @@ import React from 'react';
 import { displayUserLoginButton } from '../../../components/UserLoader';
 import { getProfileFromDB } from '../../../components/MoralisDAO';
 import Modal from '../../../components/Modal';
-
 ///TODO get and load previous state for checkbox and images correcly
 
 function UserProfile(props) {
@@ -428,7 +427,6 @@ function AuthenticatedProfile(props) {
   let user = props.user;
 
   let profile = getProfileFromDB(user);
-
   // loading
   if (!profile.loaded) return <>Loading...</>;
   // handle error
@@ -441,11 +439,14 @@ function AuthenticatedProfile(props) {
 }
 
 export default function Profile() {
-  const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
+  const { isInitialized, hasAuthError, authError, isAuthenticated, user, Moralis, authenticate } =
+    useMoralis();
 
-  if (!user) {
+  if (hasAuthError) return <>{authError}</>;
+
+  if (!user && isInitialized) {
     return displayUserLoginButton(authenticate);
   }
-
-  return isAuthenticated && <AuthenticatedProfile user={user} Moralis={Moralis} />;
+  if (user && isAuthenticated && isInitialized);
+  return <AuthenticatedProfile user={user} Moralis={Moralis} />;
 }

@@ -1,8 +1,8 @@
 import { MoralisContext, useMoralisQuery } from 'react-moralis';
-import { Moralis } from 'moralis';
+//import { Moralis } from 'moralis';
 import subCategories from '../scripts/subCategories';
 import useQueryLoader from '../hooks/useQueryLoader';
-import { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 
 function basicQuery(query, catQuery, props) {
   catQuery.equalTo('type', props.type);
@@ -79,40 +79,8 @@ export const getProfileFromDB = (user) => {
     [user]
   );
 
-  let obj = { loaded: false, data: null, error: null };
-  const [finalForm, SetFinalForm] = useState(obj);
-
-  useLayoutEffect(() => {
-    if (error) {
-      let obj = { loaded: true, data: null, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-
-    if (isFetching) {
-      let obj = { loaded: false, data: null, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-
-    if (!isFetching && data.length === 0) {
-      let obj = { loaded: true, data: null, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-
-    if (!isFetching && data.length > 0) {
-      let obj = { loaded: true, data: data, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-  }, [isFetching, data, error]);
-
-  console.log(finalForm);
-  return finalForm;
-
-  // let output = useQueryLoader(data, isFetching, error);
-  // return output;
+  let output = useQueryLoader(data, isFetching, error);
+  return output;
 };
 
 export const getProductForProfileNoMarketplace = (user) => {

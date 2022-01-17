@@ -243,17 +243,18 @@ function UploadForm(props) {
     let Moralis = props.Moralis;
     let user = props.user;
   
-    let profile = getProfileFromDB(user);
+    let profile = getProfileFromDB(user, Moralis);
+    return <></>
   
-    // loading
-    if (!profile.loaded) return <>Loading...</>;
-    // handle error
-    if (profile.error) return <>Error loading profile</>;
-    // profile loaded and has the data can use profile.data
-    if (profile.loaded && profile.data)
-      return <UploadForm user={user} Moralis={Moralis} />;
-    // profile is loaded but has no data
-    if (profile.loaded && !profile.data) return <ZeroProfile user={user} Moralis={Moralis} />;
+    // // loading
+    // if (!profile.loaded) return <>Loading...</>;
+    // // handle error
+    // if (profile.error) return <>Error loading profile</>;
+    // // profile loaded and has the data can use profile.data
+    // if (profile.loaded && profile.data)
+    //   return <UploadForm user={user} Moralis={Moralis} />;
+    // // profile is loaded but has no data
+    // if (profile.loaded && !profile.data) return <ZeroProfile user={user} Moralis={Moralis} />;
   }
   
   export default function Upload() {
