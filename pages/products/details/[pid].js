@@ -63,11 +63,14 @@ function getLicense(product) {
 }
 
 export default function Detail() {
-  // const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
   const router = useRouter();
   const { pid } = router.query;
 
-  return <ProductDetailPage pid={pid} />;
+  //Need to make sure router hook completes.  Otherwise pid will be null and the moralis query will run twice causing a flicker
+  if (pid) {
+      return <ProductDetailPage pid={pid} />;
+  }
+  return <div>Loading...</div>;
 }
 
 function ProductDetailPage(props) {
