@@ -1,5 +1,5 @@
 import { MoralisContext, useMoralisQuery } from 'react-moralis';
-//import { Moralis } from 'moralis';
+import { Moralis } from 'moralis';
 import subCategories from '../scripts/subCategories';
 import useQueryLoader from '../hooks/useQueryLoader';
 import { useState, useLayoutEffect, useEffect } from 'react';
