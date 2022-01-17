@@ -63,6 +63,17 @@ npm run build
 npm run start
 ```
 
+## Setup Moralis Locally
+- Follow [instructions](https://docs.moralis.io/moralis-server/getting-started/create-a-moralis-server) for creating a Moralis server.
+
+- Next, follow [instructions](https://docs.moralis.io/moralis-server/web3/setting-up-ganache) for connecting Ganache/Hardhat to Moralis.
+
+- Follow [instructions](https://docs.moralis.io/moralis-server/automatic-transaction-sync/smart-contract-events) for listening to events from Moralis.
+For listening to events, you should listen to the NewUserCreated and NewTokenListed events in the PazariMVP contract.
+
+- Almost there! Now we need to add a moralis cloud function that does some actions before saving to the DB. To publish the moralis cloud function open up https://admin.moralis.io/servers and click 'Cloud Functions' on your server page.
+Then run the commands listed under 'Set up Cloud Functions in your IDE' using the pages/api/moralis directory
+
 ## Version
 
 **1.0.0-alpha.7**
