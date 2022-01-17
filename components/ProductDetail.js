@@ -8,8 +8,27 @@ import 'swiper/css/thumbs';
 import SwiperCore, { FreeMode, Navigation, Thumbs } from 'swiper';
 SwiperCore.use([FreeMode, Navigation, Thumbs]);
 
-export default function BookDetail() {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+function getSlides(product, thumbsSwiper, setThumbsSwiper) {
+  let result = [];
+  let productImageUrls = product.get('productImageUrls');
+  if (!productImageUrls || productImageUrls.length == 0) {
+    let url = product.get('previewUrl');
+    result.push(
+      <SwiperSlide>
+        <img src={url} />
+      </SwiperSlide>
+    );
+    thumbResult.push()
+  } else {
+    let i = 0;
+    for (const val of productImageUrls) {
+    result.push(
+      <SwiperSlide key={i}>
+        <img src={val} />
+      </SwiperSlide>
+    );
+    }
+  }
 
   return (
     <>
@@ -20,36 +39,7 @@ export default function BookDetail() {
         navigation={true}
         thumbs={{ swiper: thumbsSwiper }}
         className="mySwiper2">
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-        </SwiperSlide>
+          {result}
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
@@ -59,37 +49,16 @@ export default function BookDetail() {
         freeMode={true}
         watchSlidesProgress={true}
         className="mySwiper">
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-        </SwiperSlide>
-      </Swiper>
-    </>
+          {result}
+        </Swiper>
+        </>
   );
+}
+
+export default function BookDetail(props) {
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
+  return <>{getSlides(props.product, thumbsSwiper, setThumbsSwiper)} </>;
+
+ // ["https://swiperjs.com/demos/images/nature-3.jpg", "https://swiperjs.com/demos/images/nature-2.jpg", "https://swiperjs.com/demos/images/nature-5.jpg"]
 }

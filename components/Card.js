@@ -75,7 +75,7 @@ function displayStars() {
 function generateItem(item, profile, props) {
   return (
     <span className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
-      <Link href={`/products/details/${Math.random(1, 9999999999)}`}>
+      <Link href={`/products/details/` + item.id}>
         <a className="cursor-pointer">
           <div className="relative overflow-hidden">
             <LoadCover previewUrl={item.get('previewUrl')} type={props.type} />

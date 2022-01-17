@@ -63,6 +63,46 @@ export const getProductsFromDB = (props, searchText) => {
   return data;
 };
 
+//TODO This is still flickering...there is a moment when loaded=true, but data is still null
+export const getProductWithId = (id) => {
+  const { data, isFetching, error } = useMoralisQuery(
+    'Product',
+    (query) => query.equalTo('objectId', id).include('profile'),
+    [id]
+  );
+
+  let obj = { loaded: false, data: null, error: null };
+  const [finalForm, SetFinalForm] = useState(obj);
+
+  useLayoutEffect(() => {
+    if (error) {
+      let obj = { loaded: true, data: null, error: error };
+      SetFinalForm(obj);
+      return;
+    }
+
+    if (isFetching) {
+      let obj = { loaded: false, data: null, error: error };
+      SetFinalForm(obj);
+      return;
+    }
+
+    if (!isFetching && data.length === 0) {
+      let obj = { loaded: true, data: null, error: error };
+      SetFinalForm(obj);
+      return;
+    }
+
+    if (!isFetching && data.length > 0) {
+      let obj = { loaded: true, data: data, error: error };
+      SetFinalForm(obj);
+      return;
+    }
+  }, [isFetching, data, error]);
+
+  return finalForm;
+};
+
 export const getCategoriesFromDB = (type) => {
   const { data, error, isLoading } = useMoralisQuery(
     'Category',
