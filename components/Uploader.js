@@ -8,78 +8,23 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
+export const uploadToMoralis = async (files, Moralis) => {
+  if (files.length === 0) {
+    return [];
+  }
+
+  let fileNames = [];
+  for (let file of files) {
+    file = file.file;
+
+    let moralisFile = new Moralis.File(file.name, file);
+    let res = await moralisFile.save();
+    fileNames.push(res._url);
+  }
+  return fileNames;
+};
+
 export default function Uploader(props) {
-  const [files, setFiles] = useState([]);
-
-  // to avoid re-renders upload duplicate ;)
-  const [fileName, setFileName] = useState(new Set());
-
-  useEffect(() => {
-    if (files.length > 0) {
-      let file = files[0].file;
-
-      // only unprocessed file
-      if (fileName.has(file)) return;
-      setFileName(fileName.add(file));
-
-      const Moralis = props.Moralis;
-
-      let moralisFile = new Moralis.File(file.name, file);;
-      switch (props.type) {
-        case 'profileCover':
-          moralisFile.save().then(
-            function () {
-              // get the url only
-              props.setData({ ...props.data, cover: moralisFile._url });
-            },
-            function (error) {
-              console.log(error);
-            }
-          );
-          break;
-        case 'productPreviewUrl':
-          moralisFile.save().then(
-            function () {
-              // get the url only
-              props.setData({ ...props.data, previewUrl: moralisFile._url });
-            },
-            function (error) {
-              console.log(error);
-            }
-          );
-          break;
-        case 'productImageUrls':
-          moralisFile.save().then(
-            //TODO handle multiple
-            function () {
-              // get the url only
-              props.setData({ ...props.data, productImageUrls: [moralisFile._url] });
-            },
-            function (error) {
-              console.log(error);
-            }
-          );
-      }
-
-      //   const formData = new FormData();
-      //   formData.append('file', file);
-
-      //   fetch('/api/uploader', {
-      //     method: 'POST',
-      //     body: formData
-      //   })
-      //     .then((res) => res.json())
-      //     .then((json) => {
-      //       if (json.error) {
-      //         console.log(json.error);
-      //       } else {
-      //         console.log(json);
-      //         //saveFile(json);
-      //       }
-      //     });
-    }
-  }, [files]);
-
   return (
     <div className="dark:bg-gray-800">
       {/* customizing uploader  */}
@@ -99,8 +44,8 @@ export default function Uploader(props) {
       `}</style>
 
       <FilePond
-        files={files}
-        onupdatefiles={setFiles}
+        files={props.files}
+        onupdatefiles={props.setFiles}
         allowMultiple={props.allowMultiple}
         name="files"
         ona

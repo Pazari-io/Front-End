@@ -14,6 +14,7 @@ import ZeroProfile from '../../../components/ZeroProfile';
 import { displayUserLoginButton, displayProfileButton } from '../../../components/UserLoader';
 import { pazariMvpAbi, FACTORY_ABI } from '../../../contracts/abi';
 import Uploader from '../../../components/Uploader';
+import {uploadToMoralis} from '../../../components/Uploader';
 import { ethers } from 'ethers';
 
 const FACTORY_ADDRESS = '0xD373d7993AF55DcA04392FD7a5776F9eE7d1fe5b';
@@ -52,15 +53,27 @@ function createNewItem(user, signer, tokenData, units, price, Moralis) {
   });
 }
 
-function doUpload(user, signer, tokenData, units, price, Moralis) {
-  // if (token === '') {
-  //   //Need to upload the contract
-  //   console.log('uploadContract');
-  //   createNewContract(signer, tokenData, units, price, Moralis);
-  // } else {
-  // console.log('create new item for token: ' + token);
-  createNewItem(user, signer, tokenData, units, price, Moralis);
-  // }
+function doUpload(
+  user,
+  signer,
+  tokenData,
+  units,
+  price,
+  Moralis,
+  productImageFiles,
+  previewImageFile
+) {
+  uploadToMoralis(productImageFiles, Moralis).then((fileNames) => {
+    if (fileNames.length > 0) {
+      tokenData.productImageUrls = fileNames;
+    }
+    uploadToMoralis(previewImageFile, Moralis).then((previewFileNames) => {
+      if (previewFileNames.length > 0) {
+        tokenData.previewUrl = previewFileNames[0];
+      }
+      createNewItem(user, signer, tokenData, units, price, Moralis);
+    });
+  });
 }
 
 function getSubcategories(tokenData, setTokenData) {
@@ -119,6 +132,8 @@ function UploadForm(props) {
   });
   const [units, setUnits] = useState(0);
   const [price, setPrice] = useState(0);
+  const [productFiles, setProductFiles] = useState([]);
+  const [previewFiles, setPreviewFiles] = useState([]);
   let user = props.user;
   let Moralis = props.Moralis;
 
@@ -219,26 +234,24 @@ function UploadForm(props) {
           Preview photo
           <div className="w-full px-4 py-1 border rounded-lg dark:bg-gray-700 dark:text-gray-400 dark:border-indigo-400">
             <Uploader
-              type={'productPreviewUrl'}
-              setData={setTokenData}
-              data={tokenData}
               Moralis={props.Moralis}
               allowMultiple={false}
+              files={previewFiles}
+              setFiles={setPreviewFiles}
             />
           </div>
           Product images
           <div className="w-full px-4 py-1 border rounded-lg dark:bg-gray-700 dark:text-gray-400 dark:border-indigo-400">
             <Uploader
-              type={'productImageUrls'}
-              setData={setTokenData}
-              data={tokenData}
               Moralis={props.Moralis}
               allowMultiple={true}
+              files={productFiles}
+              setFiles={setProductFiles}
             />
           </div>
           <button
             className="w-24 px-4 py-2 mr-2 my-4 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
-            onClick={() => doUpload(user, signer, tokenData, units, price, Moralis)}>
+            onClick={() => doUpload(user, signer, tokenData, units, price, Moralis, productFiles, previewFiles)}>
             Save
           </button>
         </div>

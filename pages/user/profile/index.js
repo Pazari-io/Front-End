@@ -4,6 +4,7 @@ import Footer from '../../../components/Footer';
 import ZeroProfile from '../../../components/ZeroProfile';
 import { useMoralis } from 'react-moralis';
 import Uploader from '../../../components/Uploader';
+import {uploadToMoralis} from '../../../components/Uploader';
 import React from 'react';
 import { displayUserLoginButton } from '../../../components/UserLoader';
 import { getProfileFromDB } from '../../../components/MoralisDAO';
@@ -25,6 +26,7 @@ function UserProfile(props) {
   const avatarFile = useRef(null);
   const [updatedProfile, setUpdatedProfile] = useState(profileObject);
   const [profileSaved, setProfileSaved] = useState(false);
+  const [coverFile, setCoverFile] = useState([]);
 
   const onChangeAvatar = (evt) => {
     let file = evt.target.files[0];
@@ -45,15 +47,22 @@ function UserProfile(props) {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    let profile = props.profile;
-    profile.set(updatedProfile);
-    await profile.save();
-    setProfileSaved(true);
+    uploadToMoralis(coverFile, props.Moralis).then((fileNames) => {
+      if (fileNames.length > 0) {
+        updatedProfile.cover = fileNames[0];
+      }
 
-    // not the best idea
-    setTimeout(function () {
-      location.reload();
-    }, 2000);
+      let profile = props.profile;
+      profile.set(updatedProfile);
+      profile.save().then(() => {
+        setProfileSaved(true);
+      });
+
+      // not the best idea
+      setTimeout(function () {
+        location.reload();
+      }, 2000);
+    });
   };
 
   return (
@@ -238,6 +247,8 @@ function UserProfile(props) {
                     data={updatedProfile}
                     Moralis={props.Moralis}
                     allowMultiple={false}
+                    files={coverFile}
+                    setFiles={setCoverFile}
                   />
                 </div>
               </div>
