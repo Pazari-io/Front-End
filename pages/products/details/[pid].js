@@ -11,7 +11,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-
 function displayStars() {
   let res = [];
   let rating = 3;
@@ -32,43 +31,46 @@ function displayStars() {
     res.push(star);
   }
 
-  return (
-    <div className="flex items-center p-4 text-sm text-gray-600">
-      {res}
-    </div>
-  );
+  return <div className="flex items-center p-4 text-sm text-gray-600">{res}</div>;
 }
 
 function getChangelog(product) {
   let result = [];
   let changes = product.get('changeLog');
   for (const [key, val] of Object.entries(changes)) {
-    result.push(<li>{key} : {val}</li>);
-  };
-  return <ul className="text-gray-900 list-disc list-inside text-normal dark:text-gray-500">{result}</ul>;
+    result.push(
+      <li key={'change' + key}>
+        {key} : {val}
+      </li>
+    );
+  }
+  return (
+    <ul className="text-gray-900 list-disc list-inside text-normal dark:text-gray-500">{result}</ul>
+  );
 }
 
 function getLicense(product) {
   let result = [];
   let licenses = product.get('license');
+  let i = 0;
   for (const val of licenses) {
-    result.push(<li>{val}</li>);
-  };
-  return <ul className="text-gray-900 list-disc list-inside text-normal dark:text-gray-500">{result}</ul>;
+    result.push(<li key={'license' + i}>{val}</li>);
+    i++;
+  }
+  return (
+    <ul className="text-gray-900 list-disc list-inside text-normal dark:text-gray-500">{result}</ul>
+  );
 }
-
-
 
 export default function Detail() {
   // const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
   const router = useRouter();
   const { pid } = router.query;
 
-  return <ProfileDetail pid={pid} />;
+  return <ProductDetailPage pid={pid} />;
 }
 
-function ProfileDetail(props) {
-
+function ProductDetailPage(props) {
   let [categories] = useState({
     Reviews: [
       {
@@ -111,7 +113,7 @@ function ProfileDetail(props) {
   let productObj = getProductWithId(props.pid);
   if (!productObj.loaded) return <>Loading...</>;
   if (productObj.loaded && !productObj.data) {
-    return <Custom404/>;
+    return <Custom404 />;
   }
   let product = productObj.data[0];
   let profile = product.get('profile');
@@ -123,7 +125,7 @@ function ProfileDetail(props) {
     <main className="mx-auto dark:bg-gray-900">
       <div className="container px-2 py-4 mx-auto md:flex">
         <div className="w-full py-10 rounded-lg md:w-1/2 px-14">
-          <ProductDetail product={product}/>
+          <ProductDetail product={product} />
           <div className="mt-2 ">
             <Tab.Group>
               <Tab.List className="flex p-1 space-x-1 bg-blue-900/20 rounded-xl">
@@ -180,17 +182,13 @@ function ProfileDetail(props) {
         <div className="w-full py-10 md:w-1/2 md:px-14">
           <div className="flex items-center justify-between mb-4 ">
             <div>
-              <div className="text-2xl font-bold dark:text-indigo-400">
-                {product.get('title')}
-              </div>
+              <div className="text-2xl font-bold dark:text-indigo-400">{product.get('title')}</div>
             </div>
             <div className="flex">{displayStars()}</div>
           </div>
           <div className="flex items-center">
             <div>
-              <p className="mr-4 text-md dark:text-gray-300">
-                By {profile.get('username')}
-              </p>
+              <p className="mr-4 text-md dark:text-gray-300">By {profile.get('username')}</p>
             </div>
             <div>
               {profile.get('avatar') === '' ? (
@@ -207,7 +205,7 @@ function ProfileDetail(props) {
               )}
             </div>
           </div>
-            <hr className="my-8 border-gray-400"></hr>
+          <hr className="my-8 border-gray-400"></hr>
           <div className="dark:text-gray-300">
             Description:
             <div className="my-4">{product.get('description')}</div>
@@ -221,16 +219,12 @@ function ProfileDetail(props) {
             <hr className="my-8 border-gray-400"></hr>
             <h4 className="my-2 font-bond">Changelog</h4>
             <div className="flex flex-col gap-8 px-2 dark:text-gray-400">
-              <div>
-                {getChangelog(product)}
-              </div>
+              <div>{getChangelog(product)}</div>
             </div>
             <hr className="my-8 border-gray-400"></hr>
             <h4 className="my-2 font-bond">License</h4>
             <div className="flex flex-col gap-8 px-2 dark:text-gray-400">
-              <div>
-                {getLicense(product)}
-              </div>
+              <div>{getLicense(product)}</div>
             </div>
           </div>
         </div>

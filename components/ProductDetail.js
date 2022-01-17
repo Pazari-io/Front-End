@@ -10,6 +10,7 @@ SwiperCore.use([FreeMode, Navigation, Thumbs]);
 
 function getSlides(product, thumbsSwiper, setThumbsSwiper) {
   let result = [];
+  let resultThumb = [];
   let productImageUrls = product.get('productImageUrls');
   if (!productImageUrls || productImageUrls.length == 0) {
     let url = product.get('previewUrl');
@@ -18,15 +19,26 @@ function getSlides(product, thumbsSwiper, setThumbsSwiper) {
         <img src={url} />
       </SwiperSlide>
     );
-    thumbResult.push()
-  } else {
-    let i = 0;
-    for (const val of productImageUrls) {
-    result.push(
-      <SwiperSlide key={i}>
+    resultThumb.push(
+      <SwiperSlide key="thumb">
         <img src={val} />
       </SwiperSlide>
     );
+    thumbResult.push();
+  } else {
+    let i = 0;
+    for (const val of productImageUrls) {
+      result.push(
+        <SwiperSlide key={i}>
+          <img src={val} />
+        </SwiperSlide>
+      );
+      resultThumb.push(
+        <SwiperSlide key={'thumb' + i}>
+          <img src={val} />
+        </SwiperSlide>
+      );
+      i++;
     }
   }
 
@@ -39,7 +51,7 @@ function getSlides(product, thumbsSwiper, setThumbsSwiper) {
         navigation={true}
         thumbs={{ swiper: thumbsSwiper }}
         className="mySwiper2">
-          {result}
+        {result}
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
@@ -49,9 +61,9 @@ function getSlides(product, thumbsSwiper, setThumbsSwiper) {
         freeMode={true}
         watchSlidesProgress={true}
         className="mySwiper">
-          {result}
-        </Swiper>
-        </>
+        {resultThumb}
+      </Swiper>
+    </>
   );
 }
 
@@ -60,5 +72,5 @@ export default function BookDetail(props) {
 
   return <>{getSlides(props.product, thumbsSwiper, setThumbsSwiper)} </>;
 
- // ["https://swiperjs.com/demos/images/nature-3.jpg", "https://swiperjs.com/demos/images/nature-2.jpg", "https://swiperjs.com/demos/images/nature-5.jpg"]
+  // ["https://swiperjs.com/demos/images/nature-3.jpg", "https://swiperjs.com/demos/images/nature-2.jpg", "https://swiperjs.com/demos/images/nature-5.jpg"]
 }
