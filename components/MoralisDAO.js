@@ -72,7 +72,6 @@ export const getProductWithId = (id) => {
 
   let output = useQueryLoader(data, isFetching, error);
   return output;
-
 };
 
 export const getCategoriesFromDB = (type) => {
@@ -96,40 +95,8 @@ export const getProfileFromDB = (user) => {
     (query) => query.equalTo('user', user),
     [user]
   );
-
-  let obj = { loaded: false, data: null, error: null };
-  const [finalForm, SetFinalForm] = useState(obj);
-
-  useLayoutEffect(() => {
-    if (error) {
-      let obj = { loaded: true, data: null, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-
-    if (isFetching) {
-      let obj = { loaded: false, data: null, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-
-    if (!isFetching && data.length === 0) {
-      let obj = { loaded: true, data: null, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-
-    if (!isFetching && data.length > 0) {
-      let obj = { loaded: true, data: data, error: error };
-      SetFinalForm(obj);
-      return;
-    }
-  }, [isFetching, data, error]);
-
-  return finalForm;
-
-  // let output = useQueryLoader(data, isFetching, error);
-  // return output;
+  let output = useQueryLoader(data, isFetching, error);
+  return output;
 };
 
 export const getProductForProfileNoMarketplace = (user) => {
