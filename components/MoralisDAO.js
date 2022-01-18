@@ -49,18 +49,14 @@ function buildQuery(query, props, searchText) {
 export const getProductsFromDB = (props, searchText) => {
   //TODO use fullText() ? Has performance impact
 
-  const { data, error, isLoading } = useMoralisQuery(
+  const { data, error, isFetching } = useMoralisQuery(
     'Product',
     (query) => buildQuery(query, props, searchText),
     [props, searchText]
   );
-  if (error) {
-    console.log('Moralis error: ' + error);
-  }
-  if (isLoading) {
-    console.log('Moralis isLoading: ' + isLoading);
-  }
-  return data;
+
+  let output = useQueryLoader(data, isFetching, error);
+  return output;
 };
 
 export const getProductWithId = (id) => {
@@ -99,25 +95,20 @@ export const getProfileFromDB = (user) => {
   return output;
 };
 
-export const getProductForProfileNoMarketplace = (user) => {
-  console.log('Getting products');
+export const getProductsForProfile = (user) => {
   const Profile = Moralis.Object.extend('Profile');
   let profileQuery = new Moralis.Query(Profile);
   const { data, error, isLoading } = useMoralisQuery(
     'Product',
     (query) => {
-      profileQuery.equalTo('userId', user.id);
+      profileQuery.equalTo('user', user);
       return query.matchesQuery('profile', profileQuery).equalTo('addedToMarketplace', false);
     },
-    [profileQuery, user.id]
+    [profileQuery, user]
   );
-  if (error) {
-    console.log('Moralis error getting categories: ' + error);
-  }
-  if (isLoading) {
-    console.log('Moralis isLoading getting categories: ' + isLoading);
-  }
-  return data;
+
+  let output = useQueryLoader(data, isFetching, error);
+  return output;
 };
 
 //Gets the token for current user.  This is important so we know whether to create a new token or use an existing one.

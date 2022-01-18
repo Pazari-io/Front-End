@@ -2,21 +2,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const LoadCover = (props) => {
-  if (!props.previewUrl|| props.previewUrl== '') {
+  if (!props.previewUrl || props.previewUrl == '') {
     return null;
   }
 
-    switch (props.type) {
+  switch (props.type) {
     case 'book':
       return (
         <div>
-          <img
-            className="object-cover w-full h-full "
-            src={props.previewUrl}
-            alt=""
-          />
+          <img className="object-cover w-full h-full " src={props.previewUrl} alt="" />
         </div>
       );
+    case 'audio':
+      return <AudioPlayer audioUrls={props.audioUrls} />;
+
     case 'video':
       return (
         <video
@@ -32,11 +31,7 @@ const LoadCover = (props) => {
     case 'graphic':
       return (
         <div>
-          <img
-            className="object-cover w-full h-full "
-            src={props.previewUrl}
-            alt=""
-          />
+          <img className="object-cover w-full h-full " src={props.previewUrl} alt="" />
         </div>
       );
     default:

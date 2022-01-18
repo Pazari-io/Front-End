@@ -1,4 +1,4 @@
-import { Fragment, useState, useRef, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import {
@@ -12,10 +12,7 @@ import Slider from './Slider';
 import AudioPlayer from './AudioPlayer';
 import Pagination from './Pagination';
 
-import Card from './Card';
 import SearchInput from './SearchInput';
-import { SwiperSlide } from 'swiper/react';
-import { getProductsFromDB } from './MoralisDAO';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -29,21 +26,6 @@ const subCategories = [
   // { name: 'Shorts', href: '#' },
   // { name: 'Guides', href: '#' }
 ];
-
-function getSlides(props, searchText) {
-  let items = getProductsFromDB(props, searchText);
-  let res = [];
-  for (let i = 0; i < items.length; i++) {
-    let item = items[i];
-    let slide = (
-      <SwiperSlide key={Math.random().toString()}>
-        <Card type={props.type} item={item} />
-      </SwiperSlide>
-    );
-    res.push(slide);
-  }
-  return <>{res}</>;
-}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -304,7 +286,7 @@ export default function CategoriesFilter(props) {
                 ) : (
                   <div>
                     {props.type && (
-                      <Slider slides={getSlides(props, searchText)} type={props.type} />
+                      <Slider slides={props} searchQuery={searchText} type={props.type} />
                     )}
                   </div>
                 )}

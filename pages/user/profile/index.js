@@ -1,6 +1,4 @@
 import { useRef, useState } from 'react';
-import Nav from '../../../components/NavBar';
-import Footer from '../../../components/Footer';
 import ZeroProfile from '../../../components/ZeroProfile';
 import { useMoralis } from 'react-moralis';
 import Uploader from '../../../components/Uploader';
@@ -9,7 +7,7 @@ import React from 'react';
 import { displayUserLoginButton } from '../../../components/UserLoader';
 import { getProfileFromDB } from '../../../components/MoralisDAO';
 import Modal from '../../../components/Modal';
-///TODO get and load previous state for checkbox and images correcly
+import { Loading } from '../../../components/Loading';
 
 function UserProfile(props) {
   // state what we are updating
@@ -236,6 +234,11 @@ function UserProfile(props) {
                 </div>
 
                 <div>
+                  {updatedProfile.cover !== '' ? (
+                    <img className="rounded-lg max-h-80 max-w-96" src={updatedProfile.cover} />
+                  ) : (
+                    ''
+                  )}
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Cover photo
                   </label>
@@ -440,7 +443,7 @@ function AuthenticatedProfile(props) {
 
   let profile = getProfileFromDB(user);
   // loading
-  if (!profile.loaded) return <>Loading...</>;
+  if (!profile.loaded) return <Loading type="full" />;
   // handle error
   if (profile.error) return <>Error loading profile</>;
   // profile loaded and has the data can use profile.data

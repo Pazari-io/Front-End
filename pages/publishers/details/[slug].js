@@ -1,8 +1,3 @@
-import Nav from '../../../components/NavBar';
-import Slider from '../../../components/Slider';
-import Footer from '../../../components/Footer';
-import { SwiperSlide } from 'swiper/react';
-import Card from '../../../components/Card';
 import Pagination from '../../../components/Pagination';
 const bookSlides = (
   <>
@@ -19,9 +14,11 @@ const bookSlides = (
 );
 
 export default function Profile(props) {
+  const router = useRouter();
+  const { aid } = router.query;
+
   return (
     <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
-
       <div className="contrainer px-14 ">
         <div className="flex items-center justify-center w-full px-4 py-4 md:px-18 lg:px-28 ">
           <h1 className="text-2xl dark:text-gray-300">Awesome Author </h1>
@@ -55,7 +52,6 @@ export default function Profile(props) {
 
         <Pagination />
       </div>
-
     </main>
   );
 }
