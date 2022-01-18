@@ -16,7 +16,7 @@ function UserProfile(props) {
     about: props.profile.get('about'),
     cover: props.profile.get('cover'),
     avatar: props.profile.get('avatar'),
-    notifications: props.profile.get('notifications'),
+    notifications: props.profile.get('notification'),
     socials: props.profile.get('socials')
   };
 

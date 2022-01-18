@@ -11,7 +11,7 @@ const subCategories = require('./subCategories.js');
 const Moralis = require('moralis/node');
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID;
-const masterKey = process.env.NEXT_PUBLIC_MORALIS_MASTER_KEY;
+const masterKey = process.env.MORALIS_MASTER_KEY;
 Moralis.start({ serverUrl, appId, masterKey });
 
 // Add a user to the admin role
@@ -162,7 +162,7 @@ const createProduct = async (
   const acl = new Moralis.ACL();
 
   // only the owner can edit the profile
-  acl.setWriteAccess(profile.get('userId'), true);
+  acl.setWriteAccess(profile.get('user'), true);
   // public can read the profile
   acl.setPublicReadAccess(true);
 
@@ -242,7 +242,7 @@ const createProfile = async (user, name, about, link, avatar, cover, level, noti
   profile.setACL(acl);
   profile.set('name', name);
   profile.set('about', about);
-  profile.set('level', about);
+  profile.set('level', 3);
   profile.set('link', link);
   profile.set('avatar', avatar);
   profile.set('cover', cover);
@@ -325,15 +325,22 @@ const getAllProfiles = async (id) => {
 };
 
 const seed = async () => {
+  let args = process.argv;
+
+  if (args.length !== 3) {
+    console.log('Need user (object) id as argument ');
+    return;
+  }
+
   const User = Moralis.Object.extend('User');
   const query = new Moralis.Query(User);
 
   console.log(Moralis.masterKey);
   console.log(Moralis.serverURL);
-  console.log(Moralis.applicationId)
+  console.log(Moralis.applicationId);
 
   let user = null;
-  await query.get('L10TbzEKj8BzT3QHep1Jub42', { useMasterKey: true }).then(
+  await query.get(args[2], { useMasterKey: true }).then(
     (result) => {
       user = result;
     },

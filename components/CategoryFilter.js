@@ -291,7 +291,6 @@ export default function CategoriesFilter(props) {
                   </div>
                 )}
 
-                <Pagination />
                 {/* /End replace */}
               </div>
             </div>

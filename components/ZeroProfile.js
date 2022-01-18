@@ -37,7 +37,7 @@ async function createProfile(Moralis, user, username, email) {
 
   // default notification setting
   let notifications = { sales: true, product: true };
-  profile.set('notifications', notifications);
+  profile.set('notification', notifications);
 
   // handle error
   await profile.save();

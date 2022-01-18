@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useState } from 'react';
+import { useRef } from 'react';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -21,9 +21,11 @@ function getSlides(props, items) {
     let item = items.data[i];
 
     let slide = (
-      <SwiperSlide key={Math.random().toString()}>
-        <Card type={props.type} item={item} />
-      </SwiperSlide>
+      <>
+        <SwiperSlide key={Math.random().toString()}>
+          <Card type={props.type} item={item} />
+        </SwiperSlide>
+      </>
     );
     res.push(slide);
   }
@@ -36,7 +38,7 @@ export default function Slider(props) {
   if (!items.loaded) return <Loading type="category" />;
   // handle error
   if (items.error) return <>Error loading products</>;
-  // profile loaded and has the data can use profile.data
+  // items loaded and has the data can use items.data
   if (items.loaded && items.data) {
     let slides = getSlides(props.slides, items);
 
@@ -58,7 +60,8 @@ export default function Slider(props) {
             spaceBetween={10}
             freeMode={true}
             loop={true}
-            navigation={true}
+            navigation
+            pagination={{ clickable: true }}
             // breakpoints={{
             //   640: {
             //     slidesPerView: 1,

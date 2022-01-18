@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-
+import AudioPlayer from './AudioPlayer';
+import Verified from '../public/images/Verified.png';
 const LoadCover = (props) => {
   if (!props.previewUrl || props.previewUrl == '') {
     return null;
@@ -109,15 +110,10 @@ function generateItem(item, profile, props) {
 
       <div className="flex items-center justify-between p-4 text-xs text-gray-700 border-t ">
         <div className="flex items-center">
-          <span className="flex items-center dark:text-gray-300">{profile.get('username')}</span>
-          {profile.get('level') === 3 ? (
-            <img
-              src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"
-              className="w-4 h-4 mx-1 rounded-full"
-            />
-          ) : (
-            <div></div>
-          )}
+          <span className="flex items-center px-2 dark:text-gray-300">
+            {profile.get('username')}
+          </span>
+          {profile.get('level') === 3 ? <Image src={Verified} height={20} width={20} /> : ''}
         </div>
         <Link href="/publishers/details/4">
           <a>
@@ -142,6 +138,8 @@ function generateItem(item, profile, props) {
 
 function getItems(props) {
   let profile = props.item.get('profile');
+  console.log(props.item);
+
   if (!profile) {
     profile = new Map();
   }
