@@ -36,6 +36,7 @@ Moralis.Cloud.afterSave('TokenListingsssss', (request) => {
       const product = new Product();
 
       product.set('title', json.name);
+      product.set('itemID', item.get('itemID'));
       product.set('category', category);
       product.set('subCategory', json.subCategory);
       product.set('addedToMarketplace', true);

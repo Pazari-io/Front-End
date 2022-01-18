@@ -63,7 +63,6 @@ export const getProductsFromDB = (props, searchText) => {
   return data;
 };
 
-//TODO This is still flickering...there is a moment when loaded=true, but data is still null
 export const getProductWithId = (id) => {
   const { data, isFetching, error } = useMoralisQuery(
     'Product',

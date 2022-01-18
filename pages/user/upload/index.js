@@ -15,43 +15,9 @@ import { displayUserLoginButton, displayProfileButton } from '../../../component
 import { pazariMvpAbi, FACTORY_ABI } from '../../../contracts/abi';
 import Uploader from '../../../components/Uploader';
 import {uploadToMoralis} from '../../../components/Uploader';
+import {createNewItem } from '../../../components/ContractAccess';
 import { ethers } from 'ethers';
 
-const FACTORY_ADDRESS = '0xD373d7993AF55DcA04392FD7a5776F9eE7d1fe5b';
-const MARKETPLACE_ADDRESS = '0x34D068C19B140F7CB21E8EC3ADdA47011c7bb34f';
-const PAZARI_TOKEN_ADDRESS = '0x9D9644A6691df2cc45Ce6717F53DEb7dA78712C2';
-// const FACTORY_ADDRESS_LOCAL = '0xf9a92AC8AC2Ad8EB8eF04F134bb51AA4A800E660';
-const FACTORY_ADDRESS_LOCAL = '0xCF3E28A7352Ae6bF1aaA3E02698370fd88FEd311';
-const MARKETPLACE_ADDRESS_LOCAL = '0x5fc8d32690cc91d4c39d9d3abcbd16989f875707';
-const ROUTER_ADDRESS_LOCAL = '0xdc64a140aa3e981100a9beca4e685f962f0cf6c9';
-// const PAZARI_MVP_ADDRESS_GANACHE = '0x634E2bA437D792Ea4D0A1Fd751AF7117112E8618';
-const PAZARI_MVP_ADDRESS_GANACHE = '0xE1b80aDA46Bca26DBE8B939a7E0939A51a38c0ac';
-// const PAZARI_MVP_ADDRESS_HARDHAT = '0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6';
-
-function createNewContract(signer, tokenData, units, price, Moralis) {
-  saveToIpfs(Moralis, tokenData).then((url) => {
-    const pazariMVP = new ethers.Contract(PAZARI_MVP_ADDRESS_GANACHE, pazariMvpAbi, signer);
-
-    pazariMVP.connect(signer);
-    pazariMVP.newUser(url, units, price);
-  });
-}
-
-async function saveToIpfs(Moralis, data) {
-  let dataFile = { base64: btoa(JSON.stringify(data)) };
-  const file = new Moralis.File('data.json', dataFile);
-  await file.saveIPFS();
-  return file.ipfs();
-}
-
-function createNewItem(user, signer, tokenData, units, price, Moralis) {
-  console.log('Uploading new item');
-  saveToIpfs(Moralis, tokenData).then((url) => {
-    const pazariMVP = new ethers.Contract(PAZARI_MVP_ADDRESS_GANACHE, pazariMvpAbi, signer);
-    pazariMVP.connect(signer);
-    pazariMVP.newTokenListing(url, units, price);
-  });
-}
 
 function doUpload(
   user,
