@@ -1,10 +1,10 @@
-import { useRef, useState, useLayoutEffect } from 'react';
+import { useRef, useState } from 'react';
 import Nav from '../../../components/NavBar';
 import Footer from '../../../components/Footer';
 import ZeroProfile from '../../../components/ZeroProfile';
 import { useMoralis } from 'react-moralis';
 import Uploader from '../../../components/Uploader';
-import {uploadToMoralis} from '../../../components/Uploader';
+import { uploadToMoralis } from '../../../components/Uploader';
 import React from 'react';
 import { displayUserLoginButton } from '../../../components/UserLoader';
 import { getProfileFromDB } from '../../../components/MoralisDAO';

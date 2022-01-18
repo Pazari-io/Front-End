@@ -35,6 +35,10 @@ async function createProfile(Moralis, user, username, email) {
   profile.set('level', 0);
   profile.set('username', username); //Moving username to profile, since we can't query the user table from the front end
 
+  // default notification setting
+  let notifications = { sales: true, product: true };
+  profile.set('notifications', notifications);
+
   // handle error
   await profile.save();
 
@@ -52,7 +56,6 @@ export default function ZeroProfile(props) {
 
   return (
     <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
-
       <div className="grid gap-4 grids-cols-1 md:grid-cols-2 ">
         <div className="mx-auto">
           <p className="px-4 py-4 mt-1 text-gray-400 text-md">
