@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import Pagination from '../../../components/Pagination';
 const bookSlides = (
   <>
