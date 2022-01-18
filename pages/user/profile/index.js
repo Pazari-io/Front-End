@@ -1,32 +1,29 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useLayoutEffect } from 'react';
 import Nav from '../../../components/NavBar';
 import Footer from '../../../components/Footer';
 import ZeroProfile from '../../../components/ZeroProfile';
 import { useMoralis } from 'react-moralis';
 import Uploader from '../../../components/Uploader';
-import {uploadToMoralis} from '../../../components/Uploader';
 import React from 'react';
 import { displayUserLoginButton } from '../../../components/UserLoader';
 import { getProfileFromDB } from '../../../components/MoralisDAO';
 import Modal from '../../../components/Modal';
-
 ///TODO get and load previous state for checkbox and images correcly
 
 function UserProfile(props) {
   // state what we are updating
   let profileObject = {
-    link: props.profile.get('link'),
-    about: props.profile.get('about'),
-    cover: props.profile.get('cover'),
-    avatar: props.profile.get('avatar'),
-    notifications: props.profile.get('notifications'),
-    socials: props.profile.get('socials')
+    link: '',
+    about: '',
+    cover: '',
+    avatar: '',
+    notifications: { sales: false, product: false },
+    socials: {}
   };
 
   const avatarFile = useRef(null);
   const [updatedProfile, setUpdatedProfile] = useState(profileObject);
   const [profileSaved, setProfileSaved] = useState(false);
-  const [coverFile, setCoverFile] = useState([]);
 
   const onChangeAvatar = (evt) => {
     let file = evt.target.files[0];
@@ -47,22 +44,15 @@ function UserProfile(props) {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    uploadToMoralis(coverFile, props.Moralis).then((fileNames) => {
-      if (fileNames.length > 0) {
-        updatedProfile.cover = fileNames[0];
-      }
+    let profile = props.profile;
+    profile.set(updatedProfile);
+    await profile.save();
+    setProfileSaved(true);
 
-      let profile = props.profile;
-      profile.set(updatedProfile);
-      profile.save().then(() => {
-        setProfileSaved(true);
-      });
-
-      // not the best idea
-      setTimeout(function () {
-        location.reload();
-      }, 2000);
-    });
+    // not the best idea
+    setTimeout(function () {
+      location.reload();
+    }, 2000);
   };
 
   return (
@@ -74,7 +64,7 @@ function UserProfile(props) {
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
               <p className="px-12 pb-4 text-2xl">
-                Howdy <span className="text-indigo-400"> {props.profile.get('username')} </span>
+                Howdy <span className="text-indigo-400"> {props.user.get('username')} </span>
                 {''}
               </p>
               <p className="px-12 mt-1 text-sm text-gray-500">
@@ -243,12 +233,9 @@ function UserProfile(props) {
 
                   <Uploader
                     type={'profileCover'}
-                    setData={setUpdatedProfile}
-                    data={updatedProfile}
+                    setUpdatedProfile={setUpdatedProfile}
+                    updatedProfile={updatedProfile}
                     Moralis={props.Moralis}
-                    allowMultiple={false}
-                    files={coverFile}
-                    setFiles={setCoverFile}
                   />
                 </div>
               </div>
@@ -440,7 +427,6 @@ function AuthenticatedProfile(props) {
   let user = props.user;
 
   let profile = getProfileFromDB(user);
-
   // loading
   if (!profile.loaded) return <>Loading...</>;
   // handle error
@@ -453,11 +439,14 @@ function AuthenticatedProfile(props) {
 }
 
 export default function Profile() {
-  const { isAuthenticated, authenticate, user, Moralis } = useMoralis();
+  const { isInitialized, hasAuthError, authError, isAuthenticated, user, Moralis, authenticate } =
+    useMoralis();
 
-  if (!user) {
+  if (hasAuthError) return <>{authError}</>;
+
+  if (!user && isInitialized) {
     return displayUserLoginButton(authenticate);
   }
-
-  return isAuthenticated && <AuthenticatedProfile user={user} Moralis={Moralis} />;
+  if (user && isAuthenticated && isInitialized);
+  return <AuthenticatedProfile user={user} Moralis={Moralis} />;
 }

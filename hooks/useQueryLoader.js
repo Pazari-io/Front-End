@@ -1,10 +1,17 @@
-import { useState, useLayoutEffect } from 'react';
-
+import { useState, useEffect } from 'react';
+import { useIsMount } from './useIsMount';
 export default function useQueryLoader(data, isFetching, error) {
   let obj = { loaded: false, data: null, error: null };
   const [finalForm, SetFinalForm] = useState(obj);
+  const isMount = useIsMount();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    if (isMount) {
+      // console.log('First Render which cause issue');
+      // we ignore this
+      return;
+    }
+
     if (error) {
       let obj = { loaded: true, data: null, error: error };
       SetFinalForm(obj);
@@ -30,6 +37,6 @@ export default function useQueryLoader(data, isFetching, error) {
     }
   }, [isFetching, data, error]);
 
-  console.log(finalForm);
+  //console.log(finalForm);
   return finalForm;
 }

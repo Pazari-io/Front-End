@@ -1,4 +1,3 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
@@ -68,6 +67,8 @@ export default function Nav() {
   const {
     authenticate,
     isAuthenticated,
+    isUnauthenticated,
+    isInitialized,
     logout,
     enableWeb3,
     account,
@@ -89,7 +90,7 @@ export default function Nav() {
       isLoading
     } = useNativeBalance({ chain: '0xA869' });
 
-    if (!account || !isAuthenticated) return null;
+    if (!isAuthenticated) return <></>;
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error getting balance...</div>;
@@ -100,7 +101,7 @@ export default function Nav() {
 
   useEffect(() => {
     const main = async () => {
-      if (isAuthenticated && account && !isWeb3Enabled && !isWeb3EnableLoading) {
+      if (isInitialized && isAuthenticated && account && !isWeb3Enabled && !isWeb3EnableLoading) {
         enableWeb3();
       }
       //0xA869 - avax testnet
@@ -111,7 +112,7 @@ export default function Nav() {
       }
     };
     main();
-  }, [chainId, account, isWeb3Enabled, isAuthenticated]);
+  }, [chainId, account, isWeb3Enabled, isAuthenticated, isInitialized, isUnauthenticated]);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -199,7 +200,7 @@ export default function Nav() {
                   <LoginIcon className="w-6 h-6" aria-hidden="true" />
                 </button> */}
 
-                {(account === null || !isAuthenticated) && (
+                {isUnauthenticated && isInitialized && (
                   <img
                     className="w-8 h-8 ml-4 mr-4"
                     alt=""
@@ -213,7 +214,7 @@ export default function Nav() {
 
                 {/* Profile dropdown */}
 
-                {account !== null && isAuthenticated && (
+                {isInitialized && isAuthenticated && (
                   <Menu as="div" className="relative z-30 ml-3">
                     <div>
                       <Menu.Button className="flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
