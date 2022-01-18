@@ -138,8 +138,6 @@ function generateItem(item, profile, props) {
 
 function getItems(props) {
   let profile = props.item.get('profile');
-  console.log(props.item);
-
   if (!profile) {
     profile = new Map();
   }

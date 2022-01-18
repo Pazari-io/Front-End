@@ -14,10 +14,9 @@ import ZeroProfile from '../../../components/ZeroProfile';
 import { displayUserLoginButton, displayProfileButton } from '../../../components/UserLoader';
 import { pazariMvpAbi, FACTORY_ABI } from '../../../contracts/abi';
 import Uploader from '../../../components/Uploader';
-import {uploadToMoralis} from '../../../components/Uploader';
-import {createNewItem } from '../../../components/ContractAccess';
+import { uploadToMoralis } from '../../../components/Uploader';
+import { createNewItem } from '../../../components/ContractAccess';
 import { ethers } from 'ethers';
-
 
 function doUpload(
   user,
@@ -216,14 +215,14 @@ function UploadForm(props) {
             />
           </div>
           <button
-            className="w-24 px-4 py-2 mr-2 my-4 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
-            onClick={() => doUpload(user, signer, tokenData, units, price, Moralis, productFiles, previewFiles)}>
+            className="w-24 px-4 py-2 my-4 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
+            onClick={() =>
+              doUpload(user, signer, tokenData, units, price, Moralis, productFiles, previewFiles)
+            }>
             Save
           </button>
         </div>
       </div>
-
-
     </main>
   );
 }
@@ -235,7 +234,7 @@ function AuthenticatedProfile(props) {
   let profile = getProfileFromDB(user);
 
   // loading
-  if (!profile.loaded) return <>Loading...</>;
+  if (!profile.loaded) return <></>; //
   // handle error
   if (profile.error) return <>Error loading profile</>;
   // profile loaded and has the data can use profile.data

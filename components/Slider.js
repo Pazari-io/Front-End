@@ -61,7 +61,7 @@ export default function Slider(props) {
             freeMode={true}
             loop={true}
             navigation
-            pagination={{ clickable: true }}
+            pagination={{ clickable: true, type: 'fraction' }}
             // breakpoints={{
             //   640: {
             //     slidesPerView: 1,

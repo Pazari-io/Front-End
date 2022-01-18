@@ -2,7 +2,6 @@ import { MoralisContext, useMoralisQuery } from 'react-moralis';
 import { Moralis } from 'moralis';
 import subCategories from '../scripts/subCategories';
 import useQueryLoader from '../hooks/useQueryLoader';
-import { useState, useLayoutEffect } from 'react';
 
 function basicQuery(query, catQuery, props) {
   catQuery.equalTo('type', props.type);
@@ -48,7 +47,6 @@ function buildQuery(query, props, searchText) {
 
 export const getProductsFromDB = (props, searchText) => {
   //TODO use fullText() ? Has performance impact
-
   const { data, error, isFetching } = useMoralisQuery(
     'Product',
     (query) => buildQuery(query, props, searchText),
@@ -98,7 +96,7 @@ export const getProfileFromDB = (user) => {
 export const getProductsForProfile = (user) => {
   const Profile = Moralis.Object.extend('Profile');
   let profileQuery = new Moralis.Query(Profile);
-  const { data, error, isLoading } = useMoralisQuery(
+  const { data, error, isFetching } = useMoralisQuery(
     'Product',
     (query) => {
       profileQuery.equalTo('user', user);

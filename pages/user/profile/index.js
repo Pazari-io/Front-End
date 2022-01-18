@@ -443,7 +443,7 @@ function AuthenticatedProfile(props) {
 
   let profile = getProfileFromDB(user);
   // loading
-  if (!profile.loaded) return <Loading type="full" />;
+  if (!profile.loaded) return <></>; //<Loading type="full" />;
   // handle error
   if (profile.error) return <>Error loading profile</>;
   // profile loaded and has the data can use profile.data
