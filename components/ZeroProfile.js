@@ -33,12 +33,13 @@ async function createProfile(Moralis, user, username, email) {
 
   // verification level
   profile.set('level', 0);
+  profile.set('username', username); //Moving username to profile, since we can't query the user table from the front end
 
   // handle error
   await profile.save();
 
   // save the user also
-  user.set('username', username);
+  // user.set('username', username);
   user.set('email', email);
   await user.save();
 

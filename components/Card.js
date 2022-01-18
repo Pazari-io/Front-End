@@ -72,13 +72,13 @@ function displayStars() {
   );
 }
 
-function generateItem(item, props) {
+function generateItem(item, profile, props) {
   return (
     <span className="block overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 c-card hover:shadow-xl">
-      <Link href={`/products/details/${Math.random(1, 9999999999)}`}>
+      <Link href={`/products/details/` + item.id}>
         <a className="cursor-pointer">
           <div className="relative overflow-hidden">
-            <LoadCover previewUrl={item.get('previewUrl')} type={props.type}/>
+            <LoadCover previewUrl={item.get('previewUrl')} type={props.type} />
           </div>
         </a>
       </Link>
@@ -87,9 +87,7 @@ function generateItem(item, props) {
           New
         </span>
         <h2 className="mt-2 mb-2 font-bold">{item.get('title')}</h2>
-        <p className="text-sm">
-          {item.get('description')}
-        </p>
+        <p className="text-sm">{item.get('description')}</p>
         <div className="flex items-center justify-between mt-3">
           {/* <div>
             <span className="text-lg font-bold dark:text-indigo-600">
@@ -116,19 +114,30 @@ function generateItem(item, props) {
 
       <div className="flex items-center justify-between p-4 text-xs text-gray-700 border-t ">
         <div className="flex items-center">
-          <span className="flex items-center dark:text-gray-300">Verifed Author</span>
-
-          <img
-            src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"
-            className="w-4 h-4 mx-1 rounded-full"
-          />
+          <span className="flex items-center dark:text-gray-300">{profile.get('username')}</span>
+          {profile.get('level') === 3 ? (
+            <img
+              src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"
+              className="w-4 h-4 mx-1 rounded-full"
+            />
+          ) : (
+            <div></div>
+          )}
         </div>
         <Link href="/publishers/details/4">
           <a>
-            <img
-              src="https://www.pikpng.com/pngl/m/382-3822530_j-k-rowling-blond-clipart.png"
-              className="w-10 h-10 rounded-full"
-            />
+            {profile.get('avatar') === '' ? (
+              <span className="inline-block w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
+                <svg
+                  className="w-full h-full text-gray-300"
+                  fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </span>
+            ) : (
+              <img src={profile.get('avatar')} className="w-12 h-12 rounded-full" />
+            )}
           </a>
         </Link>
       </div>
@@ -137,7 +146,11 @@ function generateItem(item, props) {
 }
 
 function getItems(props) {
-  let res = generateItem(props.item, props);
+  let profile = props.item.get('profile');
+  if (!profile) {
+    profile = new Map();
+  }
+  let res = generateItem(props.item, profile, props);
   return <div className="w-full">{res}</div>;
 }
 

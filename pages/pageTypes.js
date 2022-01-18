@@ -6,7 +6,6 @@ import { getCategoriesFromDB } from '../components/MoralisDAO';
 
 export default function PageTypes(props) {
   const [catFilters, setFilters] = useState(new Set());
-  console.log(props.type);
 
   //Used to update the current filters.  If a filter is already selected it will toggle off.
   const updateSearch = (text) => {
@@ -23,7 +22,7 @@ export default function PageTypes(props) {
 
   let classNameOn = 'px-4 py-2 text-base text-white bg-indigo-500 rounded-full ';
   let classNameOff = 'px-4 py-2 text-base text-white bg-orange-500 rounded-full ';
-  let categoriesObj = getCategoriesFromDB(props);
+  let categoriesObj = getCategoriesFromDB(props.type);
 
   let subCategories = [];
   let filters = [];
