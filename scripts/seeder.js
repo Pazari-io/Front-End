@@ -581,34 +581,39 @@ const categorySeedMap = {
   ],
   audio: [
     {
-      title: 'Foo',
-      description: 'Blah blah',
-      subCategory: 'Cinematic',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
+      url: 'https://www.mfiles.co.uk/mp3-downloads/scott-joplin-the-cascades.mp3',
+      title: 'The cascades',
+      author: 'Scott Joplin',
+      priceUsd: 100,
+      BPM: 40,
+      duration: 2.34
     },
+
     {
-      title: 'Bar',
-      description: 'Blah blah',
-      subCategory: 'Cinematic',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
+      url: 'https://www.mfiles.co.uk/mp3-downloads/silent-night.mp3',
+      title: 'Silent night',
+      author: 'Scott Joplin',
+      priceUsd: 120,
+      BPM: 110,
+      duration: 2.34
     },
+
     {
-      title: 'Foobar',
-      description: 'Blah',
-      subCategory: 'Cinematic',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
+      url: 'https://www.mfiles.co.uk/mp3-downloads/chopin-nocturne-op9-no2.mp3',
+      title: 'nocturne-op9-no2',
+      author: 'Chopin',
+      priceUsd: 100,
+      BPM: 70,
+      duration: 3.22
     },
+
     {
-      title: 'Blah',
-      description: 'Blah',
-      subCategory: 'Cinematic',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
-    },
-    {
-      title: 'Test',
-      description: 'Blah',
-      subCategory: 'Cinematic',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
+      url: 'https://www.mfiles.co.uk/mp3-downloads/scott-joplin-the-cascades.mp3',
+      title: 'The cascades',
+      author: 'Scott Joplin',
+      priceUsd: 200,
+      BPM: 90,
+      duration: 1.34
     }
   ]
 };
