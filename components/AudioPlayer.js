@@ -64,13 +64,6 @@ export default function AudioPlayer(props) {
   const wavesurfer = useRef([]);
   const [playing, setPlaying] = useState(false);
 
-  // const urls = [
-  //   'https://www.mfiles.co.uk/mp3-downloads/scott-joplin-the-cascades.mp3',
-  //   'https://www.mfiles.co.uk/mp3-downloads/chopin-nocturne-op9-no2.mp3',
-  //   'https://www.mfiles.co.uk/mp3-downloads/Toccata-and-Fugue-Dm.mp3'
-  // ];
-  //console.log(urls);
-
   useEffect(() => {
     create();
 
