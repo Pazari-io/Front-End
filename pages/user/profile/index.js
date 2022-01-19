@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ZeroProfile from '../../../components/ZeroProfile';
 import { useMoralis } from 'react-moralis';
 import Uploader from '../../../components/Uploader';
@@ -16,7 +16,7 @@ function UserProfile(props) {
     about: props.profile.get('about'),
     cover: props.profile.get('cover'),
     avatar: props.profile.get('avatar'),
-    notifications: props.profile.get('notification'),
+    notification: props.profile.get('notification'),
     socials: props.profile.get('socials')
   };
 
@@ -293,18 +293,18 @@ function UserProfile(props) {
                     <div className="flex items-start">
                       <div className="flex items-center h-5">
                         <input
-                          key={1}
                           id="sales"
                           name="sales"
                           type="checkbox"
                           className="w-4 h-4 text-indigo-600 border-gray-300 rounded dark:border-indigo-400 focus:ring-indigo-500"
-                          checked={updatedProfile.notifications.sales}
+                          checked={updatedProfile.notification.sales}
                           onChange={() =>
                             setUpdatedProfile({
                               ...updatedProfile,
-                              notifications: {
+                              notification: {
                                 ...updatedProfile.notification,
-                                sales: !updatedProfile.notifications.sales
+                                sales: !updatedProfile.notification.sales,
+                                product: updatedProfile.notification.product
                               }
                             })
                           }
@@ -322,19 +322,18 @@ function UserProfile(props) {
                     <div className="flex items-start">
                       <div className="flex items-center h-5">
                         <input
-                          key={2}
                           id="product"
                           name="product"
                           type="checkbox"
                           className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                          checked={updatedProfile.notifications.product}
+                          checked={updatedProfile.notification.product}
                           onChange={() =>
                             setUpdatedProfile({
                               ...updatedProfile,
-                              notifications: {
-                                ...updatedProfile.notifications,
-                                product: !updatedProfile.notifications.product
-                                //sale: updatedProfile.notifications.sale
+                              notification: {
+                                ...updatedProfile.notification,
+                                product: !updatedProfile.notification.product,
+                                sales: updatedProfile.notification.sales
                               }
                             })
                           }
