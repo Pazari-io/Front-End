@@ -26,12 +26,6 @@ Moralis.Cloud.afterSave('TokenListingsssss', (request) => {
       profileQuery.equalTo('user', user);
       const profile = await profileQuery.first();
 
-      const acl = new Moralis.ACL();
-      // only the owner can edit the profile
-      acl.setWriteAccess(item.get('sender'), true);
-      // public can read the profile
-      acl.setPublicReadAccess(true);
-
       const Product = Moralis.Object.extend('Product');
       const product = new Product();
 

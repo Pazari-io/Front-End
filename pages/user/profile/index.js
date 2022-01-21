@@ -16,7 +16,8 @@ function UserProfile(props) {
     about: props.profile.get('about'),
     cover: props.profile.get('cover'),
     avatar: props.profile.get('avatar'),
-    notification: props.profile.get('notification'),
+    notification: props.profile.get('notification'), // fixed on the seeder 
+    //notifications: props.profile.get('notifications') ? props.profile.get('notifications') : {'sales': false, 'product': false},
     socials: props.profile.get('socials')
   };
 

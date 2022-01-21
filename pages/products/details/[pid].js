@@ -2,11 +2,13 @@ import Nav from '../../../components/NavBar';
 import ProductDetail from '../../../components/ProductDetail';
 import Footer from '../../../components/Footer';
 import { Tab } from '@headlessui/react';
+import { useMoralis } from 'react-moralis';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { getProductWithId } from '../../../components/MoralisDAO';
+import { getProductWithId, ownedItems } from '../../../components/MoralisDAO';
 import { buyItem} from '../../../components/ContractAccess';
 import Custom404 from '../../404.js';
+import { displayUserLoginButton } from '../../../components/UserLoader';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -63,15 +65,60 @@ function getLicense(product) {
   );
 }
 
+function download(product) {
+  console.log('download item: ' + product.get('itemID'));
+}
+
+function checkIfOwned(isOwner, product) {
+  if (!isOwner) {
+    return;
+  }
+
+  return (
+    <div>
+      <hr className="my-8 border-gray-400"></hr>
+      <div className="flex justify-center py-2 font-bold dark:text-indigo-400">
+        You own this item! Thank you for being a supporter
+      </div>
+      <div className="flex items-center py-2 justify-center">
+        <button
+          type="button"
+          onClick={() => download(product)}
+          className="px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/3 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
+          Download
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function Detail() {
+  const { isInitialized, hasAuthError, authError, isAuthenticated, account, authenticate } =
+    useMoralis();
   const router = useRouter();
   const { pid } = router.query;
 
+  if (hasAuthError) return <>{authError}</>;
+
+  if (!account && isInitialized) {
+    return displayUserLoginButton(authenticate);
+  }
+
   //Need to make sure router hook completes.  Otherwise pid will be null and the moralis query will run twice causing a flicker
-  if (pid) {
-      return <ProductDetailPage pid={pid} />;
+  if (pid && account && isAuthenticated && isInitialized) {
+      return <LoadProduct pid={pid} account={account} />;
   }
   return <div>Loading...</div>;
+}
+
+function LoadProduct(props) {
+  let productObj = getProductWithId(props.pid);
+  if (!productObj.loaded) return <>Loading...</>;
+  if (productObj.loaded && !productObj.data) {
+    return <Custom404 />;
+  }
+  let product = productObj.data[0];
+  return <ProductDetailPage product={product} account={props.account}/>
 }
 
 function ProductDetailPage(props) {
@@ -114,12 +161,11 @@ function ProductDetailPage(props) {
     ]
   });
 
-  let productObj = getProductWithId(props.pid);
-  if (!productObj.loaded) return <>Loading...</>;
-  if (productObj.loaded && !productObj.data) {
-    return <Custom404 />;
-  }
-  let product = productObj.data[0];
+  let product = props.product;
+  let itemSoldObj = ownedItems(product.get('itemID'), props.account);
+  if (!itemSoldObj.loaded) return <>Loading...</>;
+  let isOwner = itemSoldObj.data !== null;
+
   let profile = product.get('profile');
   if (!profile) {
     profile = new Map();
@@ -209,6 +255,7 @@ function ProductDetailPage(props) {
               )}
             </div>
           </div>
+          {checkIfOwned(isOwner, product)}
           <hr className="my-8 border-gray-400"></hr>
           <div className="dark:text-gray-300">
             Description:

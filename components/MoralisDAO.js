@@ -128,3 +128,14 @@ export const getTokenForProfile = (user) => {
   }
   return data;
 };
+
+export const ownedItems = (itemId, addr) => {
+  const { data, isFetching, error } = useMoralisQuery(
+    'ItemSold',
+    (query) => query.equalTo('itemID', itemId).equalTo('owner', addr),
+    [itemId, addr]
+  );
+
+  let output = useQueryLoader(data, isFetching, error);
+  return output;
+};
