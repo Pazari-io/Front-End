@@ -22,7 +22,8 @@ export default async function handler(req, res) {
     // extract file name and type
     let contentType = response.headers.get('content-type');
     let cd = response.headers.get('content-disposition');
-    let fileName = cd.split(' ')[1].split('filename=')[1].replaceAll('"', '');
+    let fileName = cd.split(' ')[1].split('filename=')[1].replace('"', '').replace('"', '');
+    //.replaceAll('"', ''); node avaiable on node 14 x :(
 
     //extract extention
     const regex = /\.[0-9a-z]+$/i;
