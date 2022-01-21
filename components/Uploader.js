@@ -44,11 +44,11 @@ export default function Uploader(props) {
       `}</style>
 
       <FilePond
+        server={'/api/upserver'}
         files={props.files}
         onupdatefiles={props.setFiles}
         allowMultiple={props.allowMultiple}
         name="files"
-        ona
         labelIdle='Drag & Drop your files or <span class="dark:text-gray-300">Browse</span>'
       />
     </div>

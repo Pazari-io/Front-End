@@ -1,12 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
-// category images going with png for the svg bug
 import Audios from '../public/images/Audios.png';
 import Books from '../public/images/Books.png';
 import Games from '../public/images/Games.png';
 import Photos from '../public/images/Photos.png';
-//import Socials from '../public/images/Socials.png';
 import Videos from '../public/images/Videos.png';
 import Graphics from '../public/images/Graphics.png';
 
