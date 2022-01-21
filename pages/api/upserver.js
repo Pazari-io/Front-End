@@ -12,3 +12,5 @@ function randomString(length) {
   }
   return result;
 }
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
