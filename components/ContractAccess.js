@@ -21,14 +21,17 @@ export function createNewItem(user, signer, tokenData, units, price, Moralis) {
 }
 
 //When this gets called, funds go from buyer acct -> marketplace -> router -> seller
-export async function buyItem(itemID, amount) {
+export async function buyItem(itemID, amount, price) {
   console.log('buying item');
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
   const stablecoin = new ethers.Contract(STABLECOIN_TESTNET, stablecoinAbi, signer);
+  const marketplace = new ethers.Contract(MARKETPLACE_ADDRESS_GANACHE, marketplaceAbi, signer);
+
   const allowance = await stablecoin.allowance(await signer.getAddress(), MARKETPLACE_ADDRESS_GANACHE);
-  if (allowance.lt(ethers.constants.MaxUint256)) {
+  const totalPrice = ethers.utils.formatUnits(price.toString(), 18).mul(amount)
+  if (allowance.lt(totalPrice)) {
     console.log('approving token transfer')
     const approveTx = await stablecoin.approve(
       MARKETPLACE_ADDRESS_GANACHE,
@@ -39,7 +42,6 @@ export async function buyItem(itemID, amount) {
   }
 
   console.log('calling marketplace');
-  const marketplace = new ethers.Contract(MARKETPLACE_ADDRESS_GANACHE, marketplaceAbi, signer);
   console.log(itemID + ',' + amount);
   const buyTx = await marketplace.buyMarketItem(itemID, amount);
   const { transactionHash } = await buyTx.wait();
