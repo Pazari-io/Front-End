@@ -9,6 +9,7 @@ import { getProductWithId, ownedItems } from '../../../components/MoralisDAO';
 import { buyItem} from '../../../components/ContractAccess';
 import Custom404 from '../../404.js';
 import { displayUserLoginButton } from '../../../components/UserLoader';
+import {weiToEther } from '../../../components/EtherUtils';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -263,9 +264,9 @@ function ProductDetailPage(props) {
             <div className="flex items-center py-2 justify-center">
               <button
                 type="button"
-                onClick={() => buyItem(product.get('itemID'), 1)}
+                onClick={() => buyItem(product.get('itemID'), product.get('price'), 1)}
                 className="px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/3 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
-                Buy: {product.get('price')} AVAX
+                Buy: {weiToEther(product.get('price'))} AVAX
               </button>
             </div>
             <hr className="my-8 border-gray-400"></hr>

@@ -83,4 +83,5 @@ export default function Slider(props) {
       </div>
     );
   }
+  return <div>No Items found :(</div>
 }

@@ -17,6 +17,7 @@ function doUpload(user, signer, tokenData, units, price, Moralis, productImageFi
   uploadToMoralis(productImageFiles, Moralis).then((fileNames) => {
     if (fileNames.length > 0) {
       tokenData.productImageUrls = fileNames;
+      tokenData.previewUrl = fileNames[fileNames.length-1];
     }
     createNewItem(user, signer, tokenData, units, price, Moralis);
   });
@@ -36,7 +37,7 @@ function ShowUpload(props) {
   const [tokenData, setTokenData] = useState({
     name: '',
     description: '',
-    type: props.type,
+    type: props.category,
     subCategory: props.subCategory,
     previewUrl: props.previewURL,
     productImageUrls: []
@@ -99,7 +100,7 @@ function ShowUpload(props) {
               className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
             />
           </div>
-          Product images, these will not be watermarked
+          Product images, these will not be watermarked.  First image will be the preview image.
           <div className="w-full px-4 py-1 border rounded-lg dark:bg-gray-700 dark:text-gray-400 dark:border-indigo-400">
             <Uploader
               Moralis={props.Moralis}
@@ -123,7 +124,7 @@ function ShowPreview(props) {
   let audio = ['.mp3', '.wav'];
   let video = ['.mp4', '.mpg', '.mpeg', '.avi', '.mkv', '.webm', '.m4v', '.mov', '.wmv'];
   let book = ['.pdf'];
-  let photo = ['jpg', '.png', '.jpeg', '.psd', '.gif', '.bmp', '.tiff', '.webp', '.heic', '.svg'];
+  let photo = ['.jpg', '.png', '.jpeg', '.psd', '.gif', '.bmp', '.tiff', '.webp', '.heic', '.svg'];
   let rest = ['.zip', '.7z'];
 
   if (audio.includes(props.type))
@@ -217,6 +218,10 @@ function ShowPreview(props) {
         </div>
       </>
     );
+
+    return (
+      <div>Error uploading your item, please check your extension type!</div>
+    )
 }
 
 // this will change soon
@@ -230,9 +235,8 @@ function ShowWaterMark(props) {
     fetch('/api/preview?taskID=' + taskID, {
       method: 'GET'
     })
-      .then((response) => response.json())
+      .then((response) => response.json()) //TODO catch errors
       .then((json) => {
-        // console.log(json);
         setPreviewURL({ url: json.url, type: json.type });
       });
 
