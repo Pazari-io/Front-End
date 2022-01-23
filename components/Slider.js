@@ -21,11 +21,9 @@ function getSlides(props, items) {
     let item = items.data[i];
 
     let slide = (
-      <>
-        <SwiperSlide key={Math.random().toString()}>
-          <Card type={props.type} item={item} />
-        </SwiperSlide>
-      </>
+      <SwiperSlide key={Math.random().toString()}>
+        <Card type={props.type} item={item} />
+      </SwiperSlide>
     );
     res.push(slide);
   }
@@ -83,7 +81,6 @@ export default function Slider(props) {
       </div>
     );
   }else{
-    return <>No Products to Show</>;
+    return <>No Items found :(</>;
   }
-  return <div>No Items found :(</div>
 }
