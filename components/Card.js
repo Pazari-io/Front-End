@@ -1,22 +1,23 @@
 import Link from 'next/link';
 import Image from 'next/image';
-
+import AudioPlayer from './AudioPlayer';
+import Verified from '../public/images/Verified.png';
+import {weiToEther } from './EtherUtils';
 const LoadCover = (props) => {
-  if (!props.previewUrl|| props.previewUrl== '') {
+  if (!props.previewUrl || props.previewUrl == '') {
     return null;
   }
 
-    switch (props.type) {
+  switch (props.type) {
     case 'book':
       return (
         <div>
-          <img
-            className="object-cover w-full h-full "
-            src={props.previewUrl}
-            alt=""
-          />
+          <img className="object-cover w-full h-full " src={props.previewUrl} alt="" />
         </div>
       );
+    case 'audio':
+      return <AudioPlayer audioUrls={props.audioUrls} />;
+
     case 'video':
       return (
         <video
@@ -32,11 +33,7 @@ const LoadCover = (props) => {
     case 'graphic':
       return (
         <div>
-          <img
-            className="object-cover w-full h-full "
-            src={props.previewUrl}
-            alt=""
-          />
+          <img className="object-cover w-full h-full " src={props.previewUrl} alt="" />
         </div>
       );
     default:
@@ -101,7 +98,7 @@ function generateItem(item, profile, props) {
             <img
               className="w-6 h-6"
               src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"></img>
-            <h3 className="px-2 text-lg font-bold">{item.get('price')}</h3>
+            <h3 className="px-2 text-lg font-bold">{weiToEther(item.get('price'))}</h3>
           </div>
         </div>
       </div>
@@ -114,15 +111,10 @@ function generateItem(item, profile, props) {
 
       <div className="flex items-center justify-between p-4 text-xs text-gray-700 border-t ">
         <div className="flex items-center">
-          <span className="flex items-center dark:text-gray-300">{profile.get('username')}</span>
-          {profile.get('level') === 3 ? (
-            <img
-              src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"
-              className="w-4 h-4 mx-1 rounded-full"
-            />
-          ) : (
-            <div></div>
-          )}
+          <span className="flex items-center px-2 dark:text-gray-300">
+            {profile.get('username')}
+          </span>
+          {profile.get('level') === 3 ? <Image src={Verified} height={20} width={20} /> : ''}
         </div>
         <Link href="/publishers/details/4">
           <a>

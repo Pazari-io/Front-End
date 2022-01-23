@@ -1,6 +1,4 @@
-import { useRef, useState } from 'react';
-import Nav from '../../../components/NavBar';
-import Footer from '../../../components/Footer';
+import { useEffect, useRef, useState } from 'react';
 import ZeroProfile from '../../../components/ZeroProfile';
 import { useMoralis } from 'react-moralis';
 import Uploader from '../../../components/Uploader';
@@ -9,7 +7,7 @@ import React from 'react';
 import { displayUserLoginButton } from '../../../components/UserLoader';
 import { getProfileFromDB } from '../../../components/MoralisDAO';
 import Modal from '../../../components/Modal';
-///TODO get and load previous state for checkbox and images correcly
+import { Loading } from '../../../components/Loading';
 
 function UserProfile(props) {
   // state what we are updating
@@ -18,7 +16,8 @@ function UserProfile(props) {
     about: props.profile.get('about'),
     cover: props.profile.get('cover'),
     avatar: props.profile.get('avatar'),
-    notifications: props.profile.get('notifications') ? props.profile.get('notifications') : {'sales': false, 'product': false},
+    notification: props.profile.get('notification'), // fixed on the seeder 
+    //notifications: props.profile.get('notifications') ? props.profile.get('notifications') : {'sales': false, 'product': false},
     socials: props.profile.get('socials')
   };
 
@@ -236,6 +235,11 @@ function UserProfile(props) {
                 </div>
 
                 <div>
+                  {updatedProfile.cover !== '' ? (
+                    <img className="rounded-lg max-h-80 max-w-96" src={updatedProfile.cover} />
+                  ) : (
+                    ''
+                  )}
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Cover photo
                   </label>
@@ -290,18 +294,18 @@ function UserProfile(props) {
                     <div className="flex items-start">
                       <div className="flex items-center h-5">
                         <input
-                          key={1}
                           id="sales"
                           name="sales"
                           type="checkbox"
                           className="w-4 h-4 text-indigo-600 border-gray-300 rounded dark:border-indigo-400 focus:ring-indigo-500"
-                          checked={updatedProfile.notifications.sales}
+                          checked={updatedProfile.notification.sales}
                           onChange={() =>
                             setUpdatedProfile({
                               ...updatedProfile,
-                              notifications: {
+                              notification: {
                                 ...updatedProfile.notification,
-                                sales: !updatedProfile.notifications.sales
+                                sales: !updatedProfile.notification.sales,
+                                product: updatedProfile.notification.product
                               }
                             })
                           }
@@ -319,19 +323,18 @@ function UserProfile(props) {
                     <div className="flex items-start">
                       <div className="flex items-center h-5">
                         <input
-                          key={2}
                           id="product"
                           name="product"
                           type="checkbox"
                           className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                          checked={updatedProfile.notifications.product}
+                          checked={updatedProfile.notification.product}
                           onChange={() =>
                             setUpdatedProfile({
                               ...updatedProfile,
-                              notifications: {
-                                ...updatedProfile.notifications,
-                                product: !updatedProfile.notifications.product
-                                //sale: updatedProfile.notifications.sale
+                              notification: {
+                                ...updatedProfile.notification,
+                                product: !updatedProfile.notification.product,
+                                sales: updatedProfile.notification.sales
                               }
                             })
                           }
@@ -440,7 +443,7 @@ function AuthenticatedProfile(props) {
 
   let profile = getProfileFromDB(user);
   // loading
-  if (!profile.loaded) return <>Loading...</>;
+  if (!profile.loaded) return <></>; //<Loading type="full" />;
   // handle error
   if (profile.error) return <>Error loading profile</>;
   // profile loaded and has the data can use profile.data

@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import Verified from '../public/images/Verified.png';
+
 const formWaveSurferOptions = (ref) => ({
   container: ref,
   waveColor: '#eee',
@@ -16,24 +19,57 @@ const formWaveSurferOptions = (ref) => ({
 export default function AudioPlayer(props) {
   // let urls = props.audioUrls;
 
+  // TODO get these from props/DB
+  // TODO Pagination
+
+  const audioUrls = [
+    {
+      url: 'https://www.mfiles.co.uk/mp3-downloads/scott-joplin-the-cascades.mp3',
+      title: 'The cascades',
+      author: 'Scott Joplin',
+      priceUsd: 100,
+      BPM: 40,
+      duration: 2.34
+    },
+
+    {
+      url: 'https://www.mfiles.co.uk/mp3-downloads/silent-night.mp3',
+      title: 'Silent night',
+      author: 'Scott Joplin',
+      priceUsd: 120,
+      BPM: 110,
+      duration: 2.34
+    },
+
+    {
+      url: 'https://www.mfiles.co.uk/mp3-downloads/chopin-nocturne-op9-no2.mp3',
+      title: 'nocturne-op9-no2',
+      author: 'Chopin',
+      priceUsd: 100,
+      BPM: 70,
+      duration: 3.22
+    },
+
+    {
+      url: 'https://www.mfiles.co.uk/mp3-downloads/scott-joplin-the-cascades.mp3',
+      title: 'The cascades',
+      author: 'Scott Joplin',
+      priceUsd: 200,
+      BPM: 90,
+      duration: 1.34
+    }
+  ];
+
   const waveformRef = useRef([]);
   const wavesurfer = useRef([]);
   const [playing, setPlaying] = useState(false);
-
-  const urls = [
-    'https://www.mfiles.co.uk/mp3-downloads/scott-joplin-the-cascades.mp3',
-    'https://www.mfiles.co.uk/mp3-downloads/silent-night.mp3',
-    'https://www.mfiles.co.uk/mp3-downloads/chopin-nocturne-op9-no2.mp3',
-    'https://www.mfiles.co.uk/mp3-downloads/Toccata-and-Fugue-Dm.mp3'
-  ];
-  //console.log(urls);
 
   useEffect(() => {
     create();
 
     return () => {
       if (wavesurfer.current[0]) {
-        for (let i = 0; i < urls.length; i++) wavesurfer.current[i].destroy();
+        for (let i = 0; i < audioUrls.length; i++) wavesurfer.current[i].destroy();
       }
     };
   }, []);
@@ -42,18 +78,18 @@ export default function AudioPlayer(props) {
   useEffect(() => {
     //console.log(isLoading);
   }, [isLoading]);
-  const Loaded = async () => {
+  const Loaded = () => {
     setIsLoading(false);
   };
 
   const create = async () => {
     const WaveSurfer = (await import('wavesurfer.js')).default;
 
-    for (let i = 0; i < urls.length; i++) {
+    for (let i = 0; i < audioUrls.length; i++) {
       const options = formWaveSurferOptions(waveformRef.current[i]);
       wavesurfer.current[i] = WaveSurfer.create(options);
-      wavesurfer.current[i].load(urls[i]);
-      if (i === urls.length - 1) {
+      wavesurfer.current[i].load(audioUrls[i].url);
+      if (i === audioUrls.length - 1) {
         wavesurfer.current[i].on('ready', () => {
           Loaded();
         });
@@ -62,6 +98,7 @@ export default function AudioPlayer(props) {
   };
 
   const handlePlayPause = async (index) => {
+    console.log(wavesurfer.current[index]);
     setPlaying(!playing);
     wavesurfer.current[index].playPause();
   };
@@ -97,7 +134,7 @@ export default function AudioPlayer(props) {
       )}
 
       <div className=" audio-player">
-        {urls.map((_, index) => {
+        {audioUrls.map((audio, index) => {
           return (
             <div key={index}>
               <div
@@ -108,27 +145,59 @@ export default function AudioPlayer(props) {
                 }}>
                 <div className={'controls'}>
                   <button
-                    className="w-12 px-2 mx-4 my-4 bg-gray-300 rounded-lg dark:bg-gray-800 dark:text-indigo-600"
+                    className="w-20 px-2 mx-4 my-4 bg-gray-300 rounded-lg dark:bg-gray-800 dark:text-indigo-600"
                     id={index}
                     onClick={() => handlePlayPause(index)}>
-                    Play
+                    <div className="flex">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-6 h-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <span className="px-1">/</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-6 h-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
                   </button>
                 </div>
                 <div className={'flex items-center justify-between'}>
                   <div>
-                    <h3 className="px-2 text-xl font-bold">Toccata and Fugue</h3>
+                    <h3 className="px-2 text-xl font-bold">{audio.title}</h3>
                   </div>
 
                   <div className="flex justify-between">
                     <div className="flex items-center justify-center mx-4">
-                      <span className="flex items-center text-lg dark:text-gray-300">
-                        Verifed Author
+                      <span className="flex items-center px-1 text-lg dark:text-gray-300">
+                        {audio.author}
                       </span>
 
-                      <img
-                        src="https://verified-badge.vedb.me/wp-content/uploads/2020/07/Facebook-Logo-Verified-Badge-PNG.png"
-                        className="w-4 h-4 mx-1 rounded-full"
-                      />
+                      {/* {profile.get('level') === 3 ? <Image src={Verified} height={20} width={20} /> : ''} */}
+                      <Image src={Verified} height={20} width={20} />
                     </div>
                     <div>
                       <Link href="/publishers/details/4">
@@ -142,11 +211,15 @@ export default function AudioPlayer(props) {
                     </div>
                   </div>
 
+                  <div className="font-bold">BMP : {audio.BPM}</div>
+
+                  <div className="font-bold">Duration : {audio.duration}</div>
+
                   <div className="flex items-center">
                     <img
                       className="w-6 h-6"
                       src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"></img>
-                    <h3 className="px-2 text-xl font-bold">0.454 - $100</h3>
+                    <h3 className="px-2 text-xl font-bold">${audio.priceUsd}</h3>
                   </div>
                 </div>
               </div>

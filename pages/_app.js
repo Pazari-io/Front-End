@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import Layout from './layout';
+import Layout from '../components/Layout';
 import { MoralisProvider } from 'react-moralis';
 import { ThemeProvider } from 'next-themes';
 

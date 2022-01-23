@@ -26,10 +26,14 @@ Moralis.Cloud.afterSave('TokenListingsssss', (request) => {
       profileQuery.equalTo('user', user);
       const profile = await profileQuery.first();
 
+      const taskIdQuery = new Moralis.Query('TaskIds'); //Get task id
+      const taskId = await taskIdQuery.get(json.tId, {useMasterKey: true});
+
       const Product = Moralis.Object.extend('Product');
       const product = new Product();
 
       product.set('title', json.name);
+      product.set('taskId', taskId);
       product.set('itemID', item.get('itemID'));
       product.set('category', category);
       product.set('subCategory', json.subCategory);

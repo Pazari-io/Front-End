@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const formidable = require('formidable');
   const form = new formidable.IncomingForm();
 
-  form.parse(req, (err, nill, files) => {
+  form.parse(req, (err, _, files) => {
     if (err) {
       return res.status(400).json({ error: err });
     }

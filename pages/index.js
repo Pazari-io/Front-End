@@ -1,26 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import Nav from '../components/NavBar';
-import Search from '../components/Search';
-import Footer from '../components/Footer';
-import Slider from '../components/Slider';
-import Card from '../components/Card';
-
-// category images going with png for the svg bug
 import Audios from '../public/images/Audios.png';
 import Books from '../public/images/Books.png';
 import Games from '../public/images/Games.png';
 import Photos from '../public/images/Photos.png';
-//import Socials from '../public/images/Socials.png';
 import Videos from '../public/images/Videos.png';
 import Graphics from '../public/images/Graphics.png';
-import Banner from '../public/images/Banner.png';
-import { useMoralisQuery } from 'react-moralis';
-
-// if you see SVG console errors it seems to be a react
-// bug https://github.com/facebook/react/issues/15187
-// there should be a fix for this but not concerning
-// buy and remove button
 
 export default function Home() {
   return (
@@ -84,7 +69,6 @@ export default function Home() {
           </Link>
         </div>
       </div>
-
     </main>
   );
 }
