@@ -5,7 +5,7 @@ import { Tab } from '@headlessui/react';
 import { useMoralis } from 'react-moralis';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { getProductWithId, ownedItems } from '../../../components/MoralisDAO';
 import { buyItem} from '../../../components/ContractAccess';
 import Custom404 from '../../404.js';
@@ -181,6 +181,9 @@ function LoadProduct(props) {
 }
 
 function ProductDetailPage(props) {
+
+  const router = useRouter();
+
   let [categories] = useState({
     Reviews: [
       {
@@ -322,7 +325,10 @@ function ProductDetailPage(props) {
             <div className="flex items-center py-2 justify-center">
               <button
                 type="button"
-                onClick={async () => await buyItem(product.get('itemID'), product.get('price'), 1)}
+                onClick={async () => {
+                  await buyItem(product.get('itemID'), product.get('price'), 1)
+                  router.reload();
+                }}
                 className="px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/2 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
                 Buy: {weiToEther(product.get('price'))} MIM
                 {/* Buy: {product.get('price')} MIM */}
