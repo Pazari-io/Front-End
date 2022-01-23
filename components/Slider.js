@@ -82,6 +82,8 @@ export default function Slider(props) {
         </ClientOnly>
       </div>
     );
+  }else{
+    return <>No Products to Show</>;
   }
   return <div>No Items found :(</div>
 }

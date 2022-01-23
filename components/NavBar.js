@@ -135,7 +135,11 @@ export default function Nav() {
               <div className="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
                 <div className="flex items-center flex-shrink-0"></div>
 
-                <Image src={Pazari} alt="Pazari" height="20" width="90" />
+                <Link href="/" passHref={true}>
+                  <a className='flex'>
+                    <Image src={Pazari} alt="Pazari" height="20" width="90" className="cursor-pointer"/>
+                  </a>
+                </Link>
 
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex items-center space-x-4">
