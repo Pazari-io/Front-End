@@ -60,7 +60,7 @@ export const getProductsFromDB = (props, searchText) => {
 export const getProductWithId = (id) => {
   const { data, isFetching, error } = useMoralisQuery(
     'Product',
-    (query) => query.equalTo('objectId', id).include('profile'),
+    (query) => query.equalTo('objectId', id).include('profile').include('taskId'),
     [id]
   );
 

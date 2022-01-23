@@ -108,9 +108,7 @@ function ShowWaterMark(props) {
 }
 
 function download(product) {
-  // let taskID = props.taskID;
-  //TODO save taskId when uploading
-  let taskID = 'Li91cGxvYWRzL29yaWdpbmFsLzE5MTBjODE0YzNmOWRlNTA5Y2Y5ZTk3ZTRmOGYzNTM4ZDdjMjgyNTY2MzlhYWZmODI5Y2NkYjdkZWEwMzIwZTYuanBn';
+  let taskID = product.get('taskId').get('taskId');
 
     fetch('/api/downloader?taskID=' + taskID, {
       method: 'GET'
@@ -324,7 +322,7 @@ function ProductDetailPage(props) {
             <div className="flex items-center py-2 justify-center">
               <button
                 type="button"
-                onClick={async () => await buyItem(product.get('itemID'), product.get('price'), 1)}
+                onClick={() => buyItem(product.get('itemID'), product.get('price'), 1)}
                 className="px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/3 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
                 Buy: {weiToEther(product.get('price'))} AVAX
               </button>

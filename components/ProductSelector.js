@@ -13,13 +13,42 @@ import { uploadToMoralis } from './Uploader';
 import { createNewItem } from '../components/ContractAccess';
 import { ethers } from 'ethers';
 
-function doUpload(user, signer, tokenData, units, price, Moralis, productImageFiles) {
-  uploadToMoralis(productImageFiles, Moralis).then((fileNames) => {
-    if (fileNames.length > 0) {
-      tokenData.productImageUrls = fileNames;
-      tokenData.previewUrl = fileNames[fileNames.length-1];
-    }
-    createNewItem(user, signer, tokenData, units, price, Moralis);
+async function saveTaskId(Moralis, taskId) {
+  // ACL setup
+  const acl = new Moralis.ACL();
+
+  // only the owner can edit the profile
+  // acl.setWriteAccess(user.id, true);
+  // public can read the taskId
+  acl.setPublicReadAccess(true); //TODO might need to change this
+  acl.setPublicWriteAccess(false);
+
+  const TaskIds= Moralis.Object.extend('TaskIds');
+  const taskIds = new TaskIds();
+  taskIds.setACL(acl);
+
+  // relation to user
+  taskIds.set('taskId', taskId);
+
+  // handle error
+  await taskIds.save();
+  console.log(taskIds);
+  return taskIds;
+
+}
+
+
+function doUpload(user, signer, tokenData, units, price, Moralis, productImageFiles, taskId) {
+  saveTaskId(Moralis, taskId).then((taskIds) => {
+    tokenData.tId = taskIds.id; //Object id so it can be referenced later when product is created
+    console.log(tokenData);
+    uploadToMoralis(productImageFiles, Moralis).then((fileNames) => {
+      if (fileNames.length > 0) {
+        tokenData.productImageUrls = fileNames;
+        tokenData.previewUrl = fileNames[fileNames.length - 1];
+      }
+      createNewItem(user, signer, tokenData, units, price, Moralis);
+    });
   });
 }
 
@@ -40,8 +69,10 @@ function ShowUpload(props) {
     type: props.category,
     subCategory: props.subCategory,
     previewUrl: props.previewURL,
-    productImageUrls: []
+    productImageUrls: [],
+    tId: ''
   });
+  const [taskId, setTaskId] = useState(props.taskID);
   const [units, setUnits] = useState(0);
   const [price, setPrice] = useState(0);
   const [productImages, setProductImages] = useState([]);
@@ -111,7 +142,7 @@ function ShowUpload(props) {
           </div>
           <button
             className="w-24 px-4 py-2 my-4 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
-            onClick={() => doUpload(user, signer, tokenData, units, price, Moralis, productImages)}>
+            onClick={() => doUpload(user, signer, tokenData, units, price, Moralis, productImages, taskId)}>
             Save
           </button>
         </div>
