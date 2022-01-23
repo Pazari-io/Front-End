@@ -84,6 +84,7 @@ function ShowUpload(props) {
   const signer = provider.getSigner();
 
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   return (
     <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
@@ -147,12 +148,21 @@ function ShowUpload(props) {
             />
           </div>
           <button
-            className="w-24 px-4 py-2 my-4 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
+            className="flex justify-center w-24 px-4 py-2 my-4 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
             onClick={async () => {
-              await doUpload(user, signer, tokenData, units, price, Moralis, productImages, taskId);
-              router.replace('/');
+              try {
+                setLoading(true);
+                await doUpload(user, signer, tokenData, units, price, Moralis, productImages, taskId);
+                router.replace('/');
+              } catch {} finally {
+                setLoading(false);
+              }
             }}>
-            Save
+              {loading ? (
+                <div className="animate-spin h-6 w-6 border-4 border-gray-300 rounded-full border-t-transparent"></div>
+              ) : (
+                <div>Save</div>
+              )}
           </button>
         </div>
       </div>

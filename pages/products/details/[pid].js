@@ -7,10 +7,10 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Router, useRouter } from 'next/router';
 import { getProductWithId, ownedItems } from '../../../components/MoralisDAO';
-import { buyItem} from '../../../components/ContractAccess';
+import { buyItem } from '../../../components/ContractAccess';
 import Custom404 from '../../404.js';
 import { displayUserLoginButton } from '../../../components/UserLoader';
-import {weiToEther } from '../../../components/EtherUtils';
+import { weiToEther } from '../../../components/EtherUtils';
 import { saveAs } from 'file-saver';
 
 function classNames(...classes) {
@@ -70,10 +70,8 @@ function getLicense(product) {
 
 function ShowWaterMark(props) {
   // let taskID = props.taskID;
-
   // const previewURL = props.previewURL;
   // const setPreviewURL = props.setPreviewURL;
-
   // useEffect(() => {
   //   fetch('/api/preview?taskID=' + taskID, {
   //     method: 'GET'
@@ -82,7 +80,6 @@ function ShowWaterMark(props) {
   //     .then((json) => {
   //       setPreviewURL({ url: json.url, type: json.type });
   //     });
-
   //   // BLOB implementiation
   //   //   .then((response) => response.blob())
   //   //   .then((blob) => {
@@ -90,7 +87,6 @@ function ShowWaterMark(props) {
   //   //     setPreviewURL({ url: ObjectURL, type: blob.type });
   //   //   });
   // }, [taskID]);
-
   // return (
   //   <div className="py-14">
   //     <div className="flex justify-center">
@@ -110,22 +106,22 @@ function ShowWaterMark(props) {
 function download(product) {
   let taskID = product.get('taskId').get('taskId');
 
-    fetch('/api/downloader?taskID=' + taskID, {
-      method: 'GET'
-    })
-      .then((resp) => resp.json())
-      .then((json) => {
-        //TODO this could be simplified...
-        const byteCharacters = atob(json.base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
+  fetch('/api/downloader?taskID=' + taskID, {
+    method: 'GET'
+  })
+    .then((resp) => resp.json())
+    .then((json) => {
+      //TODO this could be simplified...
+      const byteCharacters = atob(json.base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
 
-        let blob = new Blob([byteArray], {type: json.contentType});
-        saveAs(blob, product.get('title') + json.extension);
-      });
+      let blob = new Blob([byteArray], { type: json.contentType });
+      saveAs(blob, product.get('title') + json.extension);
+    });
 }
 
 function checkIfOwned(isOwner, product) {
@@ -165,7 +161,7 @@ export default function Detail() {
 
   //Need to make sure router hook completes.  Otherwise pid will be null and the moralis query will run twice causing a flicker
   if (pid && account && isAuthenticated && isInitialized) {
-      return <LoadProduct pid={pid} account={account} />;
+    return <LoadProduct pid={pid} account={account} />;
   }
   return <div>Loading...</div>;
 }
@@ -177,12 +173,12 @@ function LoadProduct(props) {
     return <Custom404 />;
   }
   let product = productObj.data[0];
-  return <ProductDetailPage product={product} account={props.account}/>
+  return <ProductDetailPage product={product} account={props.account} />;
 }
 
 function ProductDetailPage(props) {
-
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   let [categories] = useState({
     Reviews: [
@@ -326,11 +322,22 @@ function ProductDetailPage(props) {
               <button
                 type="button"
                 onClick={async () => {
-                  await buyItem(product.get('itemID'), product.get('price'), 1)
-                  router.reload();
+                  try {
+                    setLoading(true);
+                    await buyItem(product.get('itemID'), product.get('price'), 1);
+                    router.reload();
+                  } catch {
+                  } finally {
+                    setLoading(false);
+                  }
                 }}
-                className="px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/2 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
-                Buy: {weiToEther(product.get('price'))} MIM
+                className="flex justify-center px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/2 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
+                {loading ? (
+                  <div className="animate-spin h-7 w-7 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+                ) : (
+                  <div>Buy: {weiToEther(product.get('price'))} MIM</div>
+                )}
+
                 {/* Buy: {product.get('price')} MIM */}
               </button>
             </div>
