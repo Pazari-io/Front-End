@@ -4,11 +4,14 @@ import Footer from '../../../components/Footer';
 import { Tab } from '@headlessui/react';
 import { useMoralis } from 'react-moralis';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getProductWithId, ownedItems } from '../../../components/MoralisDAO';
 import { buyItem} from '../../../components/ContractAccess';
 import Custom404 from '../../404.js';
 import { displayUserLoginButton } from '../../../components/UserLoader';
+import {weiToEther } from '../../../components/EtherUtils';
+import { saveAs } from 'file-saver';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -65,8 +68,66 @@ function getLicense(product) {
   );
 }
 
+function ShowWaterMark(props) {
+  // let taskID = props.taskID;
+
+  // const previewURL = props.previewURL;
+  // const setPreviewURL = props.setPreviewURL;
+
+  // useEffect(() => {
+  //   fetch('/api/preview?taskID=' + taskID, {
+  //     method: 'GET'
+  //   })
+  //     .then((response) => response.json()) //TODO catch errors
+  //     .then((json) => {
+  //       setPreviewURL({ url: json.url, type: json.type });
+  //     });
+
+  //   // BLOB implementiation
+  //   //   .then((response) => response.blob())
+  //   //   .then((blob) => {
+  //   //     const ObjectURL = URL.createObjectURL(blob);
+  //   //     setPreviewURL({ url: ObjectURL, type: blob.type });
+  //   //   });
+  // }, [taskID]);
+
+  // return (
+  //   <div className="py-14">
+  //     <div className="flex justify-center">
+  //       {previewURL.url === '' && (
+  //         <div className="flex flex-col">
+  //           <p> Pazari engine is processing your preview ...</p>
+  //         </div>
+  //       )}
+  //     </div>
+  //     {previewURL.url !== '' && (
+  //       <ShowPreview url={previewURL.url} type={previewURL.type} setStep={props.setStep} />
+  //     )}
+  //   </div>
+  // );
+}
+
 function download(product) {
-  console.log('download item: ' + product.get('itemID'));
+  // let taskID = props.taskID;
+  //TODO save taskId when uploading
+  let taskID = 'Li91cGxvYWRzL29yaWdpbmFsLzE5MTBjODE0YzNmOWRlNTA5Y2Y5ZTk3ZTRmOGYzNTM4ZDdjMjgyNTY2MzlhYWZmODI5Y2NkYjdkZWEwMzIwZTYuanBn';
+
+    fetch('/api/downloader?taskID=' + taskID, {
+      method: 'GET'
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        //TODO this could be simplified...
+        const byteCharacters = atob(json.base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+
+        let blob = new Blob([byteArray], {type: json.contentType});
+        saveAs(blob, product.get('title') + json.extension);
+      });
 }
 
 function checkIfOwned(isOwner, product) {
@@ -263,9 +324,9 @@ function ProductDetailPage(props) {
             <div className="flex items-center py-2 justify-center">
               <button
                 type="button"
-                onClick={async () => await buyItem(product.get('itemID'), 1, product.get('price'))}
+                onClick={() => buyItem(product.get('itemID'), product.get('price'), 1)}
                 className="px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/3 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
-                Buy: {product.get('price')} AVAX
+                Buy: {weiToEther(product.get('price'))} AVAX
               </button>
             </div>
             <hr className="my-8 border-gray-400"></hr>
