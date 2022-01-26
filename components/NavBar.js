@@ -88,7 +88,7 @@ export default function Nav() {
       // nativeToken,
       error,
       isLoading
-    } = useNativeBalance({ chain: '0xA869' });
+    } = useNativeBalance({ chain: '0xa869' });
 
     if (!isAuthenticated) return <></>;
 
@@ -107,8 +107,8 @@ export default function Nav() {
       //0xA869 - avax testnet
       //0x539 - ganache
       //0x7a69 - hardhat
-      if (isWeb3Enabled && chainId !== '0xA869' && chainId !== '0x539' && chainId !== '0x7a69') {
-        await switchNetwork('0xA869');
+      if (isWeb3Enabled && chainId !== '0xa869' && chainId !== '0x539' && chainId !== '0x7a69') {
+        await switchNetwork('0xa869');
       }
     };
     main();

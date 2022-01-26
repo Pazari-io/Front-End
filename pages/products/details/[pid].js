@@ -1,17 +1,15 @@
-import Nav from '../../../components/NavBar';
 import ProductDetail from '../../../components/ProductDetail';
-import Footer from '../../../components/Footer';
 import { Tab } from '@headlessui/react';
 import { useMoralis } from 'react-moralis';
 import { useState } from 'react';
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getProductWithId, ownedItems } from '../../../components/MoralisDAO';
-import { buyItem} from '../../../components/ContractAccess';
+import { buyItem } from '../../../components/ContractAccess';
 import Custom404 from '../../404.js';
 import { displayUserLoginButton } from '../../../components/UserLoader';
-import {weiToEther } from '../../../components/EtherUtils';
+import { weiToEther } from '../../../components/EtherUtils';
 import { saveAs } from 'file-saver';
+import { Loading } from '../../../components/Loading';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -68,64 +66,25 @@ function getLicense(product) {
   );
 }
 
-function ShowWaterMark(props) {
-  // let taskID = props.taskID;
-
-  // const previewURL = props.previewURL;
-  // const setPreviewURL = props.setPreviewURL;
-
-  // useEffect(() => {
-  //   fetch('/api/preview?taskID=' + taskID, {
-  //     method: 'GET'
-  //   })
-  //     .then((response) => response.json()) //TODO catch errors
-  //     .then((json) => {
-  //       setPreviewURL({ url: json.url, type: json.type });
-  //     });
-
-  //   // BLOB implementiation
-  //   //   .then((response) => response.blob())
-  //   //   .then((blob) => {
-  //   //     const ObjectURL = URL.createObjectURL(blob);
-  //   //     setPreviewURL({ url: ObjectURL, type: blob.type });
-  //   //   });
-  // }, [taskID]);
-
-  // return (
-  //   <div className="py-14">
-  //     <div className="flex justify-center">
-  //       {previewURL.url === '' && (
-  //         <div className="flex flex-col">
-  //           <p> Pazari engine is processing your preview ...</p>
-  //         </div>
-  //       )}
-  //     </div>
-  //     {previewURL.url !== '' && (
-  //       <ShowPreview url={previewURL.url} type={previewURL.type} setStep={props.setStep} />
-  //     )}
-  //   </div>
-  // );
-}
-
 function download(product) {
   let taskID = product.get('taskId').get('taskId');
 
-    fetch('/api/downloader?taskID=' + taskID, {
-      method: 'GET'
-    })
-      .then((resp) => resp.json())
-      .then((json) => {
-        //TODO this could be simplified...
-        const byteCharacters = atob(json.base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
+  fetch('/api/downloader?taskID=' + taskID, {
+    method: 'GET'
+  })
+    .then((resp) => resp.json())
+    .then((json) => {
+      //TODO this could be simplified...
+      const byteCharacters = atob(json.base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
 
-        let blob = new Blob([byteArray], {type: json.contentType});
-        saveAs(blob, product.get('title') + json.extension);
-      });
+      let blob = new Blob([byteArray], { type: json.contentType });
+      saveAs(blob, product.get('title') + json.extension);
+    });
 }
 
 function checkIfOwned(isOwner, product) {
@@ -139,7 +98,7 @@ function checkIfOwned(isOwner, product) {
       <div className="flex justify-center py-2 font-bold dark:text-indigo-400">
         You own this item! Thank you for being a supporter
       </div>
-      <div className="flex items-center py-2 justify-center">
+      <div className="flex items-center justify-center py-2">
         <button
           type="button"
           onClick={() => download(product)}
@@ -165,22 +124,25 @@ export default function Detail() {
 
   //Need to make sure router hook completes.  Otherwise pid will be null and the moralis query will run twice causing a flicker
   if (pid && account && isAuthenticated && isInitialized) {
-      return <LoadProduct pid={pid} account={account} />;
+    return <LoadProduct pid={pid} account={account} />;
   }
-  return <div>Loading...</div>;
+  return <Loading type="full" />;
 }
 
 function LoadProduct(props) {
   let productObj = getProductWithId(props.pid);
-  if (!productObj.loaded) return <>Loading...</>;
+  if (!productObj.loaded) return <Loading type="full" />;
   if (productObj.loaded && !productObj.data) {
     return <Custom404 />;
   }
   let product = productObj.data[0];
-  return <ProductDetailPage product={product} account={props.account}/>
+  return <ProductDetailPage product={product} account={props.account} />;
 }
 
 function ProductDetailPage(props) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   let [categories] = useState({
     Reviews: [
       {
@@ -222,7 +184,7 @@ function ProductDetailPage(props) {
 
   let product = props.product;
   let itemSoldObj = ownedItems(product.get('itemID'), props.account);
-  if (!itemSoldObj.loaded) return <>Loading...</>;
+  if (!itemSoldObj.loaded) return <Loading type="full" />;
   let isOwner = itemSoldObj.data !== null;
 
   let profile = product.get('profile');
@@ -235,7 +197,7 @@ function ProductDetailPage(props) {
       <div className="container px-2 py-4 mx-auto md:flex">
         <div className="w-full py-10 rounded-lg md:w-1/2 px-14">
           <ProductDetail product={product} />
-          <div className="mt-2 ">
+          {/* <div className="mt-2 ">
             <Tab.Group>
               <Tab.List className="flex p-1 space-x-1 bg-blue-900/20 rounded-xl">
                 {Object.keys(categories).map((category) => (
@@ -285,7 +247,7 @@ function ProductDetailPage(props) {
                 ))}
               </Tab.Panels>
             </Tab.Group>
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full py-10 md:w-1/2 md:px-14">
@@ -319,12 +281,27 @@ function ProductDetailPage(props) {
           <div className="dark:text-gray-300">
             Description:
             <div className="my-4">{product.get('description')}</div>
-            <div className="flex items-center py-2 justify-center">
+            <div className="flex items-center justify-center py-2">
               <button
                 type="button"
-                onClick={() => buyItem(product.get('itemID'), product.get('price'), 1)}
-                className="px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/3 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
-                Buy: {weiToEther(product.get('price'))} AVAX
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    await buyItem(product.get('itemID'), product.get('price'), 1);
+                    router.reload();
+                  } catch {
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                className="flex justify-center px-4 py-4 text-base font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md md:w-1/2 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ">
+                {loading ? (
+                  <div className="border-4 border-blue-500 rounded-full animate-spin h-7 w-7 border-t-transparent"></div>
+                ) : (
+                  <div>Buy: {weiToEther(product.get('price'))} USD</div>
+                )}
+
+                {/* Buy: {product.get('price')} MIM */}
               </button>
             </div>
             <hr className="my-8 border-gray-400"></hr>

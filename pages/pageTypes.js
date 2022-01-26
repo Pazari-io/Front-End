@@ -1,6 +1,4 @@
-import Nav from '../components/NavBar';
 import CategoryFilter from '../components/CategoryFilter';
-import Footer from '../components/Footer';
 import { useState } from 'react';
 import { getCategoriesFromDB } from '../components/MoralisDAO';
 

@@ -12,6 +12,7 @@ import { getCategoriesFromDB } from '../components/MoralisDAO';
 import { uploadToMoralis } from './Uploader';
 import { createNewItem } from '../components/ContractAccess';
 import { ethers } from 'ethers';
+import { Router, useRouter } from 'next/router';
 
 async function saveTaskId(Moralis, taskId) {
   // ACL setup
@@ -23,7 +24,7 @@ async function saveTaskId(Moralis, taskId) {
   acl.setPublicReadAccess(true); //TODO might need to change this
   acl.setPublicWriteAccess(false);
 
-  const TaskIds= Moralis.Object.extend('TaskIds');
+  const TaskIds = Moralis.Object.extend('TaskIds');
   const taskIds = new TaskIds();
   taskIds.setACL(acl);
 
@@ -32,24 +33,25 @@ async function saveTaskId(Moralis, taskId) {
 
   // handle error
   await taskIds.save();
-  console.log(taskIds);
   return taskIds;
-
 }
 
+async function doUpload(user, signer, tokenData, units, price, Moralis, productImageFiles, taskId) {
+  try {
+    const taskIds = await saveTaskId(Moralis, taskId);
+    tokenData.tId = taskIds.id;
 
-function doUpload(user, signer, tokenData, units, price, Moralis, productImageFiles, taskId) {
-  saveTaskId(Moralis, taskId).then((taskIds) => {
-    tokenData.tId = taskIds.id; //Object id so it can be referenced later when product is created
-    console.log(tokenData);
-    uploadToMoralis(productImageFiles, Moralis).then((fileNames) => {
-      if (fileNames.length > 0) {
-        tokenData.productImageUrls = fileNames;
-        tokenData.previewUrl = fileNames[fileNames.length - 1];
-      }
-      createNewItem(user, signer, tokenData, units, price, Moralis);
-    });
-  });
+    const fileNames = await uploadToMoralis(productImageFiles, Moralis);
+    if (fileNames.length > 0) {
+      tokenData.productImageUrls = fileNames;
+      tokenData.previewUrl = fileNames[fileNames.length - 1];
+    }
+
+    await createNewItem(user, signer, tokenData, units, price, Moralis);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 /*
@@ -79,6 +81,10 @@ function ShowUpload(props) {
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   return (
     <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
       <div className="flex justify-center py-2">
@@ -131,7 +137,7 @@ function ShowUpload(props) {
               className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
             />
           </div>
-          Product images, these will not be watermarked.  First image will be the preview image.
+          Product images, these will not be watermarked. First image will be the preview image.
           <div className="w-full px-4 py-1 border rounded-lg dark:bg-gray-700 dark:text-gray-400 dark:border-indigo-400">
             <Uploader
               Moralis={props.Moralis}
@@ -141,9 +147,31 @@ function ShowUpload(props) {
             />
           </div>
           <button
-            className="w-24 px-4 py-2 my-4 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
-            onClick={() => doUpload(user, signer, tokenData, units, price, Moralis, productImages, taskId)}>
-            Save
+            className="flex justify-center w-24 px-4 py-2 my-4 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300"
+            onClick={async () => {
+              try {
+                setLoading(true);
+                await doUpload(
+                  user,
+                  signer,
+                  tokenData,
+                  units,
+                  price,
+                  Moralis,
+                  productImages,
+                  taskId
+                );
+                router.replace('/');
+              } catch {
+              } finally {
+                setLoading(false);
+              }
+            }}>
+            {loading ? (
+              <div className="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-transparent"></div>
+            ) : (
+              <div>Save</div>
+            )}
           </button>
         </div>
       </div>
@@ -250,9 +278,7 @@ function ShowPreview(props) {
       </>
     );
 
-    return (
-      <div>Error uploading your item, please check your extension type!</div>
-    )
+  return <div>Error uploading your item, please check your extension type!</div>;
 }
 
 // this will change soon
@@ -409,7 +435,6 @@ function UploadToEngine(props) {
 
           console.log(allowedExtentions.includes(extention));
           if (!allowedExtentions.includes(extention)) {
-            console.log('here');
             SetExtentionErr('Invalid extention');
             return;
           }
@@ -636,6 +661,7 @@ export default function ProductSelector(props) {
           subCategory={subCategory}
           user={user}
           Moralis={Moralis}
+          // previewURL={previewURL}
         />
       )}
     </main>

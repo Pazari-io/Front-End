@@ -4,8 +4,10 @@ import Image from 'next/image';
 export default function Custom404() {
   return (
     <div className=" text-gray-300 bg-gray-900">
-      <Link href="/">
-        <Image src={Error404} className="cursor-pointer" />
+      <Link href="/" passHref={true}>
+        <a>
+          <Image alt="error" src={Error404} className="cursor-pointer" />
+        </a>
       </Link>
     </div>
   );
