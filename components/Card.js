@@ -100,7 +100,7 @@ function generateItem(item, profile, props) {
               className="w-6 h-6"
               alt="MIM"
               src="https://assets.coingecko.com/coins/images/16786/small/mimlogopng.png?1624979612"></img>
-            <h3 className="px-2 text-lg font-bold">{weiToEther(item.get('price'))}</h3>
+            <h3 className="px-2 text-lg font-bold">{Number(weiToEther(item.get('price'))).toFixed(2)}</h3>
           </div>
         </div>
       </div>
