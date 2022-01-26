@@ -2,7 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import AudioPlayer from './AudioPlayer';
 import Verified from '../public/images/Verified.png';
-import {weiToEther } from './EtherUtils';
+import { weiToEther } from './EtherUtils';
+
 const LoadCover = (props) => {
   if (!props.previewUrl || props.previewUrl == '') {
     return null;
@@ -97,7 +98,8 @@ function generateItem(item, profile, props) {
           <div className="flex items-center">
             <img
               className="w-6 h-6"
-              src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"></img>
+              alt="MIM"
+              src="https://assets.coingecko.com/coins/images/16786/small/mimlogopng.png?1624979612"></img>
             <h3 className="px-2 text-lg font-bold">{weiToEther(item.get('price'))}</h3>
           </div>
         </div>
