@@ -2,9 +2,9 @@ import { ethers, BigNumber } from 'ethers';
 import { etherToWei } from '../components/EtherUtils';
 import { pazariMvpAbi, marketplaceAbi, stablecoinAbi } from '../contracts/abi';
 
-const PAZARI_MVP_ADDRESS = process.env.NEXT_PUBLIC_PAZARI_MVP_ADDRESS || ""
-const MARKETPLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_ADDRESS || ""
-const STABLECOIN_ADDRESS = process.env.NEXT_PUBLIC_STABLECOIN_ADDRESS || ""
+const PAZARI_MVP_ADDRESS = process.env.NEXT_PUBLIC_PAZARI_MVP_ADDRESS || '';
+const MARKETPLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_ADDRESS || '';
+const STABLECOIN_ADDRESS = process.env.NEXT_PUBLIC_STABLECOIN_ADDRESS || '';
 
 export async function createNewItem(user, signer, tokenData, units, price, Moralis) {
   console.log('Uploading new item');
@@ -15,7 +15,6 @@ export async function createNewItem(user, signer, tokenData, units, price, Moral
     const pazariMVP = new ethers.Contract(PAZARI_MVP_ADDRESS, pazariMvpAbi, signer);
     const tx = await pazariMVP.newTokenListing(url, units, wei);
     const { transactionHash } = await tx.wait();
-    console.log(transactionHash);
   } catch (error) {
     throw error;
   }

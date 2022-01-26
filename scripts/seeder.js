@@ -9,6 +9,7 @@
 const filters = require('./filters.js');
 const subCategories = require('./subCategories.js');
 const Moralis = require('moralis/node');
+
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVER_ID;
 const masterKey = process.env.MORALIS_MASTER_KEY;
@@ -155,6 +156,7 @@ const createProduct = async (
   price,
   previewUrl,
   productImageUrls,
+  taskId,
   license,
   changeLogs
 ) => {
@@ -165,6 +167,11 @@ const createProduct = async (
   acl.setWriteAccess(profile.get('user'), true);
   // public can read the profile
   acl.setPublicReadAccess(true);
+
+  const TaskID = Moralis.Object.extend('TaskIds');
+  const taskid = new TaskID();
+  taskid.set('taskId', taskId);
+  const savedTask = await taskid.save();
 
   const Product = Moralis.Object.extend('Product');
   const product = new Product();
@@ -179,6 +186,7 @@ const createProduct = async (
   product.set('price', price);
   product.set('productImageUrls', productImageUrls);
   product.set('previewUrl', previewUrl); // avaiable after watermark etc
+  product.set('taskId', savedTask);
   product.set('license', license);
   product.set('changeLog', changeLogs);
 
@@ -271,9 +279,65 @@ const createProfile = async (user, name, about, link, avatar, cover, level, noti
 
 const saveItems = async (user, category, count) => {
   console.log('SaveItems category: ' + category.get('type') + ', count: ' + count);
+
+  let pazariImages = [
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/gc1.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/gc2.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/gc3.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/p1.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/p2.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/p3.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/b1.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/b2.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/b3.png'
+  ];
+
+  const random = pazariImages[Math.floor(Math.random() * pazariImages.length)];
+
   let type = category.get('type');
+
+  let taskId = '';
+
+  switch (type) {
+    case 'book':
+      taskId =
+        'Li91cGxvYWRzL29yaWdpbmFsLzMwYzA3ZDAyZjBjMTgyZTc1OWIwMTNmYmEwOGJhOWE3NDFjNTBlMjBjZDE2YzhmMDk4MThlODk2ODBlYjQwMTMucGRm';
+      break;
+
+    case 'video':
+      taskId =
+        'Li91cGxvYWRzL29yaWdpbmFsL2YxY2I1ZDFkNDhjYWQ5ZTFhZGZmYWY2ZWM4MDFlZjQzNzNkODE2MTg4NDE2MjMyMjUxN2Q5MzkyYjgzZWNjZjMubXA0';
+      break;
+
+    case 'photo':
+      taskId =
+        'Li91cGxvYWRzL29yaWdpbmFsLzI1YTQ0MWUyYjQ1ZmEzNWYyOTkzODM2ZGM4MzM0ZGI1ODljMDEyNTIwZDlhN2RmYjQ0OWM4ZmY5NTgxYmVhZjQucG5n';
+      break;
+
+    case 'graphic':
+      taskId =
+        'Li91cGxvYWRzL29yaWdpbmFsL2MxNWMwMzJhODM1YTJkNjEyNzhiY2ZjODdmMjZiMzA2Mzc4NWNiMTM3ODQ0YWJmODFhMDcwZTNhNzQ5ZWM4MWMucG5n';
+      break;
+
+    case 'game':
+      taskId =
+        'Li91cGxvYWRzL29yaWdpbmFsLzg2OTEwYTc1MzI0ODRlOGZjNDI4Mzk0OTgwYTFiMTYxZjViNDVjOGM4ZDU5ZTMxZjNlZTYzN2RkZWRmNGIwYmEucG5n';
+      break;
+
+    case 'audio':
+      taskId =
+        'Li91cGxvYWRzL29yaWdpbmFsL2U0NzA2YWJmNzhkOTU3NGEyZDU5ZDkyODdmZmM0YmUxYTJkZTNiMWJjNTBkMWI0YWU0NjRlNmEyNmQyODI5ODYubXAz';
+      break;
+  }
+
   for (let i = 0; i < count; i++) {
-    let price = Math.floor(Math.random() * 20);
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    }
+
+    let price = getRandomInt(1000000000000000000, 3000000000000000000);
     await createProduct(
       user,
       category,
@@ -284,7 +348,8 @@ const saveItems = async (user, category, count) => {
       40,
       price,
       categorySeedMap[type][i].previewUrl,
-      ['http://url.com/1.png', 'http://url.com/1.png', 'http://url.com/1.png'],
+      [random, random, random],
+      taskId,
       ['pro', 'personal', 'exclusive'],
       { v1: 'this is a change', v2: 'this is best change' }
     );
@@ -391,192 +456,134 @@ const seed = async () => {
   //example create a user profile
   let profile = await createProfile(
     user,
-    'Name',
-    'About Author blah blah lorem',
-    'Link',
-    'Avatar.com/1.png',
-    'Cover.com/2.png',
+    'Pazari',
+    'My work ranges from the context of the street to museums, movie theaters, to presentations of sound through parking meters.  Often focusing on the trappings of power and the rituals needed for it’s effect, or evoking the traditional distancing of the supplicant by those in power, giving voice to those who are often unheard, or revealing the power of language through history.  The work takes on various forms intended to draw in the viewer as co-author and witness, create new and unpredictable cycles of thoughts and associations, providing an experimental chance to challenge one’s perceptions, perspectives and assumptions.',
+    'https://pazari.io',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/pavatar.png',
+    'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/pcover.png',
     {
-      setting: 'ok'
+      sales: true,
+      product: true
     }
   );
 
   // getAllProducts("book");
   // getAllProfiles(user.id);
   // example create a product
-  saveItems(profile, bookCategory, 5);
-  saveItems(profile, videoCategory, 5);
-  saveItems(profile, gameCategory, 2);
-  saveItems(profile, graphicCategory, 1);
-  saveItems(profile, photoCategory, 5);
-  saveItems(profile, audioCategory, 5);
+  saveItems(profile, bookCategory, 3);
+  saveItems(profile, videoCategory, 3);
+  saveItems(profile, gameCategory, 3);
+  saveItems(profile, graphicCategory, 3);
+  saveItems(profile, photoCategory, 3);
+  saveItems(profile, audioCategory, 3);
 };
 seed();
 
 const categorySeedMap = {
   book: [
     {
-      title: 'Moby Dick',
-      description: 'A tale about a whale',
+      title: 'Awesome Book I',
+      description:
+        'Despite finding a rustic cabin in the clearing, they do not enter. Fabrizio and Riccardo find three deformed scarecrows crucified with pig heads on stakes in a kind of altar. Terrified, they leave. After Elisa enters the cottage, she discovers a ritualistic mural depicting three deities: Ostro, Mastosso and Carcagnosso, which symbolize the leadership of a group that worships them in exchange for abundance and riches through human sacrifice. They decide to spend the night in the RV. When they hear screams coming from inside the house, everyone but Mark decides to go into the house to investigate. In the attic of the house, they discover a girl trapped inside a cocoon of hay. The group is horrified to discover the girl has had her tongue mutilated.',
       subCategory: 'Classic',
-      previewUrl:
-        'https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/b1.png'
     },
     {
-      title: 'Game of Thrones',
+      title: 'Awesome Book II',
       description: 'Story about Westeros',
       subCategory: 'Fantasy',
-      previewUrl:
-        'https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/b2.png'
     },
     {
-      title: 'Of Mice and Men',
-      description: 'Lennie',
+      title: 'Awesome Book III',
+      description:
+        "After being hired at a farm, the pair are confronted by Curley—the Boss's small, aggressive son with a Napoleon complex who dislikes larger men. Curley starts to target Lennie. Curley's flirtatious and provocative underaged wife, to whom Lennie is instantly attracted, poses a problem as well. In contrast, the pair also meets Candy, an elderly ranch handyman with one hand and a loyal dog, and Slim, an intelligent and gentle jerkline-skinner whose dog has recently had a litter of puppies. Slim gives a puppy to Lennie and Candy, whose loyal, accomplished sheep dog was put down by fellow ranch-hand Carlson.",
       subCategory: 'Classic',
-      previewUrl:
-        'https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format'
-    },
-    {
-      title: 'Intro to Algorithms',
-      description: 'Not a fun book',
-      subCategory: 'Programming',
-      previewUrl:
-        'https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format'
-    },
-    {
-      title: '1984',
-      description: 'Big brother',
-      subCategory: 'Classic',
-      previewUrl:
-        'https://motionarray.imgix.net/preview-1027354-4isy6dvmbv6R4qj3-large.jpg?w=1400&q=60&fit=max&auto=format'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/b3.png'
     }
   ],
   video: [
     {
-      title: 'Foo',
-      description: 'Blah blah',
-      subCategory: 'Sports',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
+      title: 'Crazy Art I',
+      description: "beautiful isn't it ?",
+      subCategory: 'Arts',
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/v1.mp4'
     },
     {
-      title: 'Bar',
-      description: 'Blah blah',
-      subCategory: 'Sports',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
+      title: 'Crazy Art II',
+      description: "peacful isn't it ?",
+      subCategory: 'Arts',
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/v2.mp4'
     },
     {
-      title: 'Foobar',
-      description: 'Blah',
-      subCategory: 'Sports',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
-    },
-    {
-      title: 'Blah',
-      description: 'Blah',
-      subCategory: 'Sports',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
-    },
-    {
-      title: 'Test',
-      description: 'Blah',
-      subCategory: 'Sports',
-      previewUrl: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1045970-aycmOAlpNs-high.mp4'
+      title: 'Crazy Art II',
+      description: "nice isn't it ?",
+      subCategory: 'Arts',
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/v3.mp4'
     }
   ],
   game: [
     {
-      title: 'Foo',
-      description: 'Blah blah',
+      title: 'Game Asset I',
+      description: `This is a new pack, featuring new models, separate from my others.
+      Mega Pack means a large collection of modular pieces and props for vast scene creations!
+      `,
       subCategory: 'Creatures',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/g1.png'
     },
     {
-      title: 'Bar',
-      description: 'Blah blah',
+      title: 'Game Asset II',
+      description: `Nature items ranging from small to huge trees, rocks and grouped rocks, ranging from small pebbles to larger boulders, bushes and flowers, and 1 grass and 1 yellow flower texture to paint detail onto your terrain scene!
+      `,
       subCategory: 'Creatures',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/g2.png'
     },
     {
-      title: 'Foobar',
-      description: 'Blah',
+      title: 'Game Asset III',
+      description: `have included a public demo scene for all to try before you buy! Join my discord, and head over to the tab called #demo-scenes, and you'll find a .zip file to download and play!
+      `,
       subCategory: 'Creatures',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
-    },
-    {
-      title: 'Blah',
-      description: 'Blah',
-      subCategory: 'Creatures',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
-    },
-    {
-      title: 'Test',
-      description: 'Blah',
-      subCategory: 'Creatures',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/g3.png'
     }
   ],
   graphic: [
     {
-      title: 'Foo',
-      description: 'Blah blah',
+      title: 'Sick Graphics I',
+      description: 'The graphics for your website',
       subCategory: 'Backgrounds',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/gc1.png'
     },
     {
-      title: 'Bar',
-      description: 'Blah blah',
+      title: 'Sick Graphics II',
+      description: 'The graphics for your blog',
       subCategory: 'Backgrounds',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/gc2.png'
     },
     {
-      title: 'Foobar',
-      description: 'Blah',
+      title: 'Sick Graphics III',
+      description: 'The graphics for your web3 project',
       subCategory: 'Backgrounds',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
-    },
-    {
-      title: 'Blah',
-      description: 'Blah',
-      subCategory: 'Backgrounds',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
-    },
-    {
-      title: 'Test',
-      description: 'Blah',
-      subCategory: 'Backgrounds',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/gc3.png'
     }
   ],
   photo: [
     {
-      title: 'Foo',
-      description: 'Blah blah',
+      title: 'Cool Photo I',
+      description: 'cool it is',
       subCategory: 'Fashion',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/p1.png'
     },
     {
-      title: 'Bar',
-      description: 'Blah blah',
+      title: 'Cool Photo II',
+      description: 'Here is your photo',
       subCategory: 'Fashion',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/p2.png'
     },
     {
-      title: 'Foobar',
-      description: 'Blah',
+      title: 'Cool Photo III',
+      description: 'buy and own it for ever',
       subCategory: 'Fashion',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
-    },
-    {
-      title: 'Blah',
-      description: 'Blah',
-      subCategory: 'Fashion',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
-    },
-    {
-      title: 'Test',
-      description: 'Blah',
-      subCategory: 'Fashion',
-      previewUrl: 'https://cdn.gamingdose.com/wp-content/uploads/2021/02/Ninja-Gaiden-2.jpg'
+      previewUrl: 'https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/p3.png'
     }
   ],
   audio: [
