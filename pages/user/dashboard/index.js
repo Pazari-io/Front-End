@@ -9,100 +9,24 @@ import { Tab } from '@headlessui/react';
 import { Fragment } from 'react/cjs/react.production.min';
 import Pagination from '../../../components/Pagination';
 export default function Dashboard() {
-  const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
-
   const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/');
+      router.replace('/');
     }
   });
 
   const { isAuthenticated } = useMoralis();
 
-  const onDrop = useCallback(async (acceptedFiles) => {
-    let file = acceptedFiles[0];
-
-    // const reader = new FileReader();
-    // // reader.onload = () => {
-    // //   const fileAsBinaryString = reader.result;
-    // //   // furture file content magic check here
-    // // };
-    // reader.onabort = () => console.log('file reading was aborted');
-    // reader.onerror = () => {
-    //   console.log('file reading has failed');
-    //   return;
-    // };
-    // reader.readAsBinaryString(file);
-    const formData = new FormData();
-    formData.append('file', file);
-
-    await fetch('/api/uploader', {
-      method: 'POST',
-      body: formData
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.error) {
-          console.log(json.error);
-        } else {
-          //console.log(json);
-          //saveFile(json);
-        }
-      });
-
-    // acceptedFiles.forEach((file) => {
-    //   console.log(file);
-    // });
-    //{error && console.log(error)}
-    //{isUploading && console.log("uploading")}
-    //saveFile("batman.jpeg", acceptedFiles[0]);
-    //saveFile("batman.jpeg", file, { saveIPFS: true });
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
-    onDrop,
-    accept: 'jpg, .jpeg, .png, .pdf, .mp4, .mp3, .webp, .webm ' // add more extention
-  });
-
   return (
     isAuthenticated && (
       <main className="mx-auto dark:bg-gray-900 dark:text-gray-300">
-
         <Tab.Group
           onChange={(index) => {
             //console.log('Changed selected tab to:', index);
           }}>
           <Tab.List className="flex justify-center py-2">
-            <Tab as={Fragment}>
-              {({ selected }) => (
-                <button
-                  className={
-                    selected
-                      ? 'bg-blue-500 text-white dark:bg-black dark:text-indigo-400 rounded-lg px-4 py-2'
-                      : 'bg-white text-black dark:bg-gray-900 dark:text-indigo-400 rounded-lg px-4 py-2'
-                  }>
-                  <div className="flex items-center px-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-6 h-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    <p className="underline ">Upload</p>
-                  </div>
-                </button>
-              )}
-            </Tab>
-
             <Tab as={Fragment}>
               {({ selected }) => (
                 <button
@@ -160,67 +84,6 @@ export default function Dashboard() {
             </Tab>
           </Tab.List>
           <Tab.Panels>
-            <Tab.Panel>
-              <div className="flex items-start mx-12 justify-evenly">
-                <div className="w-1/2 px-4 mx-auto ">
-                  <p>Project Name</p>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-1 border rounded-lg dark:bg-gray-700 dark:text-gray-400 dark:border-indigo-400 "
-                  />
-                  <p>Project description</p>
-
-                  <textarea className="w-full px-4 py-2 my-2 border rounded-lg dark:border-indigo-400 h-44 dark:bg-gray-700 dark:text-gray-400" />
-
-                  <div className="flex">
-                    <p>Units sold from 1 to N</p>
-                    <input
-                      type="text"
-                      placeholder="3"
-                      className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
-                    />
-                    <p className="px-2">Price in USD 0 for free</p>
-                    <input
-                      placeholder="100"
-                      type="text"
-                      className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
-                    />
-
-                    <p className="px-2">Buy and Bang price in USD</p>
-                    <input
-                      placeholder="10000"
-                      type="text"
-                      className="w-1/5 px-4 py-1 border rounded-lg dark:border-indigo-400 dark:bg-gray-700 dark:text-gray-400"
-                    />
-                  </div>
-
-                  <button className="absolute w-24 px-4 py-2 mr-2 text-indigo-400 bg-indigo-500 rounded-lg right-8 hover:bg-indigo-600 dark:text-gray-300">
-                    Save
-                  </button>
-                </div>
-
-                <div
-                  {...getRootProps()}
-                  className="relative w-1/2 h-64 px-4 py-16 mx-auto my-6 text-center border-2 border-indigo-400 border-dashed rounded-lg dark:bg-gray-700">
-                  <input {...getInputProps()} />
-                  {isDragActive ? (
-                    <p>Drop the files here ...</p>
-                  ) : (
-                    <>
-                      <p>Drag 'n' drop some files here, or click to select files</p>
-                      <p className="hidden md:block">
-                        Allowed extentions : .jpg, .jpeg, .png .pdf .mp4 .mp3 .webp .webm
-                      </p>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <p className="py-4 mx-16">
-                To enable buy and bang button you need to sell set a price for buy and bang input or
-                leave it empty. and it will be removed from marketplace{' '}
-              </p>
-            </Tab.Panel>
             <Tab.Panel>
               <div className="flex flex-col mx-14">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -433,7 +296,6 @@ export default function Dashboard() {
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
-
       </main>
     )
   );

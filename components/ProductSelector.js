@@ -33,13 +33,12 @@ async function saveTaskId(Moralis, taskId) {
 
   // handle error
   await taskIds.save();
-  console.log(taskIds);
   return taskIds;
 }
 
 async function doUpload(user, signer, tokenData, units, price, Moralis, productImageFiles, taskId) {
   try {
-    const taskIds = saveTaskId(Moralis, taskId);
+    const taskIds = await saveTaskId(Moralis, taskId);
     tokenData.tId = taskIds.id;
 
     const fileNames = await uploadToMoralis(productImageFiles, Moralis);
@@ -152,17 +151,27 @@ function ShowUpload(props) {
             onClick={async () => {
               try {
                 setLoading(true);
-                await doUpload(user, signer, tokenData, units, price, Moralis, productImages, taskId);
+                await doUpload(
+                  user,
+                  signer,
+                  tokenData,
+                  units,
+                  price,
+                  Moralis,
+                  productImages,
+                  taskId
+                );
                 router.replace('/');
-              } catch {} finally {
+              } catch {
+              } finally {
                 setLoading(false);
               }
             }}>
-              {loading ? (
-                <div className="animate-spin h-6 w-6 border-4 border-gray-300 rounded-full border-t-transparent"></div>
-              ) : (
-                <div>Save</div>
-              )}
+            {loading ? (
+              <div className="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-transparent"></div>
+            ) : (
+              <div>Save</div>
+            )}
           </button>
         </div>
       </div>
@@ -426,7 +435,6 @@ function UploadToEngine(props) {
 
           console.log(allowedExtentions.includes(extention));
           if (!allowedExtentions.includes(extention)) {
-            console.log('here');
             SetExtentionErr('Invalid extention');
             return;
           }
@@ -653,6 +661,7 @@ export default function ProductSelector(props) {
           subCategory={subCategory}
           user={user}
           Moralis={Moralis}
+          // previewURL={previewURL}
         />
       )}
     </main>

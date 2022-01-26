@@ -21,13 +21,13 @@ Moralis.Cloud.afterSave('TokenListingsssss', (request) => {
 
       const userQuery = new Moralis.Query('User');
       userQuery.equalTo('ethAddress', item.get('sender'));
-      const user = await userQuery.first({useMasterKey: true}); //Need master key to query the user table.  This is fine since it's only called when event is triggered.
+      const user = await userQuery.first({ useMasterKey: true }); //Need master key to query the user table.  This is fine since it's only called when event is triggered.
       const profileQuery = new Moralis.Query('Profile');
       profileQuery.equalTo('user', user);
       const profile = await profileQuery.first();
 
       const taskIdQuery = new Moralis.Query('TaskIds'); //Get task id
-      const taskId = await taskIdQuery.get(json.tId, {useMasterKey: true});
+      const taskId = await taskIdQuery.get(json.tId, { useMasterKey: true });
 
       const Product = Moralis.Object.extend('Product');
       const product = new Product();
