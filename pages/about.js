@@ -78,14 +78,16 @@ export default function About() {
             <p>
               Pazari is a fully digital Web3 marketplace where any kind of blockchain token can be
               listed and purchased. If it can be tokenized, then Pazari can sell it. Pazari is
-              currently living on the <span className="text-red-500"> Avalanche </span> blockchain
-              network, but plans to become multi-chain in the future. Just about anything can be
+              currently living on the <span className="text-red-500"> Avalanche </span> blockchain.
+              Pazari is currently focused on tokenizing, protecting, and providing a payment system
+              for digital assets.
+              {/* network, but plans to become multi-chain in the future. Just about anything can be
               tokenized, from the most obvious NFTs down to the most bizarre and exotic of tokens
               that you never thought were possible. There is no online marketplace wherein *any*
               kind of token can be sold or bought yet, and Pazari aims to change this by providing
               the infrastructure necessary for one to exist. Pazari is here to empower sellers
               worldwide through providing a marketplace protocol that was built for them to own,
-              control, and develop as a community.
+              control, and develop as a community. */}
             </p>
           </div>
         </div>
@@ -259,7 +261,7 @@ export default function About() {
                         <div className="mt-2 font-medium text-center text-gray-900 sm:text-xl title-font dark:text-indigo-500">
                           For Sellers
                         </div>{' '}
-                        You keep 95% of all item sales, get paid instantly and on-demand, split your
+                        You keep 93% of all item sales, get paid instantly and on-demand, split your
                         sales with contributors automatically, and you can explore how tokenized
                         content can supercharge your business and future.
                       </li>
