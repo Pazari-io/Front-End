@@ -11,9 +11,8 @@ import Pazari from '../public/images/Pazari.png';
 import { useTheme } from 'next-themes';
 
 const navigation = [
-  { name: 'MarketPlace', href: '/', current: false },
-  { name: 'Learn', href: '/learn', current: false },
-  { name: 'About', href: '/about', current: false }
+  { name: 'About', href: '/', current: false },
+  { name: 'MarketPlace', href: '/marketplace', current: false }
 ];
 
 function classNames(...classes) {
@@ -261,7 +260,7 @@ export default function Nav() {
                             </Link>
                           )}
                         </Menu.Item>
-                        <Menu.Item>
+                        {/* <Menu.Item>
                           {({ active }) => (
                             <Link href="/user/dashboard">
                               <a
@@ -273,7 +272,7 @@ export default function Nav() {
                               </a>
                             </Link>
                           )}
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item>
                           {({ active }) => (
                             <a
