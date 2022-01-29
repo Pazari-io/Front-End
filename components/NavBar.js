@@ -12,7 +12,8 @@ import { useTheme } from 'next-themes';
 
 const navigation = [
   { name: 'About', href: '/', current: false },
-  { name: 'MarketPlace', href: '/marketplace', current: false }
+  { name: 'MarketPlace', href: '/marketplace', current: false },
+  { name: 'Learn', href: 'https://docs.pazari.io', current: false }
 ];
 
 function classNames(...classes) {
@@ -135,8 +136,14 @@ export default function Nav() {
                 <div className="flex items-center flex-shrink-0"></div>
 
                 <Link href="/" passHref={true}>
-                  <a className='flex'>
-                    <Image src={Pazari} alt="Pazari" height="20" width="90" className="cursor-pointer"/>
+                  <a className="flex">
+                    <Image
+                      src={Pazari}
+                      alt="Pazari"
+                      height="20"
+                      width="90"
+                      className="cursor-pointer"
+                    />
                   </a>
                 </Link>
 
