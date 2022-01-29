@@ -11,8 +11,8 @@ import Pazari from '../public/images/Pazari.png';
 import { useTheme } from 'next-themes';
 
 const navigation = [
-  { name: 'MarketPlace', href: '/', current: false },
-  { name: 'About', href: '/about', current: false }
+  { name: 'About', href: '/', current: false },
+  { name: 'MarketPlace', href: '/marketplace', current: false }
 ];
 
 function classNames(...classes) {
