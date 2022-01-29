@@ -144,7 +144,7 @@ export default function About() {
 
                 <details className="mb-4">
                   <summary className="px-4 py-2 font-semibold bg-gray-200 rounded-md dark:bg-indigo-500 dark:text-gray-300">
-                    How is Pazari different ?
+                    How is Pazari different?
                   </summary>
 
                   <span className="text-gray-300">
@@ -199,7 +199,7 @@ export default function About() {
               <div className="w-full px-4 py-2 lg:w-1/2">
                 <details className="mb-4">
                   <summary className="px-4 py-2 font-semibold bg-gray-200 rounded-md dark:bg-indigo-500 dark:text-gray-300">
-                    How do I get paid ?
+                    How do I get paid?
                   </summary>
 
                   <span className="text-gray-300">
