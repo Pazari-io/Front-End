@@ -14,12 +14,12 @@ export default function Marketplace() {
 
       <div>
         <h1 className="py-4 text-4xl font-extrabold tracking-tight text-gray-900 px-14 dark:text-indigo-600">
-          Indie Publication revolution
+          Indie Publication revolution starts here.
         </h1>
 
-        <h3 className="py-4 text-xl px-14 dark:text-gray-200">
+        {/* <h3 className="py-4 text-xl px-14 dark:text-gray-200">
           Pazari a new era of publishing digital assets
-        </h3>
+        </h3> */}
       </div>
 
       <div className="py-14">
