@@ -298,7 +298,7 @@ function ProductDetailPage(props) {
                 {loading ? (
                   <div className="border-4 border-blue-500 rounded-full animate-spin h-7 w-7 border-t-transparent"></div>
                 ) : (
-                  <div>Buy: {weiToEther(product.get('price'))} USD</div>
+                  <div>Buy: {Number(weiToEther(product.get('price'))).toFixed(2)} USD</div>
                 )}
 
                 {/* Buy: {product.get('price')} MIM */}

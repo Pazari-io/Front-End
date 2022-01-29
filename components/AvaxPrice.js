@@ -15,7 +15,7 @@ export default function AvaxPrice(props) {
           className="w-6 h-6"
           src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"
         />
-        <p className="px-1">${data['data']}</p>
+        <p className="px-1">${Number(data['data']).toFixed(2)}</p>
       </div>
     );
   } else {
@@ -30,7 +30,7 @@ export default function AvaxPrice(props) {
           className="w-4 h-4"
           src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png?1604021818"
         />
-        <p className="px-1">{data['data']}</p>
+        <p className="px-1">{Number(data['data']).toFixed(2)}</p>
       </div>
     );
   }

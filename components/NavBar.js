@@ -204,9 +204,9 @@ export default function Nav() {
                   <LoginIcon className="w-6 h-6" aria-hidden="true" />
                 </button> */}
 
-                {isUnauthenticated && isInitialized && (
+                {!account || !isAuthenticated ? (
                   <img
-                    className="w-8 h-8 ml-4 mr-4"
+                    className="w-8 h-8 ml-4 mr-4 cursor-pointer"
                     alt=""
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
                     onClick={async () => {
@@ -214,11 +214,7 @@ export default function Nav() {
                       //enableWeb3();
                     }}
                   />
-                )}
-
-                {/* Profile dropdown */}
-
-                {isInitialized && isAuthenticated && (
+                ) : (
                   <Menu as="div" className="relative z-30 ml-3">
                     <div>
                       <Menu.Button className="flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
