@@ -99,7 +99,7 @@ export default function About() {
           height={400}
           width={400}
           className="w-full border-2 border-indigo-500 rounded-lg md:w-2/3"
-          frameborder="0"></video>
+          frameBorder="0"></video>
       </div>
 
       <div className="py-12 bg-white dark:bg-gray-800">
