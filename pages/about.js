@@ -67,18 +67,43 @@ export default function About() {
           className="rounded-lg"
         />
       </div>
+
       <div className="py-12 bg-white dark:bg-gray-800">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <p className="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-gray-900 dark:text-indigo-600 sm:text-4xl">
-              A better way to publish and purchase
-            </p>
-            <div className="flex">
-              <Image src={WhyOne}></Image>
-              <Image src={WhyTwo}></Image>
-            </div>
-          </div>
+          <div className="mt-4">
+            <h1 className="mb-4 text-3xl font-medium text-center text-gray-900 sm:text-3xl title-font dark:text-indigo-600">
+              Open-source, decentralized, web3, digital marketplace for the digital age
+            </h1>
 
+            <p>
+              Pazari is a fully digital Web3 marketplace where any kind of blockchain token can be
+              listed and purchased. If it can be tokenized, then Pazari can sell it. Pazari is
+              currently living on the <span className="text-red-500"> Avalanche </span> blockchain
+              network, but plans to become multi-chain in the future. Just about anything can be
+              tokenized, from the most obvious NFTs down to the most bizarre and exotic of tokens
+              that you never thought were possible. There is no online marketplace wherein *any*
+              kind of token can be sold or bought yet, and Pazari aims to change this by providing
+              the infrastructure necessary for one to exist. Pazari is here to empower sellers
+              worldwide through providing a marketplace protocol that was built for them to own,
+              control, and develop as a community.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-center py-14">
+        <video
+          controls
+          poster="https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/demo.png"
+          src="https://pazari-storage.sgp1.cdn.digitaloceanspaces.com/MVP/Pazari-Demo.mp4"
+          height={400}
+          width={400}
+          className="w-full border-2 border-indigo-500 rounded-lg md:w-2/3"
+          frameborder="0"></video>
+      </div>
+
+      <div className="py-12 bg-white dark:bg-gray-800">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="mt-10">
             <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
               {features.map((feature) => (
@@ -106,6 +131,59 @@ export default function About() {
                 Frequently Asked Question
               </h1>
             </div>
+
+            <details className="mb-4">
+              <summary className="px-4 py-2 font-semibold bg-gray-200 rounded-md dark:bg-indigo-500 dark:text-gray-300">
+                Pazari is?
+              </summary>
+
+              <span className="text-gray-300">
+                <ul className="list-disc">
+                  <li>Totally open-source</li>
+                  <li>A globally accessible marketplace</li>
+                  <li>A home for verified artists and Merchants</li>
+                  <li>Where creators meet and collaborate</li>
+                  <li>Where contributors get paid</li>
+                </ul>
+              </span>
+            </details>
+
+            <details className="mb-4">
+              <summary className="px-4 py-2 font-semibold bg-gray-200 rounded-md dark:bg-indigo-500 dark:text-gray-300">
+                Pazari provides?
+              </summary>
+
+              <span className="text-gray-300">
+                <ul className="list-disc">
+                  <li>A unique and exclusive selection</li>
+                  <li>Automated tokenization of content</li>
+                  <li>Instant, multi-recipient payments</li>
+                  <li>Automated commission/royalty distribution</li>
+                  <li>Lowest fees in the world</li>
+                  <li>Clawback and fraud protection</li>
+                  <li>Watermarked and AES-256 encrypted content</li>
+                  <li>Opportunity to evolve your business model</li>
+                </ul>
+              </span>
+            </details>
+
+            <details className="mb-4">
+              <summary className="px-4 py-2 font-semibold bg-gray-200 rounded-md dark:bg-indigo-500 dark:text-gray-300">
+                Pazari does NOT?
+              </summary>
+
+              <span className="text-gray-300">
+                <ul className="list-disc">
+                  <li>Withhold or freeze payments</li>
+                  <li>Charge monthly/service fees</li>
+                  <li>Require minimum/maximum balances</li>
+                  <li>Impose price controls</li>
+                  <li>Collect banking data</li>
+                  <li>Require any KYC to use</li>
+                </ul>
+              </span>
+            </details>
+
             <div className="flex flex-wrap -mx-2 lg:w-4/5 sm:mx-auto sm:mb-2">
               <div className="w-full px-4 py-2 lg:w-1/2">
                 <details className="mb-4">
@@ -207,7 +285,7 @@ export default function About() {
                     or MIM, which can be swapped for AVAX and sent to an exchange where it can be
                     sold for your local fiat currency--a process which we make as simple as
                     possible. We use MIM for two reasons:
-                    <ul className="list-decimal mt-2">
+                    <ul className="mt-2 list-none">
                       <li>
                         1. MIM is a stablecoin, and isn't subject to price volatility like most
                         cryptocurrencies
@@ -227,7 +305,7 @@ export default function About() {
                   </summary>
 
                   <span className="text-gray-300">
-                    <ul className="list-decimal mt-2">
+                    <ul className="mt-2 list-none">
                       <li>
                         1. Because USD is not programmable, therefore creating an automated system
                         that is capable of paying out multiple recipients *instantly* upon every
