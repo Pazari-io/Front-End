@@ -363,7 +363,7 @@ export default function About() {
               <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-green-600 shadow-md rounded-xl">
                 <h3 className="mb-1 text-lg font-semibold">Q1 - 2022</h3>
                 <ul className="w-full leading-tight text-justify">
-                  <li>Survive and win the Avalanche hackathon</li>
+                  <li>Survive and win the Avalanche/Moralis hackathon</li>
                   <li>Establish social media channels </li>
                   <li>Begin writing on Pazari Blog </li>
                   <li>Deployment of functional MVP on Fuji testnet </li>
