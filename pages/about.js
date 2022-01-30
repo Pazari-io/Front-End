@@ -363,9 +363,10 @@ export default function About() {
               <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-green-600 shadow-md rounded-xl">
                 <h3 className="mb-1 text-lg font-semibold">Q1 - 2022</h3>
                 <ul className="w-full leading-tight text-justify">
-                  <li>Wrap the alpha version </li>
-                  <li>Pazari on social media</li>
-                  <li>Deploy functional MVP on Avalanche-C chain testnet</li>
+                  <li>Survive and win the Avalanche hackathon</li>
+                  <li>Establish social media channels </li>
+                  <li>Begin writing on Pazari Blog </li>
+                  <li>Deployment of functional MVP on Fuji testnet </li>
                   <li>Call for investors I</li>
                 </ul>
               </div>
@@ -374,38 +375,40 @@ export default function About() {
             <div className="flex md:contents">
               <div className="relative col-start-2 col-end-4 mr-10 md:mx-auto">
                 <div className="flex items-center justify-center w-6 h-full">
-                  <div className="w-1 h-full bg-green-600 pointer-events-none"></div>
+                  <div className="w-1 h-full bg-yellow-600 pointer-events-none"></div>
                 </div>
-                <div className="absolute w-6 h-6 -mt-3 text-center bg-green-600 rounded-full shadow top-1/2">
+                <div className="absolute w-6 h-6 -mt-3 text-center bg-yellow-600 rounded-full shadow top-1/2">
                   <i className="text-white fas fa-check-circle"></i>
                 </div>
               </div>
-              <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-green-600 shadow-md rounded-xl">
+              <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-yellow-600 shadow-md rounded-xl">
                 <h3 className="mb-1 text-lg font-semibold">Q2 - 2022</h3>
                 <ul className="w-full leading-tight text-justify">
-                  <li>Wrap the beta version (engine, frontend, and contract)</li>
-                  <li>Deploy beta on Avalanche-C main </li>
+                  <li>Finish and deploy Pazari Beta</li>
+                  <li>Push for new sellers, buyers, and beta testers </li>
                   <li>Call for investors II</li>
+                  <li>Begin work on Pazari V1</li>
+                  <li>Begin work on Pazari Governance Token</li>
+                  <li>Begin work on PazariDAO</li>
                 </ul>
               </div>
             </div>
             <div className="flex md:contents">
               <div className="relative col-start-2 col-end-4 mr-10 md:mx-auto">
                 <div className="flex items-center justify-center w-6 h-full">
-                  <div className="w-1 h-full bg-green-600 pointer-events-none"></div>
+                  <div className="w-1 h-full bg-yellow-600 pointer-events-none"></div>
                 </div>
-                <div className="absolute w-6 h-6 -mt-3 text-center bg-green-600 rounded-full shadow top-1/2">
+                <div className="absolute w-6 h-6 -mt-3 text-center bg-yellow-600 rounded-full shadow top-1/2">
                   <i className="text-white fas fa-check-circle"></i>
                 </div>
               </div>
-              <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-green-600 shadow-md rounded-xl">
+              <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-yellow-600 shadow-md rounded-xl">
                 <h3 className="mb-1 text-lg font-semibold">Q3 - 2022</h3>
                 <ul className="w-full leading-tight text-justify">
-                  <li>
-                    Pazari limited ERC20 Token for early adapters (publishers, buyers, investors )
-                  </li>
-                  <li>Wrap the RC version (engine, frontend, and contract)</li>
+                  <li>Deploy Pazari Governance Token, or ARC20 Representation</li>
+                  <li>Deploy Pazari's RC version (engine, front-end, and contracts)</li>
                   <li>Call for investors III</li>
+                  <li>Begin work on Pazari Collaborations</li>
                 </ul>
               </div>
             </div>
@@ -422,9 +425,9 @@ export default function About() {
               <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-yellow-600 shadow-md rounded-xl">
                 <h3 className="mb-1 text-lg font-semibold text-gray-50">Q4 - 2022</h3>
                 <ul className="w-full leading-tight text-justify">
-                  <li>Deploy stable release version</li>
-                  <li>Pazari AirDrop</li>
-                  <li>Marketing and massive user adoption</li>
+                  <li>Deploy Pazari V1</li>
+                  <li>Massive marketing push for mass-adoption</li>
+                  <li>Begin Multi-Chain Bridge for Polygon, BSC, and Fantom</li>
                 </ul>
               </div>
             </div>
@@ -441,10 +444,13 @@ export default function About() {
               <div className="w-full col-start-4 col-end-12 p-4 my-4 mr-auto bg-gray-500 shadow-md rounded-xl">
                 <h3 className="mb-1 text-lg font-semibold text-gray-200">2023 and beyond</h3>
                 <ul className="w-full leading-tight text-justify">
-                  <li>Pazari services</li>
-                  <li>Pazari subscriptions</li>
-                  <li>Reward top-performing publishers and buyers</li>
-                  <li>And much more!</li>
+                  <li>Deploy Multi-Chain Bridge</li>
+                  <li>Continue marketing push, advertise, offer new seller incentives</li>
+                  <li>Major exchange listings of PGT</li>
+                  <li>Begin Pazari Subscriptions</li>
+                  <li>Begin Pazari Services</li>
+                  <li>Begin Pazari Auctions</li>
+                  <li>Begin DRM Tokens (i.e. fully tradable, non-downloadable ebooks)</li>
                 </ul>
               </div>
             </div>
