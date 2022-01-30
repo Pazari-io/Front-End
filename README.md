@@ -95,5 +95,7 @@ Our interface uses well-known open-source software to handle encryption, authori
 ## Security
 
 We handle security and security issues with great care. Please contract security [at] pazari.io as soon as you find a valid vulnerability.
-Important
+
+
+## Important 
 Currently alpha and under development .
